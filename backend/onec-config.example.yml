@@ -1,0 +1,11 @@
+# Copy this file to backend/onec-config.yml (or set ONEC_CONFIG_FILE)
+# and fill values for the single 1C instance.
+#
+# IMPORTANT:
+# JWT_SECRET is mandatory for backend startup and must be set via environment variable.
+# Minimum requirements: 32+ chars and at least 3 of 4 classes (A-Z, a-z, 0-9, special symbols).
+# Example:
+#   export JWT_SECRET='YourStrongRandomSecretAtLeast32Chars!2026'
+url: "https://example.com/onec"
+basicAuth: "base64_login_password"
+onecTotpSecret: "JBSWY3DPEHPK3PXP"
