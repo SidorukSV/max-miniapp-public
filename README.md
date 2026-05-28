@@ -5,10 +5,6 @@
 - `Ubuntu / Debian`: [UBUNTU.md](install-guide\UBUNTU.MD)
 - `Windows Server`:  [WINDOWS-SERVER.md](install-guide\WINDOWS-SERVER.MD)
 
-## Windows Server: установка backend как службы
-
-Подробный пошаговый гайд: [windows-server-install.md](./windows-server-install.md).
-
 
 ### Запуск backend (dev)
 
