@@ -2,8 +2,8 @@
 
 ## INSTALLATION GUIDES
 
-- `Ubuntu / Debian`: [UBUNTU.md](install-guide\UBUNTU.MD)
-- `Windows Server`:  [WINDOWS-SERVER.md](install-guide\WINDOWS-SERVER.MD)
+- `Ubuntu / Debian`: [UBUNTU.md](install-guide/UBUNTU.MD)
+- `Windows Server`:  [WINDOWS-SERVER.md](install-guide/WINDOWS-SERVER.MD)
 
 
 ### Запуск backend (dev)
