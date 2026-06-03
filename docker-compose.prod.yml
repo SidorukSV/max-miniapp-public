@@ -30,9 +30,6 @@ services:
         VITE_APP_VERSION: ${APP_VERSION:-0.0.0}
         VITE_GIT_COMMIT: ${GIT_COMMIT:-unknown}
         VITE_BUILD_TIME: ${BUILD_TIME:-unknown}
-        VITE_THEME_CONFIG_PATH: ${VITE_THEME_CONFIG_PATH:-theme-config.json}
-        VITE_PRIVACY_POLICY_URL: ${VITE_PRIVACY_POLICY_URL:-https://aldenta.ru/confidentiality/}
-        VITE_PERSONAL_DATA_CONSENT_URL: ${VITE_PERSONAL_DATA_CONSENT_URL:-https://aldenta.ru/personal-data-consent/}
     restart: unless-stopped
     depends_on:
       - backend
