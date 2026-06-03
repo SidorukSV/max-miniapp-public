@@ -15,8 +15,8 @@
   --warning: #c57a00;
   --shadow-card: 0 2px 8px rgba(16, 16, 20, 0.08);
   --shadow-floating: 0 6px 18px rgba(16, 16, 20, 0.12);
-  --inset-top: env(safe-area-inset-top, 0px);
-  --inset-bottom: env(safe-area-inset-bottom, 0px);
+  --inset-top: clamp(0px, env(safe-area-inset-top, 0px), 8px);
+  --inset-bottom: clamp(0px, env(safe-area-inset-bottom, 0px), 8px);
 }
 
 .appShell {
@@ -27,15 +27,15 @@
 }
 
 .appShell--tabs {
-  padding-bottom: calc(106px + var(--inset-bottom));
+  padding-bottom: calc(82px + var(--inset-bottom));
 }
 
 .appShell--action {
-  padding-bottom: calc(96px + var(--inset-bottom));
+  padding-bottom: calc(86px + var(--inset-bottom));
 }
 
 .appShell--tabs.appShell--action {
-  padding-bottom: calc(178px + var(--inset-bottom));
+  padding-bottom: calc(148px + var(--inset-bottom));
 }
 
 .appHeader {
@@ -44,13 +44,13 @@
   z-index: 50;
   background: rgba(238, 238, 239, 0.92);
   backdrop-filter: blur(14px);
-  padding: calc(10px + var(--inset-top)) 0 8px;
+  padding: calc(6px + var(--inset-top)) 0 6px;
 }
 
 .appHeader__inner {
   width: min(100%, 560px);
   margin: 0 auto;
-  padding: 0 22px;
+  padding: 0 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -65,10 +65,10 @@
 }
 
 .clinicLogoWrap {
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
-  border-radius: 14px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 12px;
   /*background: var(--surface);
   border: 1px solid var(--border);*/
   display: inline-flex;
@@ -87,13 +87,13 @@
 .clinicLogoFallback {
   color: var(--accent);
   font-weight: 800;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .clinicTitle {
   min-width: 0;
   color: var(--text);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.2;
   font-weight: 800;
   white-space: nowrap;
@@ -103,7 +103,7 @@
 
 .headerTitle {
   color: var(--muted-strong);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.2;
   text-align: right;
   min-width: 0;
@@ -116,14 +116,14 @@
 .page {
   width: min(100%, 560px);
   margin: 0 auto;
-  padding: 12px 22px 0;
+  padding: 8px 18px 0;
 }
 
 .pageWideScroll {
-  margin-left: -22px;
-  margin-right: -22px;
-  padding-left: 22px;
-  padding-right: 22px;
+  margin-left: -18px;
+  margin-right: -18px;
+  padding-left: 18px;
+  padding-right: 18px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -149,32 +149,32 @@
 }
 
 .uiTitle--1 {
-  font-size: 36px;
+  font-size: 30px;
   line-height: 1.08;
   font-weight: 800;
 }
 
 .uiTitle--2 {
-  font-size: 25px;
+  font-size: 21px;
   line-height: 1.18;
   font-weight: 800;
 }
 
 .uiTitle--3 {
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.22;
   font-weight: 800;
 }
 
 .uiLabel {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.35;
 }
 
 .sectionHeader {
   color: var(--text);
-  font-size: 22px;
+  font-size: 19px;
   line-height: 1.2;
   font-weight: 800;
   margin: 4px 0 0;
@@ -192,7 +192,7 @@
   background: transparent;
   color: var(--accent);
   font-weight: 800;
-  font-size: 15px;
+  font-size: 13px;
   padding: 4px 0;
   display: inline-flex;
   align-items: center;
@@ -203,13 +203,13 @@
   width: 100%;
   background: var(--surface);
   border: 1px solid rgba(16, 16, 20, 0.04);
-  border-radius: 20px;
-  padding: 18px;
+  border-radius: 18px;
+  padding: 16px;
   box-shadow: var(--shadow-card);
 }
 
 .card--tight {
-  padding: 14px;
+  padding: 12px;
 }
 
 .card--disabled {
@@ -222,10 +222,10 @@
 }
 
 .uiButton {
-  min-height: 46px;
-  border-radius: 14px;
+  min-height: 42px;
+  border-radius: 12px;
   border: 1px solid transparent;
-  padding: 10px 18px;
+  padding: 9px 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -233,7 +233,7 @@
   color: #ffffff;
   background: var(--accent);
   font-weight: 800;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.2;
   text-decoration: none;
   transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
@@ -270,9 +270,9 @@
 }
 
 .uiIconButton {
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
   border: 0;
   border-radius: 50%;
   background: transparent;
@@ -285,13 +285,13 @@
 
 .uiControl {
   width: 100%;
-  min-height: 52px;
+  min-height: 46px;
   border: 1px solid transparent;
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 10px 13px;
   background: var(--surface-soft);
   color: var(--text);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.25;
   outline: none;
 }
@@ -358,12 +358,12 @@
 
 .cellRow {
   width: 100%;
-  min-height: 62px;
+  min-height: 56px;
   border: 0;
   border-bottom: 1px solid var(--border);
   background: transparent;
   color: var(--text);
-  padding: 13px 0;
+  padding: 11px 0;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -383,9 +383,9 @@
 }
 
 .cellRow__before {
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
   border-radius: 50%;
   background: var(--surface-soft);
   color: var(--accent);
@@ -404,14 +404,14 @@
 
 .cellRow__title {
   color: var(--text);
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.25;
   font-weight: 800;
 }
 
 .cellRow__subtitle {
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.3;
 }
 
@@ -449,7 +449,7 @@
   align-items: center;
   justify-content: center;
   color: var(--text);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   background: #ffe4ba;
 }
@@ -498,12 +498,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 28px;
-  padding: 5px 10px;
+  min-height: 26px;
+  padding: 4px 9px;
   border-radius: 999px;
   background: var(--accent-soft);
   color: var(--accent);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.2;
   font-weight: 800;
   white-space: nowrap;
@@ -578,15 +578,15 @@
 
 .appointmentHero {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: 60px minmax(0, 1fr);
+  gap: 14px;
   align-items: flex-start;
 }
 
 .appointmentHero__icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 22px;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
   background: var(--accent-soft);
   color: var(--accent);
   display: inline-flex;
@@ -612,19 +612,19 @@
 .horizontalCards {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(245px, 78%);
+  grid-auto-columns: minmax(224px, 76%);
   gap: 12px;
 }
 
 .miniVisitCard {
-  min-height: 152px;
+  min-height: 136px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .messageCard {
-  padding: 0 18px;
+  padding: 0 16px;
 }
 
 .bottomTabBar {
@@ -633,15 +633,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 8px 0 calc(10px + var(--inset-bottom));
+  padding: 6px 0 calc(6px + var(--inset-bottom));
   background: transparent;
 }
 
 .bottomTabBar__inner {
   width: min(calc(100% - 12px), 528px);
   margin: 0 auto;
-  padding: 9px 2px 8px;
-  border-radius: 22px;
+  padding: 6px 2px 5px;
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.97);
   box-shadow: var(--shadow-floating);
   border: 1px solid rgba(16, 16, 20, 0.06);
@@ -652,9 +652,9 @@
 
 .bottomTab {
   min-width: 0;
-  min-height: 62px;
+  min-height: 50px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 14px;
   background: transparent;
   color: var(--muted-strong);
   text-decoration: none;
@@ -662,8 +662,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 5px;
-  font-size: 12px;
+  gap: 4px;
+  font-size: 11px;
   line-height: 1.1;
   font-weight: 800;
   position: relative;
@@ -687,7 +687,7 @@
   border-radius: 999px;
   background: var(--accent);
   position: absolute;
-  bottom: 2px;
+  bottom: 1px;
 }
 
 .bottomActionBar {
@@ -696,21 +696,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 10px 0 calc(12px + var(--inset-bottom));
+  padding: 8px 0 calc(8px + var(--inset-bottom));
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   border-top: 1px solid rgba(16, 16, 20, 0.08);
 }
 
 .bottomActionBar--withTabs {
-  bottom: calc(94px + var(--inset-bottom));
-  padding-bottom: 10px;
+  bottom: calc(72px + var(--inset-bottom));
+  padding-bottom: 8px;
 }
 
 .bottomActionBar__inner {
   width: min(100%, 560px);
   margin: 0 auto;
-  padding: 0 22px;
+  padding: 0 18px;
 }
 
 .bottomBefore {
@@ -764,14 +764,14 @@
 }
 
 .pill {
-  min-height: 40px;
+  min-height: 36px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 8px 13px;
+  padding: 7px 12px;
   background: var(--surface);
   color: var(--text);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .pill--active {
@@ -794,7 +794,7 @@
 
 .calendarTitle {
   color: var(--text);
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.2;
   font-weight: 800;
   text-transform: capitalize;
@@ -806,13 +806,13 @@
 }
 
 .calendarArrow {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  font-size: 25px;
+  font-size: 20px;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -833,7 +833,7 @@
 .calendarWeekdays span {
   color: var(--muted);
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -919,13 +919,13 @@
 .popularGrid {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 128px;
+  grid-auto-columns: 112px;
   gap: 12px;
 }
 
 .popularCard {
-  min-height: 122px;
-  padding: 12px;
+  min-height: 106px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -940,9 +940,9 @@
 }
 
 .specialtyPlaceholder {
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: var(--accent-tint);
   color: var(--accent);
   display: inline-flex;
@@ -952,8 +952,8 @@
 
 .methodCard {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) 24px;
-  gap: 14px;
+  grid-template-columns: 54px minmax(0, 1fr) 22px;
+  gap: 12px;
   align-items: center;
   border: 1px solid rgba(16, 16, 20, 0.05);
   background: var(--surface);
@@ -967,9 +967,9 @@
 }
 
 .methodCard__icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
   background: var(--accent-tint);
   color: var(--accent);
   display: inline-flex;
@@ -992,13 +992,13 @@
 }
 
 .methodTag {
-  min-height: 32px;
+  min-height: 30px;
   border: 1px solid rgba(228, 0, 127, 0.32);
   border-radius: 10px;
-  padding: 6px 10px;
+  padding: 5px 9px;
   color: var(--accent);
   background: var(--surface);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.2;
   font-weight: 800;
 }
@@ -1085,7 +1085,7 @@
   min-width: 90px;
   text-align: right;
   font-weight: 800;
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.2;
   white-space: nowrap;
 }
@@ -1466,14 +1466,14 @@
 }
 
 .surveyNumberButton {
-  width: 46px;
-  min-width: 46px;
-  height: 46px;
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--surface);
   color: var(--text);
-  font-size: 22px;
+  font-size: 19px;
   line-height: 1;
 }
 
@@ -1534,15 +1534,15 @@
   .page,
   .appHeader__inner,
   .bottomActionBar__inner {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
   .pageWideScroll {
-    margin-left: -16px;
-    margin-right: -16px;
-    padding-left: 16px;
-    padding-right: 16px;
+    margin-left: -14px;
+    margin-right: -14px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
   .appointmentHero {
@@ -1561,6 +1561,6 @@
   }
 
   .bottomTab {
-    font-size: 10px;
+    font-size: 9px;
   }
 }
