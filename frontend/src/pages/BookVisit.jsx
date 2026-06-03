@@ -66,7 +66,7 @@ function PopularCard({ spec, active, onClick }) {
   );
 }
 
-function MethodCard({ icon: Icon, title, subtitle, tag, selected, onClick, children }) {
+function MethodCard({ icon: Icon, title, subtitle, tag, selected, onClick, children, showChevron = true }) {
   const Component = Icon;
   const content = (
     <>
@@ -79,7 +79,9 @@ function MethodCard({ icon: Icon, title, subtitle, tag, selected, onClick, child
         {tag ? <span className="methodTag">{tag}</span> : null}
         {children ? <span className="methodCard__actions">{children}</span> : null}
       </span>
-      <ChevronRight className="methodCard__chevron" size={24} aria-hidden="true" />
+      {showChevron && (
+        <ChevronRight className="methodCard__chevron" size={24} aria-hidden="true" />
+      )}
     </>
   );
 
@@ -235,11 +237,8 @@ export default function BookVisit() {
             className="uiControl"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Врач или услуга"
+            placeholder="Найдите нужную специализацию"
           />
-          <span className="searchPanel__mic" aria-hidden="true">
-            <Mic size={24} />
-          </span>
         </div>
 
         <Stack gap={12}>
@@ -303,7 +302,6 @@ export default function BookVisit() {
               icon={BriefcaseMedical}
               title="Консультации"
               subtitle="Запись по врачу или услуге"
-              tag="По врачу или услуге"
               onClick={() => openOnline()}
             />
           ) : null}
@@ -315,6 +313,7 @@ export default function BookVisit() {
               title={spec.title}
               subtitle={spec.type === "phone_and_chat" ? "Запись по телефону или в чате" : "Запись по телефону"}
               selected={selectedContactSpecId === spec.id}
+              showChevron={spec.type !== "phone_and_chat"}
             >
               <Button mode="secondary" onClick={() => openPhone(spec.phone)} disabled={!spec.phone}>
                 <Phone size={18} />
