@@ -209,6 +209,9 @@ GIT_COMMIT=$(git rev-parse --short HEAD)
 BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 APP_VERSION=$(git rev-parse --short HEAD)
 BACKEND_VERSION=$(git rev-parse --short HEAD)
+VITE_THEME_CONFIG_PATH=theme-config.json
+VITE_PRIVACY_POLICY_URL=https://aldenta.ru/confidentiality/
+VITE_PERSONAL_DATA_CONSENT_URL=https://aldenta.ru/personal-data-consent/
 EOF
 sudo systemctl restart max-miniapp
 ```

@@ -1,3 +1,5 @@
+import { appConfig } from "./config.js";
+
 const COLOR_VARIABLES = {
   background: "--bg",
   surface: "--surface",
@@ -25,9 +27,25 @@ function applyColors(colors) {
   }
 }
 
+function resolveThemeConfigUrl(rawPath) {
+  const value = String(rawPath || "theme-config.json").trim();
+  if (!value) return null;
+  if (/^https?:\/\//i.test(value)) return value;
+  if (value.startsWith("/")) return value;
+
+  const base = import.meta.env.BASE_URL || "/";
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  const normalizedPath = value.replace(/^\.?\//, "");
+
+  return `${normalizedBase}${normalizedPath}`;
+}
+
 export async function applyRuntimeTheme() {
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}theme-config.json`, {
+    const themeConfigUrl = resolveThemeConfigUrl(appConfig.themeConfigPath);
+    if (!themeConfigUrl) return;
+
+    const response = await fetch(themeConfigUrl, {
       cache: "no-store",
     });
 

@@ -179,6 +179,9 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 ### 3) Сборка и запуск
 
+Опциональные настройки frontend-сборки задаются в корневом `.env`:
+`VITE_THEME_CONFIG_PATH`, `VITE_PRIVACY_POLICY_URL`, `VITE_PERSONAL_DATA_CONSENT_URL`.
+
 ```bash
 docker compose -f docker-compose.prod.yml up -d --build
 ```
