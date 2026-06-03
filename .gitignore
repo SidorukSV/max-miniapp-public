@@ -29,3 +29,5 @@ onec-config*.yml
 backend/.env
 deploy/nginx/*.pem
 frontend/public/*.png
+frontend/public/*.json 
+!frontend/public/theme-config.json
