@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { config } from "./config.js";
+import { config, oneCConfigLoadDiagnostics } from "./config.js";
 import { authRoutes } from "./routes/auth.js";
 import { meRoutes } from "./routes/me.js";
 import { logsRoutes } from "./routes/logs.js";
@@ -29,6 +29,14 @@ function buildLoggerOptions() {
     };
 }
 
+function logOneCConfigDiagnostics(app) {
+    for (const diagnostic of oneCConfigLoadDiagnostics) {
+        const { level = "info", ...payload } = diagnostic;
+        const safeLevel = typeof app.log[level] === "function" ? level : "info";
+        app.log[safeLevel](payload, "1C config load diagnostic");
+    }
+}
+
 export async function buildApp() {
     const localhostOrigins = [
         "http://localhost:3000",
@@ -45,6 +53,8 @@ export async function buildApp() {
     const app = Fastify({
         logger: buildLoggerOptions(),
     });
+
+    logOneCConfigDiagnostics(app);
 
     await app.register(cors, {
         origin(origin, cb) {

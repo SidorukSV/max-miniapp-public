@@ -14,6 +14,8 @@ test("backend logger writes requests to BACKEND_LOG_FILE", async (t) => {
     process.env.NODE_ENV = "test";
     process.env.BACKEND_LOG_FILE = logFile;
     process.env.BACKEND_LOG_LEVEL = "info";
+    process.env.ONEC_CONFIG_FILE = "__file_logger_test_missing_onec.yml";
+    delete process.env.ONEC_CONFIG;
 
     const { buildApp } = await import("../src/app.js");
     const app = await buildApp();
@@ -22,6 +24,7 @@ test("backend logger writes requests to BACKEND_LOG_FILE", async (t) => {
         await app.close();
         delete process.env.BACKEND_LOG_FILE;
         delete process.env.BACKEND_LOG_LEVEL;
+        delete process.env.ONEC_CONFIG_FILE;
         await fs.rm(tempDir, { recursive: true, force: true });
     });
 
@@ -37,4 +40,7 @@ test("backend logger writes requests to BACKEND_LOG_FILE", async (t) => {
 
     assert.match(logContent, /\/api\/v1\/version/);
     assert.match(logContent, /request completed/);
+    assert.match(logContent, /onec_config_file_checked/);
+    assert.match(logContent, /onec_config_not_found/);
+    assert.match(logContent, /__file_logger_test_missing_onec\.yml/);
 });
