@@ -69,8 +69,8 @@
   height: 42px;
   min-width: 42px;
   border-radius: 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  /*background: var(--surface);
+  border: 1px solid var(--border);*/
   display: inline-flex;
   align-items: center;
   justify-content: center;
