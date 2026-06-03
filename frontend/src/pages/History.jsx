@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Flex, Typography, Button } from "@maxhub/max-ui";
+import { Container, Flex, Typography, Button } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
-import AppointmentOptionsSheet from "../components/AppointmentOptionsSheet.jsx";
 import {
     getMedicalHistory,
     getStoredAccessToken,
@@ -11,7 +10,6 @@ import "../App.css";
 import HistorySkeleton from "../components/history/HistorySkeleton.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
 import { FileClock } from "lucide-react";
-import { openExternalLink } from "../utils/safeUrl.js";
 
 function parseMedicalDate(value) {
     if (!value) return null;
@@ -120,8 +118,6 @@ export default function History() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [specSheetOpen, setSpecSheetOpen] = useState(false);
-    const [offlineSpec, setOfflineSpec] = useState(null);
 
     useEffect(() => {
         async function loadHistory() {
@@ -174,13 +170,10 @@ export default function History() {
         }
 
         if (item?.specializationType !== "online") {
-            setOfflineSpec({
-                id: item.specializationId,
-                title: item.specializationTitle || "Без названия",
-                appointmentType: item.specializationType === "phone_and_chat" ? "phone_and_chat" : "phone",
-                appointmentPhone: item.specializationPhone || "",
+            const params = new URLSearchParams({
+                contactSpecializationId: item.specializationId,
             });
-            setSpecSheetOpen(true);
+            nav(`/book?${params.toString()}`);
             return;
         }
 
@@ -191,28 +184,16 @@ export default function History() {
             params.set("branchId", item.branchId);
         }
 
-        nav(`/book?${params.toString()}`);
-    }
-
-    function openPhone(phoneRaw) {
-        const digits = String(phoneRaw || "").replace(/[^\d+]/g, "");
-        if (!digits) return;
-        window.location.href = `tel:${digits}`;
-    }
-
-    function openChat() {
-        const chatUrl = import.meta.env.VITE_MAX_CHAT_URL || "";
-        openExternalLink(chatUrl);
+        nav(`/book/flow?${params.toString()}`);
     }
 
     return (
         <PageLayout
-            showBottom={true}
-            bottomButtonText="Вернуться на главную"
-            onBottomButtonClick={() => { nav("/"); }}
+            showBottom
+            headerTitle="Медкарта"
         >
             <Flex direction="column" gap={12}>
-                <Typography.Title level={2}>История приемов</Typography.Title>
+                <Typography.Title level={2}>Медкарта</Typography.Title>
 
                 {loading ? <HistorySkeleton /> : null}
                 {!loading && error ? <Typography.Label className="authErrorLabel">{error}</Typography.Label> : null}
@@ -250,22 +231,6 @@ export default function History() {
                 ))}
             </Flex>
 
-            <AppointmentOptionsSheet
-                open={specSheetOpen}
-                onlineCount={0}
-                offlineSpecs={offlineSpec ? [offlineSpec] : []}
-                loading={false}
-                error={""}
-                onClose={() => {
-                    setSpecSheetOpen(false);
-                    setOfflineSpec(null);
-                }}
-                onOnlineBook={() => {
-                    setSpecSheetOpen(false);
-                }}
-                onPhoneCall={openPhone}
-                onOpenChat={openChat}
-            />
         </PageLayout>
     );
 }

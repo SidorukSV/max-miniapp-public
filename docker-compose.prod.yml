@@ -6,6 +6,11 @@ services:
   backend:
     build:
       context: ./backend
+      args:
+        APP_VERSION: ${APP_VERSION:-1.0.0}
+        BACKEND_VERSION: ${BACKEND_VERSION:-1.0.0}
+        GIT_COMMIT: ${GIT_COMMIT:-unknown}
+        BUILD_TIME: ${BUILD_TIME:-unknown}
     restart: unless-stopped
     env_file:
       - ./backend/.env.production
@@ -22,6 +27,9 @@ services:
       dockerfile: deploy/nginx/Dockerfile
       args:
         VITE_API_BASE: /api/v1
+        VITE_APP_VERSION: ${APP_VERSION:-0.0.0}
+        VITE_GIT_COMMIT: ${GIT_COMMIT:-unknown}
+        VITE_BUILD_TIME: ${BUILD_TIME:-unknown}
     restart: unless-stopped
     depends_on:
       - backend

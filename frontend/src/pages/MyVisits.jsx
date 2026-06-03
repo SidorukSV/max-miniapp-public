@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Flex, Typography, Button, CellHeader } from "@maxhub/max-ui";
+import { Container, Flex, Typography, Button, CellHeader } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
 import QuestionDialog from "../components/QuestionDialog";
 import { getAppointments, getStoredAccessToken, updateAppointment } from "../api";
@@ -199,14 +199,13 @@ export default function MyVisits() {
             specializationId: visit.specializationId,
             doctorId: visit.doctorId,
         });
-        nav(`/book?${params.toString()}`);
+        nav(`/book/flow?${params.toString()}`);
     }
 
     return (
         <PageLayout
-            showBottom={true}
-            bottomButtonText="Вернуться на главную"
-            onBottomButtonClick={() => { nav("/"); }}
+            showBottom
+            headerTitle="Мои записи"
         >
             <Flex direction="column" gap={10}>
                 <CellHeader titleStyle="caps">Мои записи</CellHeader>

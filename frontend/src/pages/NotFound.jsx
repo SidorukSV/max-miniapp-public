@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Compass } from "lucide-react";
-import { CellHeader, Flex } from "@maxhub/max-ui";
+import { CellHeader, Flex } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
 

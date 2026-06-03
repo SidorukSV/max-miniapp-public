@@ -1,35 +1,53 @@
-import { Panel, Container } from "@maxhub/max-ui";
-import AppHeader from "./AppHeader";
-import AppBottomBar from "./AppBottomBar";
+import AppHeader from "./AppHeader.jsx";
+import AppBottomBar from "./AppBottomBar.jsx";
+import { Button } from "./ui.jsx";
 import "../App.css";
 
 export default function PageLayout({
-    children,
-    headerTitle = "",
-    logoSrc = `${import.meta.env.BASE_URL}${import.meta.env.VITE_LOGO_PATH}`,
-    showBottom = true,
-    bottomButtonText,
-    onBottomButtonClick,
-    bottomButtonDisabled = false,
-    showBottomButton = true,
-    before = null,
-    after = null,
-    roundedLogo = false
+  children,
+  headerTitle = "",
+  title = "",
+  showTabs = true,
+  showBottom,
+  bottomButtonText,
+  onBottomButtonClick,
+  bottomButtonDisabled = false,
+  showBottomButton = true,
+  before = null,
+  after = null,
 }) {
-    return (
-        <Panel mode="secondary" className="panel">
-            <AppHeader title={headerTitle} logoSrc={logoSrc} roundedLogo={roundedLogo} />
-            <Container className="page">{children}</Container>
-            {showBottom && (
-                <AppBottomBar
-                    buttonText={bottomButtonText}
-                    onButtonClick={onBottomButtonClick}
-                    buttonDisabled={bottomButtonDisabled}
-                    showButton={showBottomButton}
-                    before={before}
-                    after={after}
-                />
-            )}
-        </Panel>
-    );
+  const shouldShowTabs = showBottom === undefined ? showTabs : Boolean(showBottom);
+  const shouldShowAction = Boolean(bottomButtonText && showBottomButton);
+
+  return (
+    <div
+      className={[
+        "appShell",
+        shouldShowTabs ? "appShell--tabs" : "",
+        shouldShowAction ? "appShell--action" : "",
+      ].filter(Boolean).join(" ")}
+    >
+      <AppHeader title={headerTitle || title} />
+      <main className="page">{children}</main>
+
+      {shouldShowAction ? (
+        <footer className={`bottomActionBar ${shouldShowTabs ? "bottomActionBar--withTabs" : ""}`}>
+          <div className="bottomActionBar__inner">
+            {before ? <div className="bottomBefore">{before}</div> : null}
+            <Button
+              className="bottomPrimary"
+              stretched
+              onClick={onBottomButtonClick}
+              disabled={bottomButtonDisabled}
+            >
+              {bottomButtonText}
+            </Button>
+            {after ? <div className="bottomAfter">{after}</div> : null}
+          </div>
+        </footer>
+      ) : null}
+
+      {shouldShowTabs ? <AppBottomBar /> : null}
+    </div>
+  );
 }

@@ -1,10 +1,16 @@
 const ALLOWED_PROTOCOLS = new Set(["https:", "http:", "max:"]);
 
+function startsWithControlCharacter(value) {
+    if (!value) return false;
+    const code = value.charCodeAt(0);
+    return code <= 31 || code === 127;
+}
+
 export function getSafeExternalUrl(rawUrl) {
     const value = String(rawUrl || "").trim();
     if (!value) return null;
 
-    if (/^[\u0000-\u001F\u007F]/.test(value)) return null;
+    if (startsWithControlCharacter(value)) return null;
 
     try {
         const parsed = new URL(value, window.location.origin);

@@ -204,6 +204,12 @@ sudo systemctl start max-miniapp
 ```Bash
 cd /opt/max-miniapp
 git pull
+cat > .env <<EOF
+GIT_COMMIT=$(git rev-parse --short HEAD)
+BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+APP_VERSION=$(git rev-parse --short HEAD)
+BACKEND_VERSION=$(git rev-parse --short HEAD)
+EOF
 sudo systemctl restart max-miniapp
 ```
 
@@ -212,5 +218,6 @@ sudo systemctl restart max-miniapp
 
 ```Bash
 docker compose -f docker-compose.prod.yml ps
+curl -k https://localhost/api/v1/version
 docker compose -f docker-compose.prod.yml logs -f --tail=200
 ```

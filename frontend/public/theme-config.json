@@ -1,0 +1,18 @@
+{
+  "colors": {
+    "background": "#eeeeef",
+    "surface": "#ffffff",
+    "surfaceSoft": "#f7f7f8",
+    "text": "#101014",
+    "muted": "#8d8d93",
+    "mutedStrong": "#66666d",
+    "accent": "#e4007f",
+    "accentDark": "#c60070",
+    "accentSoft": "#ffe7f3",
+    "accentTint": "#fff2f8",
+    "border": "#dedee3",
+    "success": "#19a56b",
+    "danger": "#d83a52",
+    "warning": "#c57a00"
+  }
+}

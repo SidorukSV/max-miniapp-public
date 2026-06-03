@@ -1,335 +1,370 @@
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Flex, Avatar, Typography, CellList, CellSimple, EllipsisText, Counter, Button } from "@maxhub/max-ui";
-import { Calendar, LibraryBig, Gift, LogOut, ClipboardList, ChevronDown, ChevronUp } from "lucide-react";
-import PageLayout from "../components/PageLayout";
-import "../App.css";
-import { useAuth } from "../context/AuthContext.jsx";
+import { Bell, CalendarDays, ChevronRight, Mail, MapPin, RotateCcw, X } from "lucide-react";
+import PageLayout from "../components/PageLayout.jsx";
 import AuthScreen from "../components/AuthScreen.jsx";
+import EmptyStateCard from "../components/EmptyStateCard.jsx";
+import QuestionDialog from "../components/QuestionDialog.jsx";
 import { HomeLoadingCard } from "../components/loadingCard.jsx";
-import { useEffect, useState } from "react";
-import AppointmentOptionsSheet from "../components/AppointmentOptionsSheet.jsx";
-import {
-    clearTokens,
-    authLogout,
-    getStoredAccessToken,
-    getCatalogSpecializationsBySchedule,
-    getSurveys,
-    authSwitchPatient,
-    storeTokens,
-    getMe,
-} from "../api.js";
-
+import { Avatar, Button, Card, IconButton, Stack, Typography } from "../components/ui.jsx";
+import { getAppointments, getStoredAccessToken, getSurveys, updateAppointment } from "../api.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import { getFallbackGradientByInitials } from "../modules/avatarGradient.js";
-import { openExternalLink } from "../utils/safeUrl.js";
-import { dateISOFormat } from "../modules/DateFormat.js";
 
-function formatPhoneToInternational(phone) {
-    if (!phone) return "";
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 5) return "Доброй ночи";
+  if (hour < 12) return "Доброе утро";
+  if (hour < 18) return "Добрый день";
+  return "Добрый вечер";
+}
 
-    const cleaned = String(phone).replace(/[^\d+]/g, "");
-    const digits = cleaned.replace(/\D/g, "");
-    const formatRu = (normalizedRuDigits) => `+7 ${normalizedRuDigits.slice(1, 4)} ${normalizedRuDigits.slice(4, 7)} ${normalizedRuDigits.slice(7, 9)} ${normalizedRuDigits.slice(9, 11)}`;
+function getFirstName(fullName) {
+  return String(fullName || "Пациент").trim().split(/\s+/)[1] || String(fullName || "Пациент").trim().split(/\s+/)[0] || "Пациент";
+}
 
-    if (digits.length === 11 && (digits.startsWith("7") || digits.startsWith("8"))) {
-        const normalized = `7${digits.slice(1)}`;
-        return formatRu(normalized);
-    }
+function toDateLabel(dateObj) {
+  if (!(dateObj instanceof Date) || Number.isNaN(dateObj.getTime())) return "Без даты";
+  return dateObj.toLocaleDateString("ru-RU", {
+    day: "numeric",
+    month: "long",
+  });
+}
 
-    if (digits.length === 10) {
-        return formatRu(`7${digits}`);
-    }
+function toTimeLabel(dateObj) {
+  if (!(dateObj instanceof Date) || Number.isNaN(dateObj.getTime())) return "--:--";
+  return dateObj.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
-    if (cleaned.startsWith("+")) {
-        return `+${digits}`;
-    }
+function normalizeAppointment(item, index) {
+  const sourceDate = item?.datetimeBegin || item?.appointment_date || "";
+  const dateObj = sourceDate ? new Date(sourceDate) : null;
+  const isValidDate = dateObj instanceof Date && !Number.isNaN(dateObj.valueOf());
 
-    if (digits.length > 0) {
-        return `+${digits}`;
-    }
+  return {
+    id: item?.appointment_id || item?.appointmentId || item?.id || `appointment-${index}`,
+    dateObj: isValidDate ? dateObj : null,
+    datetimeMs: isValidDate ? dateObj.getTime() : 0,
+    dateLabel: isValidDate ? toDateLabel(dateObj) : "Без даты",
+    timeLabel: isValidDate ? toTimeLabel(dateObj) : "--:--",
+    doctor: [item?.doctorLastname, item?.doctorFirstname, item?.doctorPatronimic].filter(Boolean).join(" ") || "Врач не указан",
+    doctorId: item?.doctorId || "",
+    spec: item?.specializationTitle || "Специализация не указана",
+    specializationId: item?.specializationId || "",
+    branchId: item?.branchId || "",
+    place: item?.cabinetTitle || "Кабинет не указан",
+    clinic: item?.branchTitle || "Филиал не указан",
+    status: item?.conditionTitle || "Запись",
+    isApproved: item?.isApproved,
+  };
+}
 
-    return phone;
+function toRuDate(value) {
+  const parsed = new Date(value || "");
+  if (Number.isNaN(parsed.getTime())) return "без даты";
+  return parsed.toLocaleDateString("ru-RU");
+}
+
+function normalizeSurvey(item, index) {
+  return {
+    id: item?.surveyId || `survey-${index}`,
+    title: item?.surveyTemplateTitle || "Анкета",
+    dateLabel: toRuDate(item?.surveyDate),
+    isDone: Boolean(item?.isDone),
+  };
+}
+
+function AppointmentCard({ visit, onReschedule, onCancel }) {
+  return (
+    <Card>
+      <div className="appointmentHero">
+        <div className="appointmentHero__icon" aria-hidden="true">
+          <CalendarDays size={34} />
+        </div>
+        <Stack gap={8}>
+          <Typography.Title level={2}>
+            {visit.dateLabel}, {visit.timeLabel}
+          </Typography.Title>
+          <Typography.Title level={3}>
+            {visit.doctor} · {visit.spec}
+          </Typography.Title>
+          <span className="appointmentMeta">
+            <MapPin size={18} />
+            <Typography.Label>{visit.clinic}</Typography.Label>
+          </span>
+        </Stack>
+        <div className="appointmentActions">
+          <Button onClick={() => onReschedule(visit)}>
+            <RotateCcw size={18} />
+            Перенести
+          </Button>
+          <Button mode="secondary" className="dangerBtn" onClick={() => onCancel(visit.id)}>
+            <X size={18} />
+            Отменить
+          </Button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function MiniVisitCard({ visit, onOpen }) {
+  return (
+    <Card className="miniVisitCard">
+      <Stack gap={8}>
+        <Typography.Title level={3}>
+          {visit.dateLabel}, {visit.timeLabel}
+        </Typography.Title>
+        <Typography.Label>{visit.doctor} · {visit.spec}</Typography.Label>
+        <Typography.Label>{visit.clinic}</Typography.Label>
+      </Stack>
+      <Button mode="secondary" onClick={() => onOpen(visit)}>
+        Перенести
+      </Button>
+    </Card>
+  );
 }
 
 export default function Home() {
-    const nav = useNavigate();
-    const { me, loading, isAuthorized, setMe } = useAuth();
+  const nav = useNavigate();
+  const { me, loading, isAuthorized } = useAuth();
+  const accessToken = getStoredAccessToken();
+  const [appointments, setAppointments] = useState([]);
+  const [surveys, setSurveys] = useState([]);
+  const [contentLoading, setContentLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [cancelDialogVisitId, setCancelDialogVisitId] = useState(null);
+  const [pendingVisitId, setPendingVisitId] = useState("");
 
-    const [busy, setBusy] = useState(false);
-    const [specSheetOpen, setSpecSheetOpen] = useState(false);
-    const [specSheetLoading, setSpecSheetLoading] = useState(false);
-    const [specSheetError, setSpecSheetError] = useState("");
-    const [onlineCount, setOnlineCount] = useState(0);
-    const [offlineSpecs, setOfflineSpecs] = useState([]);
-    const [newSurveysCount, setNewSurveysCount] = useState(0);
-    const [isPatientsMenuOpen, setIsPatientsMenuOpen] = useState(false);
-    const [patientSwitchBusy, setPatientSwitchBusy] = useState(false);
-    const username = me?.fullName || "Иван Иванов";
-    const phone = formatPhoneToInternational(me?.phone || "79123456789");
-    const parts = username.trim().split(/\s+/, 2);
-    const initials = parts.map(p => p[0]?.toUpperCase()).join("");
-    const bonus = me?.bonus || 0;
-    const patientsByPhone = Array.isArray(me?.patients_by_phone) ? me.patients_by_phone : [];
-    const hasSeveralPatients = patientsByPhone.length > 1;
+  const username = me?.fullName || "Пациент";
+  const firstName = getFirstName(username);
+  const initials = username
+    .trim()
+    .split(/\s+/, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+  const newSurveysCount = surveys.filter((item) => !item.isDone).length;
 
-    useEffect(() => {
-        async function loadSurveyCounters() {
-            const accessToken = getStoredAccessToken();
-            if (!accessToken) {
-                setNewSurveysCount(0);
-                return;
-            }
-
-            try {
-                const response = await getSurveys(accessToken);
-                const items = Array.isArray(response?.items) ? response.items : [];
-                const newCount = items.filter((item) => !item?.isDone).length;
-                setNewSurveysCount(newCount);
-            } catch {
-                setNewSurveysCount(0);
-            }
-        }
-
-        loadSurveyCounters();
-    }, [me?.patient_id]);
-
-    async function handleLogout() {
-        setBusy(true);
-        try {
-            await authLogout();
-        } catch (err) {
-            console.log(err);
-        } finally {
-            clearTokens();
-            setMe(null);
-            setBusy(false);
-        }
+  async function loadHomeData() {
+    if (!accessToken) {
+      setAppointments([]);
+      setSurveys([]);
+      setContentLoading(false);
+      return;
     }
 
-    function openPhone(phoneRaw) {
-        const digits = String(phoneRaw || "").replace(/[^\d+]/g, "");
-        if (!digits) return;
-        window.location.href = `tel:${digits}`;
+    try {
+      setContentLoading(true);
+      setError("");
+      const [appointmentsResponse, surveysResponse] = await Promise.allSettled([
+        getAppointments(accessToken),
+        getSurveys(accessToken),
+      ]);
+
+      if (appointmentsResponse.status === "fulfilled") {
+        const items = Array.isArray(appointmentsResponse.value?.items) ? appointmentsResponse.value.items : [];
+        setAppointments(items.map(normalizeAppointment).sort((a, b) => a.datetimeMs - b.datetimeMs));
+      } else {
+        setAppointments([]);
+      }
+
+      if (surveysResponse.status === "fulfilled") {
+        const items = Array.isArray(surveysResponse.value?.items) ? surveysResponse.value.items : [];
+        setSurveys(items.map(normalizeSurvey));
+      } else {
+        setSurveys([]);
+      }
+    } catch {
+      setError("Не удалось загрузить данные главной");
+    } finally {
+      setContentLoading(false);
     }
+  }
 
-    function openChat() {
-        const chatUrl = import.meta.env.VITE_MAX_CHAT_URL || "";
-        openExternalLink(chatUrl);
+  useEffect(() => {
+    loadHomeData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
+
+  const nearestAppointment = useMemo(() => {
+    const now = Date.now();
+    const future = appointments.filter((item) => item.datetimeMs >= now);
+    return future[0] || appointments[0] || null;
+  }, [appointments]);
+
+  function rescheduleVisit(visit) {
+    const params = new URLSearchParams({
+      appointmentId: visit.id,
+      specializationId: visit.specializationId,
+      doctorId: visit.doctorId,
+    });
+    if (visit.branchId) params.set("branchId", visit.branchId);
+    nav(`/book/flow?${params.toString()}`);
+  }
+
+  async function confirmCancelVisit() {
+    if (!cancelDialogVisitId || !accessToken) return;
+
+    try {
+      setPendingVisitId(cancelDialogVisitId);
+      setError("");
+      await updateAppointment(accessToken, {
+        appointmentId: cancelDialogVisitId,
+        isCanceled: true,
+      });
+      setAppointments((prev) => prev.filter((visit) => visit.id !== cancelDialogVisitId));
+      setCancelDialogVisitId(null);
+    } catch {
+      setError("Не удалось отменить запись");
+    } finally {
+      setPendingVisitId("");
     }
+  }
 
-    async function handleBookClick() {
-        const accessToken = getStoredAccessToken();
-        if (!accessToken) {
-            nav("/book");
-            return;
-        }
-
-        setSpecSheetLoading(true);
-        setSpecSheetError("");
-
-        try {
-            const specsResponse = await getCatalogSpecializationsBySchedule(accessToken);
-
-            const items = Array.isArray(specsResponse?.items) ? specsResponse.items : [];
-            const online = items.filter((item) => item?.appointment_type === "online");
-            const offline = items
-                .filter((item) => item?.appointment_type === "phone" || item?.appointment_type === "phone_and_chat")
-                .sort((a, b) => String(a?.specializationTitle.toUpperCase() || "").localeCompare(String(b?.specializationTitle.toUpperCase() || "")))
-                .map((item) => ({
-                    id: item.specializationId,
-                    title: item.specializationTitle || "Без названия",
-                    appointmentType: item.appointment_type,
-                    appointmentPhone: item.appointement_phone || item.appointment_phone || "",
-                }));
-
-            if (!offline.length) {
-                nav("/book");
-                return;
-            }
-
-            setOnlineCount(online.length);
-            setOfflineSpecs(offline);
-            setSpecSheetOpen(true);
-        } catch (error) {
-            console.error(error);
-            setSpecSheetError("Не удалось загрузить варианты записи. Открываем онлайн-запись.");
-            nav("/book");
-        } finally {
-            setSpecSheetLoading(false);
-        }
-    }
-
-    async function handleSwitchPatient(patientId) {
-        const accessToken = getStoredAccessToken();
-        if (!accessToken || !patientId || patientId === me?.patient_id) {
-            setIsPatientsMenuOpen(false);
-            return;
-        }
-
-        setPatientSwitchBusy(true);
-        try {
-            const switched = await authSwitchPatient({
-                access_token: accessToken,
-                patient_id: patientId,
-            });
-            storeTokens(switched);
-            const meData = await getMe(switched.access_token);
-            setMe(meData);
-            setIsPatientsMenuOpen(false);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setPatientSwitchBusy(false);
-        }
-    }
-
-    if (loading) {
-        return (
-            <PageLayout showBottomButton={false}>
-                <HomeLoadingCard />
-            </PageLayout>
-        );
-    }
-
-    if (!isAuthorized) {
-        return <AuthScreen />;
-    }
-
+  if (loading) {
     return (
-        <PageLayout
-            bottomButtonText={specSheetLoading ? "Загружаем варианты..." : "Записаться на прием"}
-            bottomButtonDisabled={specSheetLoading}
-            onBottomButtonClick={handleBookClick}
-        >
-            <Flex direction="column" gap={10}>
-                {/* Карточка пациента */}
-                <Container className="card card--tight">
-                    <Flex align="center" justify="space-between" gap={12}>
-                        <Flex align="center" gap={12} style={{ minWidth: 0 }}>
-                            <Avatar.Container style={{ minWidth: 60 }} size={60} form="circle">
-                                <Avatar.Image
-                                    fallback={initials}
-                                    fallbackGradient={getFallbackGradientByInitials(initials, me?.patient_id || phone)}
-                                />
-                            </Avatar.Container>
-
-                            <div className="nameBlock">
-                                <Flex align="center" gap={6}>
-                                    <Typography.Title level={3} className="nameLine">
-                                        <EllipsisText maxLines={3}>
-                                            {username}
-                                        </EllipsisText>
-                                    </Typography.Title>
-                                    {hasSeveralPatients && (
-                                        <button
-                                            type="button"
-                                            className="iconButton"
-                                            aria-label="Выбрать другого пациента"
-                                            onClick={() => setIsPatientsMenuOpen((prev) => !prev)}
-                                            disabled={patientSwitchBusy}
-                                        >
-                                            {isPatientsMenuOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                        </button>
-                                    )}
-                                </Flex>
-
-                                {/* "Пациент" отдельно под ФИО */}
-                                <Typography.Label className="roleLine">
-                                    {phone}
-                                </Typography.Label>
-                            </div>
-                        </Flex>
-
-                        <Flex align="center" gap={10} className="actions">
-
-                            {/* Бонусы */}
-                            <button
-                                type="button"
-                                className="bonusChip bonusChip--clickable"
-                                onClick={() => nav("/bonuses")}
-                                aria-label="Открыть бонусы"
-                            >
-                                <div className="bonusIcon">
-                                    <Gift size={16} />
-                                </div>
-                                <Typography.Title level={3} className="bonusValue">
-                                    {bonus} ₽
-                                </Typography.Title>
-                            </button>
-
-                        </Flex>
-
-                    </Flex>
-                </Container>
-
-                {hasSeveralPatients && isPatientsMenuOpen && (
-                    <Container className="card card--tight">
-                        <CellList>
-                            {patientsByPhone.map((patient) => (
-                                <CellSimple
-                                    key={patient.id}
-                                    title={patient.fullName}
-                                    subtitle={dateISOFormat(patient.birthDate, "dd.MM.yyyy")}
-                                    showChevron={patient.id !== me?.patient_id}
-                                    selected={patient.id === me?.patient_id}
-                                    onClick={() => handleSwitchPatient(patient.id)}
-                                />
-                            ))}
-                        </CellList>
-                    </Container>
-                )}
-
-                {/* Меню */}
-                <Container className="card menuCard">
-                    <CellList>
-                        <CellSimple
-                            before={<Calendar size={24} />}
-                            showChevron
-                            onClick={() => nav("/visits")}
-                        >
-                            Мои записи
-                        </CellSimple>
-
-                        <CellSimple
-                            before={<LibraryBig size={24} />}
-                            showChevron
-                            onClick={() => nav("/history")}
-                        >
-                            История приёмов
-                        </CellSimple>
-
-                        <CellSimple
-                            before={<ClipboardList size={24} />}
-                            showChevron
-                            onClick={() => nav("/surveys")}
-                            after={newSurveysCount > 0 ? <Counter rounded={true} value={newSurveysCount}></Counter> : null}
-                        >
-                            Мои анкеты
-                        </CellSimple>
-
-                        <CellSimple
-                            before={<LogOut size={24} />}
-                            showChevron={false}
-                            onClick={async () => handleLogout()}
-                        >
-                            {busy ? "Выходим" : "Выйти"}
-                        </CellSimple>
-                    </CellList>
-                </Container>
-            </Flex>
-            <AppointmentOptionsSheet
-                open={specSheetOpen}
-                onlineCount={onlineCount}
-                offlineSpecs={offlineSpecs}
-                loading={specSheetLoading}
-                error={specSheetError}
-                onClose={() => setSpecSheetOpen(false)}
-                onOnlineBook={() => {
-                    setSpecSheetOpen(false);
-                    nav("/book");
-                }}
-                onPhoneCall={openPhone}
-                onOpenChat={openChat}
-            />
-        </PageLayout >
+      <PageLayout>
+        <HomeLoadingCard />
+      </PageLayout>
     );
+  }
+
+  if (!isAuthorized) {
+    return <AuthScreen />;
+  }
+
+  return (
+    <PageLayout>
+      <Stack gap={20}>
+        <section className="profilePreview">
+          <div className="profilePreview__main">
+            <Avatar.Container size={58}>
+              <Avatar.Image
+                fallback={initials}
+                fallbackGradient={getFallbackGradientByInitials(initials, me?.patient_id || username)}
+              />
+            </Avatar.Container>
+            <div className="greetingBlock">
+              <Typography.Title level={2}>
+                {getGreeting()}, {firstName}
+              </Typography.Title>
+              <Typography.Label>Как ваше самочувствие сегодня?</Typography.Label>
+            </div>
+          </div>
+          <div className="profilePreview__actions">
+            <IconButton className="notificationButton" onClick={() => nav("/surveys")} aria-label="Открыть сообщения">
+              <Bell size={25} />
+              {newSurveysCount > 0 ? <span className="notificationBadge">{newSurveysCount}</span> : null}
+            </IconButton>
+          </div>
+        </section>
+
+        {error ? <Typography.Label className="authErrorLabel">{error}</Typography.Label> : null}
+
+        <Stack gap={12}>
+          <Typography.Title level={2}>Ближайший приём</Typography.Title>
+          {contentLoading ? (
+            <div className="skeleton skeleton--tx" />
+          ) : nearestAppointment ? (
+            <AppointmentCard
+              visit={nearestAppointment}
+              onReschedule={rescheduleVisit}
+              onCancel={(id) => setCancelDialogVisitId(id)}
+              pendingId={pendingVisitId}
+            />
+          ) : (
+            <EmptyStateCard
+              icon={CalendarDays}
+              title="Записей пока нет"
+              description="Новая запись появится здесь после подтверждения."
+              primaryAction={{
+                label: "Записаться",
+                onClick: () => nav("/book"),
+              }}
+            />
+          )}
+        </Stack>
+
+        {appointments.length > 0 ? (
+          <Stack gap={12}>
+            <div className="sectionHeaderRow">
+              <Typography.Title level={2}>Записи</Typography.Title>
+              <button type="button" className="sectionLink" onClick={() => nav("/visits")}>
+                Все
+                <ChevronRight size={18} />
+              </button>
+            </div>
+            <div className="pageWideScroll">
+              <div className="horizontalCards">
+                {appointments.slice(0, 6).map((visit) => (
+                  <MiniVisitCard key={visit.id} visit={visit} onOpen={rescheduleVisit} />
+                ))}
+              </div>
+            </div>
+          </Stack>
+        ) : null}
+
+        <Stack gap={12}>
+          <div className="sectionHeaderRow">
+            <Typography.Title level={2}>Сообщения</Typography.Title>
+            <button type="button" className="sectionLink" onClick={() => nav("/surveys")}>
+              Все сообщения
+              <ChevronRight size={18} />
+            </button>
+          </div>
+          <Card className="messageCard">
+            {contentLoading ? (
+              <>
+                <div className="skeletonRow" />
+                <div className="skeletonRow" />
+              </>
+            ) : surveys.length ? (
+              surveys.slice(0, 2).map((survey) => (
+                <button
+                  key={survey.id}
+                  type="button"
+                  className="cellRow"
+                  onClick={() => nav(`/surveys/${survey.id}`)}
+                >
+                  <span className="cellRow__before">
+                    <Mail size={22} />
+                  </span>
+                  <span className="cellRow__body">
+                    <span className="cellRow__title">{survey.title}</span>
+                    <span className="cellRow__subtitle">{survey.dateLabel}</span>
+                  </span>
+                  {!survey.isDone ? <span className="notificationBadge">1</span> : null}
+                  <ChevronRight className="cellRow__chevron" size={20} />
+                </button>
+              ))
+            ) : (
+              <div className="cellRow">
+                <span className="cellRow__before">
+                  <Mail size={22} />
+                </span>
+                <span className="cellRow__body">
+                  <span className="cellRow__title">Анкет пока нет</span>
+                  <span className="cellRow__subtitle">Новые анкеты появятся здесь</span>
+                </span>
+              </div>
+            )}
+          </Card>
+        </Stack>
+      </Stack>
+
+      <QuestionDialog
+        open={Boolean(cancelDialogVisitId)}
+        question="Вы уверены, что хотите отменить запись?"
+        onCancel={() => setCancelDialogVisitId(null)}
+        onConfirm={confirmCancelVisit}
+        cancelText="Нет"
+        confirmText={pendingVisitId ? "Отменяем..." : "Да, отменить"}
+        confirmMode="secondary"
+        confirmClassName="dangerBtn"
+      />
+    </PageLayout>
+  );
 }

@@ -7,6 +7,7 @@ import { logsRoutes } from "./routes/logs.js";
 import { catalogsRoutes } from "./routes/catalogs.js";
 import { documentsRoutes } from "./routes/documents.js";
 import { maxWebhookRoutes } from "./routes/maxWebhook.js";
+import { versionRoutes } from "./routes/version.js";
 
 export async function buildApp() {
     const localhostOrigins = [
@@ -78,6 +79,7 @@ export async function buildApp() {
     app.register(catalogsRoutes);
     app.register(documentsRoutes);
     app.register(maxWebhookRoutes);
+    app.register(versionRoutes);
 
     return app;
 }

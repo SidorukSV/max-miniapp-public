@@ -6,6 +6,16 @@ dotenv.config();
 
 const MIN_JWT_SECRET_LENGTH = 32;
 
+function loadPackageVersion() {
+    try {
+        const packagePath = path.resolve(process.cwd(), "package.json");
+        const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf-8"));
+        return String(packageJson?.version || "").trim() || "unknown";
+    } catch {
+        return "unknown";
+    }
+}
+
 function validateJwtSecret(rawSecret) {
     const jwtSecret = typeof rawSecret === "string" ? rawSecret.trim() : "";
 
@@ -204,10 +214,15 @@ function parseCorsAllowedOrigins(rawValue) {
 }
 
 const loadedOneCConfig = loadOneCConfig();
+const packageVersion = loadPackageVersion();
 
 export const config = {
     port: Number(process.env.PORT || 3000),
     nodeEnv: process.env.NODE_ENV || "development",
+    appVersion: process.env.APP_VERSION || packageVersion,
+    backendVersion: process.env.BACKEND_VERSION || packageVersion,
+    gitCommit: process.env.GIT_COMMIT || "unknown",
+    buildTime: process.env.BUILD_TIME || "unknown",
     jwtSecret: validateJwtSecret(process.env.JWT_SECRET),
     maxBotToken: process.env.MAX_BOT_TOKEN || "",
     maxInitDataMaxAgeSeconds: Number(process.env.MAX_INIT_DATA_MAX_AGE_SECONDS || 300),

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Container, Flex, Typography } from "@maxhub/max-ui";
+import { Button, Container, Flex, Typography } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
 
 export default function BookVisitSummary() {
@@ -10,7 +10,8 @@ export default function BookVisitSummary() {
 
     return (
         <PageLayout
-            showBottom={true}
+            showBottom
+            headerTitle="Запись"
             bottomButtonText="К моим записям"
             onBottomButtonClick={() => nav("/visits")}
         >

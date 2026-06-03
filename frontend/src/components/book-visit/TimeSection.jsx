@@ -1,4 +1,4 @@
-import { Container, Flex, Typography } from "@maxhub/max-ui";
+import { Container, Flex, Typography } from "../ui.jsx";
 import Pill from "./Pill.jsx";
 import TimesSkeleton from "./skeletons/TimesSkeleton.jsx";
 

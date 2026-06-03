@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Container, Flex, Typography, CellHeader } from "@maxhub/max-ui";
+import { Container, Flex, Typography, CellHeader } from "../components/ui.jsx";
 import { format, isValid, parse, parseISO } from "date-fns";
 import { ru } from "date-fns/locale";
 import PageLayout from "../components/PageLayout";
@@ -34,7 +33,6 @@ function formatTransactionDate(dateISO) {
 }
 
 export default function Bonuses() {
-  const nav = useNavigate();
   const { me } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,16 +82,15 @@ export default function Bonuses() {
 
   return (
     <PageLayout
-      showBottom={true}
-      bottomButtonText="Вернуться на главную"
-      onBottomButtonClick={() => { nav("/") }}
+      showBottom
+      headerTitle="Бонусы"
     >
       <Flex direction="column" gap={10}>
         {loading ? (
           <BonusesSkeleton />
         ) : (
           <>
-            <Container className="card">
+            <Container className="card bonusesBalanceCard">
               <Flex direction="column" gap={10}>
                 <Typography.Title level={2}>{balance} ₽</Typography.Title>
                 <Typography.Label>Текущий остаток бонусов</Typography.Label>

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import { authRefresh, getMe, getStoredAccessToken, storeTokens, clearTokens } from "../api";
 
@@ -63,6 +64,8 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         bootstrap();
+        // bootstrap should run only once on app startup.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

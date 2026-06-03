@@ -1,4 +1,4 @@
-import { Typography } from "@maxhub/max-ui";
+import { Typography } from "../ui.jsx";
 
 export default function SectionTitle({ title, subtitle }) {
     return (

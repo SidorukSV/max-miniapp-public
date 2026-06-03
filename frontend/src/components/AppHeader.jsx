@@ -1,39 +1,43 @@
-import { useEffect, useState } from "react";
-import { Typography } from "@maxhub/max-ui";
-import "../App.css";
+import { useMemo, useState } from "react";
 
-export default function AppHeader({
-    title = "",
-    logoSrc = "/logo-clinic-aldenta.png",
-    roundedLogo = false
-}) {
-    const [scrolled, setScrolled] = useState(false);
+function buildLogoSrc() {
+  const rawPath = import.meta.env.VITE_LOGO_PATH || "";
+  if (!rawPath.trim()) return "";
 
-    useEffect(() => {
-        const onScroll = () => {
-            const y = window.scrollY || document.documentElement.scrollTop || 0;
-            setScrolled(y > 0);
-        }
+  if (/^https?:\/\//i.test(rawPath)) return rawPath;
 
-        onScroll();
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
-
-    return (
-        <div className={`Header ${scrolled ? "Header--scrolled" : ""}`}>
-            <div className="HeaderInner">
-                <img
-                    src={logoSrc}
-                    alt={title}
-                    className={`clinicLogo ${roundedLogo ? "clinicLogo-rounded" : ""}`}
-                    onError={(e) => (e.currentTarget.style.display = "none")}
-                />
-                <Typography.Label className="clinicTitle">
-                    {title}
-                </Typography.Label>
-            </div>
-        </div>
-    );
+  const base = import.meta.env.BASE_URL || "/";
+  const normalizedBase = base.endsWith("/") ? base : `${base}/`;
+  const normalizedPath = rawPath.replace(/^\/+/, "");
+  return `${normalizedBase}${normalizedPath}`;
 }
 
+export default function AppHeader({ title = "" }) {
+  const [logoFailed, setLogoFailed] = useState(false);
+  const clinicName = import.meta.env.VITE_CLINIC_NAME || "Клиника";
+  const logoSrc = useMemo(() => buildLogoSrc(), []);
+  const showLogo = Boolean(logoSrc) && !logoFailed;
+
+  return (
+    <header className="appHeader">
+      <div className="appHeader__inner">
+        <div className="clinicBrand" aria-label={clinicName}>
+          <span className="clinicLogoWrap">
+            {showLogo ? (
+              <img
+                src={logoSrc}
+                alt={clinicName}
+                className="clinicLogo"
+                onError={() => setLogoFailed(true)}
+              />
+            ) : (
+              <span className="clinicLogoFallback">{clinicName.slice(0, 2).toUpperCase()}</span>
+            )}
+          </span>
+          <span className="clinicTitle">{clinicName}</span>
+        </div>
+        {title ? <span className="headerTitle">{title}</span> : null}
+      </div>
+    </header>
+  );
+}

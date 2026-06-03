@@ -103,6 +103,10 @@ export async function getMe(access_token) {
     });
 }
 
+export async function getVersion() {
+    return apiFetch("/version");
+}
+
 export async function getBonusTransactions(access_token) {
     return apiFetch("/me/bonus-transactions", {
         headers: {

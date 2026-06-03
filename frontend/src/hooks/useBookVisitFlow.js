@@ -426,7 +426,7 @@ export default function useBookVisitFlow() {
             onNextMonth: goNextMonth,
             onBottomButtonClick,
             confirm,
-            goHome: () => nav("/"),
+            goHome: () => nav("/book"),
         },
         loading: {
             specialties: isSpecialtiesLoading,

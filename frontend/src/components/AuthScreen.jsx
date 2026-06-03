@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authStart, authPhone, authSelectPatient, storeTokens, getMe } from "../api";
-import { Flex, Container, Typography, CellList, CellSimple, CellHeader, Input } from "@maxhub/max-ui";
+import { Flex, Container, Typography, CellList, CellSimple, CellHeader, Input } from "./ui.jsx";
 import "../App.css";
 import { useMaxWebApp } from "../hooks/useMaxWebApp";
 import { dateISOFormat } from "../modules/DateFormat";
@@ -142,7 +142,7 @@ export default function AuthScreen() {
 
     return (
         <PageLayout
-            showBottom
+            showBottom={false}
             showBottomButton={!patients.length}
             bottomButtonText={busy ? "Подтверждаем номер..." : "Подтвердить номер телефона"}
             onBottomButtonClick={handleStart}

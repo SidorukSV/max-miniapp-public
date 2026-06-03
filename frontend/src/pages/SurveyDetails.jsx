@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CellHeader, CellList, CellSimple, Container, Flex, Input, SearchInput, Switch, Textarea, Typography } from "@maxhub/max-ui";
+import { CellHeader, CellList, CellSimple, Container, Flex, Input, SearchInput, Switch, Textarea, Typography } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
 import { getCatalogSurveyTemplateById, getStoredAccessToken, getSurveyById } from "../api";
 import Pill from "../components/book-visit/Pill";

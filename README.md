@@ -187,6 +187,7 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 ```bash
 curl -k https://localhost/
+curl -k https://localhost/api/v1/version
 curl -k https://localhost/api/v1/auth/start -X POST
 ```
 
