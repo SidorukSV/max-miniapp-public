@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { config } from "./config.js";
@@ -8,6 +10,24 @@ import { catalogsRoutes } from "./routes/catalogs.js";
 import { documentsRoutes } from "./routes/documents.js";
 import { maxWebhookRoutes } from "./routes/maxWebhook.js";
 import { versionRoutes } from "./routes/version.js";
+
+function buildLoggerOptions() {
+    const loggerOptions = {
+        level: config.backendLogLevel,
+    };
+
+    if (!config.backendLogFile) {
+        return loggerOptions;
+    }
+
+    const resolvedLogFile = path.resolve(process.cwd(), config.backendLogFile);
+    fs.mkdirSync(path.dirname(resolvedLogFile), { recursive: true });
+
+    return {
+        ...loggerOptions,
+        file: resolvedLogFile,
+    };
+}
 
 export async function buildApp() {
     const localhostOrigins = [
@@ -23,7 +43,7 @@ export async function buildApp() {
     ]);
 
     const app = Fastify({
-        logger: true,
+        logger: buildLoggerOptions(),
     });
 
     await app.register(cors, {

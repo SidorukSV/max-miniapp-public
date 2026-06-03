@@ -196,6 +196,14 @@ curl -k https://localhost/api/v1/auth/start -X POST
 
 `-k` нужен только для self-signed сертификата.
 
+Backend пишет JSONL-логи в `./logs/backend.log` при production-запуске через Docker Compose.
+Для диагностики авторизации удобно смотреть:
+
+```bash
+tail -f logs/backend.log
+grep -i auth logs/backend.log
+```
+
 ### Что это даёт
 
 - Frontend работает в production-режиме внутри Docker.

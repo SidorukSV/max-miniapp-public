@@ -225,3 +225,10 @@ docker compose -f docker-compose.prod.yml ps
 curl -k https://localhost/api/v1/version
 docker compose -f docker-compose.prod.yml logs -f --tail=200
 ```
+
+Файл логов backend сохраняется на сервере в:
+
+```Bash
+tail -f /opt/max-miniapp/logs/backend.log
+grep -i auth /opt/max-miniapp/logs/backend.log
+```

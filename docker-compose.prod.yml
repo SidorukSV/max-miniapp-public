@@ -18,8 +18,12 @@ services:
       NODE_ENV: production
       PORT: 3000
       REDIS_URL: redis://redis:6379
+      BACKEND_LOG_FILE: ${BACKEND_LOG_FILE:-/app/logs/backend.log}
+      BACKEND_LOG_LEVEL: ${BACKEND_LOG_LEVEL:-info}
     depends_on:
       - redis
+    volumes:
+      - ./logs:/app/logs
 
   gateway:
     build:

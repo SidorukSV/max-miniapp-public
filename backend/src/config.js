@@ -213,6 +213,12 @@ function parseCorsAllowedOrigins(rawValue) {
     );
 }
 
+function parseLogLevel(rawValue) {
+    const value = String(rawValue || "info").trim().toLowerCase();
+    const allowed = new Set(["fatal", "error", "warn", "info", "debug", "trace", "silent"]);
+    return allowed.has(value) ? value : "info";
+}
+
 const loadedOneCConfig = loadOneCConfig();
 const packageVersion = loadPackageVersion();
 
@@ -223,6 +229,8 @@ export const config = {
     backendVersion: process.env.BACKEND_VERSION || packageVersion,
     gitCommit: process.env.GIT_COMMIT || "unknown",
     buildTime: process.env.BUILD_TIME || "unknown",
+    backendLogFile: process.env.BACKEND_LOG_FILE || "",
+    backendLogLevel: parseLogLevel(process.env.BACKEND_LOG_LEVEL),
     jwtSecret: validateJwtSecret(process.env.JWT_SECRET),
     maxBotToken: process.env.MAX_BOT_TOKEN || "",
     maxInitDataMaxAgeSeconds: Number(process.env.MAX_INIT_DATA_MAX_AGE_SECONDS || 300),
