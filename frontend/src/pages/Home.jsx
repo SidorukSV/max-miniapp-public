@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, CalendarDays, ChevronRight, Mail, MapPin, RotateCcw, X } from "lucide-react";
+import { Bell, CalendarDays, ChevronRight, Mail, RotateCcw, X } from "lucide-react";
 import PageLayout from "../components/PageLayout.jsx";
 import AuthScreen from "../components/AuthScreen.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
 import QuestionDialog from "../components/QuestionDialog.jsx";
 import { HomeLoadingCard } from "../components/loadingCard.jsx";
 import { Avatar, Button, Card, IconButton, Stack, Typography } from "../components/ui.jsx";
+import { BranchInfoRow, DoctorInfoRow } from "../components/VisitInfoRows.jsx";
 import { getAppointments, getStoredAccessToken, getSurveys, updateAppointment } from "../api.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { buildRescheduleUrl, normalizeAppointment } from "../modules/appointmentView.js";
 import { getFallbackGradientByInitials } from "../modules/avatarGradient.js";
 
 function getGreeting() {
@@ -21,45 +23,6 @@ function getGreeting() {
 
 function getFirstName(fullName) {
   return String(fullName || "Пациент").trim().split(/\s+/)[1] || String(fullName || "Пациент").trim().split(/\s+/)[0] || "Пациент";
-}
-
-function toDateLabel(dateObj) {
-  if (!(dateObj instanceof Date) || Number.isNaN(dateObj.getTime())) return "Без даты";
-  return dateObj.toLocaleDateString("ru-RU", {
-    day: "numeric",
-    month: "long",
-  });
-}
-
-function toTimeLabel(dateObj) {
-  if (!(dateObj instanceof Date) || Number.isNaN(dateObj.getTime())) return "--:--";
-  return dateObj.toLocaleTimeString("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function normalizeAppointment(item, index) {
-  const sourceDate = item?.datetimeBegin || item?.appointment_date || "";
-  const dateObj = sourceDate ? new Date(sourceDate) : null;
-  const isValidDate = dateObj instanceof Date && !Number.isNaN(dateObj.valueOf());
-
-  return {
-    id: item?.appointment_id || item?.appointmentId || item?.id || `appointment-${index}`,
-    dateObj: isValidDate ? dateObj : null,
-    datetimeMs: isValidDate ? dateObj.getTime() : 0,
-    dateLabel: isValidDate ? toDateLabel(dateObj) : "Без даты",
-    timeLabel: isValidDate ? toTimeLabel(dateObj) : "--:--",
-    doctor: [item?.doctorLastname, item?.doctorFirstname, item?.doctorPatronimic].filter(Boolean).join(" ") || "Врач не указан",
-    doctorId: item?.doctorId || "",
-    spec: item?.specializationTitle || "Специализация не указана",
-    specializationId: item?.specializationId || "",
-    branchId: item?.branchId || "",
-    place: item?.cabinetTitle || "Кабинет не указан",
-    clinic: item?.branchTitle || "Филиал не указан",
-    status: item?.conditionTitle || "Запись",
-    isApproved: item?.isApproved,
-  };
 }
 
 function toRuDate(value) {
@@ -77,9 +40,14 @@ function normalizeSurvey(item, index) {
   };
 }
 
-function AppointmentCard({ visit, onReschedule, onCancel }) {
+function stopAndRun(event, action) {
+  event.stopPropagation();
+  action();
+}
+
+function AppointmentCard({ visit, onOpen, onReschedule, onCancel }) {
   return (
-    <Card>
+    <Card className="visitCardClickable" onClick={() => onOpen(visit)}>
       <div className="appointmentHero">
         <div className="appointmentHero__icon" aria-hidden="true">
           <CalendarDays size={34} />
@@ -88,20 +56,15 @@ function AppointmentCard({ visit, onReschedule, onCancel }) {
           <Typography.Title level={2}>
             {visit.dateLabel}, {visit.timeLabel}
           </Typography.Title>
-          <Typography.Title level={3}>
-            {visit.doctor} · {visit.spec}
-          </Typography.Title>
-          <span className="appointmentMeta">
-            <MapPin size={18} />
-            <Typography.Label>{visit.clinic}</Typography.Label>
-          </span>
+          <DoctorInfoRow doctor={visit.doctor} specialization={visit.spec} />
+          <BranchInfoRow clinic={visit.clinic} place={visit.place} />
         </Stack>
         <div className="appointmentActions">
-          <Button onClick={() => onReschedule(visit)}>
+          <Button onClick={(event) => stopAndRun(event, () => onReschedule(visit))}>
             <RotateCcw size={18} />
             Перенести
           </Button>
-          <Button mode="secondary" className="dangerBtn" onClick={() => onCancel(visit.id)}>
+          <Button mode="secondary" className="dangerBtn" onClick={(event) => stopAndRun(event, () => onCancel(visit.id))}>
             <X size={18} />
             Отменить
           </Button>
@@ -111,19 +74,21 @@ function AppointmentCard({ visit, onReschedule, onCancel }) {
   );
 }
 
-function MiniVisitCard({ visit, onOpen }) {
+function MiniVisitCard({ visit, onOpen, onReschedule }) {
   return (
-    <Card className="miniVisitCard">
+    <Card className="miniVisitCard visitCardClickable" onClick={() => onOpen(visit)}>
       <Stack gap={8}>
         <Typography.Title level={3}>
           {visit.dateLabel}, {visit.timeLabel}
         </Typography.Title>
-        <Typography.Label>{visit.doctor} · {visit.spec}</Typography.Label>
-        <Typography.Label>{visit.clinic}</Typography.Label>
+        <DoctorInfoRow doctor={visit.doctor} specialization={visit.spec} />
+        <BranchInfoRow clinic={visit.clinic} place={visit.place} />
       </Stack>
-      <Button mode="secondary" onClick={() => onOpen(visit)}>
-        Перенести
-      </Button>
+      <div className="miniVisitCard__actions">
+        <Button mode="secondary" onClick={(event) => stopAndRun(event, () => onReschedule(visit))}>
+          Перенести
+        </Button>
+      </div>
     </Card>
   );
 }
@@ -196,13 +161,11 @@ export default function Home() {
   }, [appointments]);
 
   function rescheduleVisit(visit) {
-    const params = new URLSearchParams({
-      appointmentId: visit.id,
-      specializationId: visit.specializationId,
-      doctorId: visit.doctorId,
-    });
-    if (visit.branchId) params.set("branchId", visit.branchId);
-    nav(`/book/flow?${params.toString()}`);
+    nav(buildRescheduleUrl(visit));
+  }
+
+  function openVisitDetails(visit) {
+    nav(`/visits/${encodeURIComponent(visit.id)}`, { state: { visit } });
   }
 
   async function confirmCancelVisit() {
@@ -271,6 +234,7 @@ export default function Home() {
           ) : nearestAppointment ? (
             <AppointmentCard
               visit={nearestAppointment}
+              onOpen={openVisitDetails}
               onReschedule={rescheduleVisit}
               onCancel={(id) => setCancelDialogVisitId(id)}
               pendingId={pendingVisitId}
@@ -300,7 +264,12 @@ export default function Home() {
             <div className="pageWideScroll">
               <div className="horizontalCards">
                 {appointments.slice(0, 6).map((visit) => (
-                  <MiniVisitCard key={visit.id} visit={visit} onOpen={rescheduleVisit} />
+                  <MiniVisitCard
+                    key={visit.id}
+                    visit={visit}
+                    onOpen={openVisitDetails}
+                    onReschedule={rescheduleVisit}
+                  />
                 ))}
               </div>
             </div>

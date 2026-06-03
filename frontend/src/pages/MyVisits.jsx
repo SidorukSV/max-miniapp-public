@@ -1,52 +1,33 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Flex, Typography, Button, CellHeader } from "../components/ui.jsx";
+import { BranchInfoRow, DoctorInfoRow } from "../components/VisitInfoRows.jsx";
 import PageLayout from "../components/PageLayout";
 import QuestionDialog from "../components/QuestionDialog";
 import { getAppointments, getStoredAccessToken, updateAppointment } from "../api";
+import { buildRescheduleUrl, normalizeAppointment } from "../modules/appointmentView.js";
 import "../App.css";
 import MyVisitsSkeleton from "../components/my-visits/MyVisitsSkeleton.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
 import { CalendarClock } from "lucide-react";
 
-function normalizeAppointment(item, index) {
-    const sourceDate = item?.datetimeBegin || item?.appointment_date || "";
-    const dateObj = sourceDate ? new Date(sourceDate) : null;
-    const isValidDate = dateObj instanceof Date && !Number.isNaN(dateObj.valueOf());
-    const date = isValidDate ? dateObj.toLocaleDateString("ru-RU") : "Без даты";
-    const time = isValidDate ? dateObj.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" }) : "--:--";
-
-    return {
-        id: item?.appointment_id || item?.appointmentId || item?.id || `appointment-${index}`,
-        date,
-        time,
-        doctor: [
-            item?.doctorLastname,
-            item?.doctorFirstname,
-            item?.doctorPatronimic,
-        ].filter(Boolean).join(" ") || "Не указан",
-        doctorId: item?.doctorId || "",
-        spec: item?.specializationTitle || "Специализация не указана",
-        specializationId: item?.specializationId || "",
-        place: item?.cabinetTitle || "Кабинет не указан",
-        clinic: item?.branchTitle || "Филиал не указан",
-        status: item?.conditionTitle || "Статус не указан",
-        isApproved: item?.isApproved,
-    };
+function stopAndRun(event, action) {
+    event.stopPropagation();
+    action();
 }
 
-function VisitCard({ v, pendingId, onConfirm, onCancel, onReschedule }) {
+function VisitCard({ v, pendingId, onOpen, onConfirm, onCancel, onReschedule }) {
     const isConfirmedByPatient = v.isApproved === true;
     const canBeConfirmedByPatient = v.isApproved !== undefined;
     const shouldShowConfirmButton = canBeConfirmedByPatient && !isConfirmedByPatient;
     const isBusy = pendingId === v.id;
 
     return (
-        <Container className="card">
+        <Container className="card visitCardClickable" onClick={() => onOpen(v)}>
             <Flex direction="column" gap={12}>
                 <Flex align="center" justify="space-between" gap={10}>
                     <Typography.Title level={3}>
-                        {v.date} • {v.time}
+                        {v.dateShortLabel} • {v.timeLabel}
                     </Typography.Title>
 
                     <Flex align="center" gap={6}>
@@ -61,30 +42,19 @@ function VisitCard({ v, pendingId, onConfirm, onCancel, onReschedule }) {
                     </Flex>
                 </Flex>
 
-                <div className="visitLine">
-                    <Typography.Label>Врач</Typography.Label>
-                    <Typography.Label>
-                        {v.spec} • {v.doctor}
-                    </Typography.Label>
-                </div>
-
-                <div className="visitLine">
-                    <Typography.Label>Место</Typography.Label>
-                    <Typography.Label>
-                        {v.clinic}, {v.place}
-                    </Typography.Label>
-                </div>
+                <DoctorInfoRow doctor={v.doctor} specialization={v.spec} />
+                <BranchInfoRow clinic={v.clinic} place={v.place} />
 
                 <Flex gap={8} className="visitActions">
                     {shouldShowConfirmButton && (
-                        <Button onClick={() => onConfirm(v.id)} disabled={isBusy}>
+                        <Button onClick={(event) => stopAndRun(event, () => onConfirm(v.id))} disabled={isBusy}>
                             Подтвердить
                         </Button>
                     )}
 
                     <Button
                         mode="secondary"
-                        onClick={() => onReschedule(v)}
+                        onClick={(event) => stopAndRun(event, () => onReschedule(v))}
                         disabled={isBusy}
                     >
                         Перенести
@@ -93,7 +63,7 @@ function VisitCard({ v, pendingId, onConfirm, onCancel, onReschedule }) {
                     <Button
                         mode="secondary"
                         className="dangerBtn"
-                        onClick={() => onCancel(v.id)}
+                        onClick={(event) => stopAndRun(event, () => onCancel(v.id))}
                         disabled={isBusy}
                     >
                         Отменить
@@ -194,12 +164,11 @@ export default function MyVisits() {
     }
 
     function rescheduleVisit(visit) {
-        const params = new URLSearchParams({
-            appointmentId: visit.id,
-            specializationId: visit.specializationId,
-            doctorId: visit.doctorId,
-        });
-        nav(`/book/flow?${params.toString()}`);
+        nav(buildRescheduleUrl(visit));
+    }
+
+    function openVisitDetails(visit) {
+        nav(`/visits/${encodeURIComponent(visit.id)}`, { state: { visit } });
     }
 
     return (
@@ -236,6 +205,7 @@ export default function MyVisits() {
                             key={v.id}
                             v={v}
                             pendingId={pendingVisitId}
+                            onOpen={openVisitDetails}
                             onConfirm={confirmVisit}
                             onCancel={openCancelDialog}
                             onReschedule={rescheduleVisit}

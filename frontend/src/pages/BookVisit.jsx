@@ -313,7 +313,7 @@ export default function BookVisit() {
               title={spec.title}
               subtitle={spec.type === "phone_and_chat" ? "Запись по телефону или в чате" : "Запись по телефону"}
               selected={selectedContactSpecId === spec.id}
-              showChevron={spec.type !== "phone_and_chat"}
+              showChevron={false}
             >
               <Button mode="secondary" onClick={() => openPhone(spec.phone)} disabled={!spec.phone}>
                 <Phone size={18} />

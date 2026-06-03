@@ -4,6 +4,7 @@ import BookVisit from "./pages/BookVisit.jsx";
 import BookVisitFlow from "./pages/BookVisitFlow.jsx";
 import BookVisitSummary from "./pages/BookVisitSummary.jsx";
 import MyVisits from "./pages/MyVisits.jsx";
+import VisitDetails from "./pages/VisitDetails.jsx";
 import History from "./pages/History.jsx";
 import Bonuses from "./pages/Bonuses.jsx";
 import Profile from "./pages/Profile.jsx";
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/book/flow" element={<BookVisitFlow />} />
             <Route path="/book/summary" element={<BookVisitSummary />} />
             <Route path="/visits" element={<MyVisits />} />
+            <Route path="/visits/:id" element={<VisitDetails />} />
             <Route path="/history" element={<Navigate to="/medcard" replace />} />
             <Route path="/medcard" element={<History />} />
             <Route path="/bonuses" element={<Bonuses />} />

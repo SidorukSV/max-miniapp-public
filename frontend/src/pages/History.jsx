@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Flex, Typography, Button } from "../components/ui.jsx";
+import { BranchInfoRow, DoctorInfoRow, ServicesInfoRow } from "../components/VisitInfoRows.jsx";
 import PageLayout from "../components/PageLayout";
 import {
     getMedicalHistory,
@@ -77,7 +78,9 @@ function HistoryCard({ item, onRepeat }) {
     const dateLabel = toLocalDateLabel(item.date);
     const timeLabel = toLocalTimeLabel(item.date);
     const doctorName = getDoctorName(item);
-    const services = Array.isArray(item?.servicesList) ? item.servicesList.filter(Boolean) : [];
+    const services = Array.isArray(item?.servicesList)
+        ? item.servicesList.map((service) => service?.serviceTitle).filter(Boolean)
+        : [];
 
     return (
         <Container className="card">
@@ -86,23 +89,9 @@ function HistoryCard({ item, onRepeat }) {
                     {dateLabel}{timeLabel ? ` • ${timeLabel}` : ""}
                 </Typography.Title>
 
-                <div className="visitLine">
-                    <Typography.Label>Врач</Typography.Label>
-                    <Typography.Label>
-                        {item?.specializationTitle || "Специальность не указана"} • {doctorName}
-                    </Typography.Label>
-                </div>
-
-                <div className="visitLine">
-                    <Typography.Label>Филиал</Typography.Label>
-                    <Typography.Label>{item?.branchTitle || "Не указан"}</Typography.Label>
-                </div>
-
-                {services.length > 0 ? (
-                    <Typography.Label style={{ marginTop: 2 }}>
-                        Услуги: {services.map((item) => { return item.serviceTitle }).join(", ")}
-                    </Typography.Label>
-                ) : null}
+                <DoctorInfoRow doctor={doctorName} specialization={item?.specializationTitle || "Специальность не указана"} />
+                <BranchInfoRow clinic={item?.branchTitle || "Филиал не указан"} />
+                <ServicesInfoRow services={services} />
 
                 <Button mode="secondary" onClick={() => onRepeat(item)}>
                     Повторить запись
