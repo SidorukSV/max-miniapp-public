@@ -53,7 +53,7 @@ function AppointmentCard({ visit, onOpen, onReschedule, onCancel }) {
           <CalendarDays size={34} />
         </div>
         <Stack gap={8}>
-          <Typography.Title level={2}>
+          <Typography.Title level={2} className="appointmentDateTitle">
             {visit.dateLabel}, {visit.timeLabel}
           </Typography.Title>
           <DoctorInfoRow doctor={visit.doctor} specialization={visit.spec} />
@@ -78,14 +78,14 @@ function MiniVisitCard({ visit, onOpen, onReschedule }) {
   return (
     <Card className="miniVisitCard visitCardClickable" onClick={() => onOpen(visit)}>
       <Stack gap={8}>
-        <Typography.Title level={3}>
+        <Typography.Title level={3} className="appointmentDateTitle">
           {visit.dateLabel}, {visit.timeLabel}
         </Typography.Title>
         <DoctorInfoRow doctor={visit.doctor} specialization={visit.spec} />
         <BranchInfoRow clinic={visit.clinic} place={visit.place} />
       </Stack>
       <div className="miniVisitCard__actions">
-        <Button mode="secondary" onClick={(event) => stopAndRun(event, () => onReschedule(visit))}>
+        <Button mode="secondary" stretched onClick={(event) => stopAndRun(event, () => onReschedule(visit))}>
           Перенести
         </Button>
       </div>
@@ -189,7 +189,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <PageLayout>
+      <PageLayout showHeader={false}>
         <HomeLoadingCard />
       </PageLayout>
     );
@@ -200,7 +200,7 @@ export default function Home() {
   }
 
   return (
-    <PageLayout>
+    <PageLayout showHeader={false}>
       <Stack gap={20}>
         <section className="profilePreview">
           <div className="profilePreview__main">
@@ -211,7 +211,7 @@ export default function Home() {
               />
             </Avatar.Container>
             <div className="greetingBlock">
-              <Typography.Title level={2}>
+              <Typography.Title level={2} className="homeGreetingTitle">
                 {getGreeting()}, {firstName}
               </Typography.Title>
               <Typography.Label>Как ваше самочувствие сегодня?</Typography.Label>

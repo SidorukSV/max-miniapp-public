@@ -8,6 +8,7 @@ export default function PageLayout({
   headerTitle = "",
   title = "",
   showTabs = true,
+  showHeader = true,
   showBottom,
   bottomButtonText,
   onBottomButtonClick,
@@ -27,7 +28,7 @@ export default function PageLayout({
         shouldShowAction ? "appShell--action" : "",
       ].filter(Boolean).join(" ")}
     >
-      <AppHeader title={headerTitle || title} />
+      {showHeader ? <AppHeader title={headerTitle || title} /> : null}
       <main className="page">{children}</main>
 
       {shouldShowAction ? (

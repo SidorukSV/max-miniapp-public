@@ -576,6 +576,10 @@
   gap: 5px;
 }
 
+.homeGreetingTitle {
+  font-size: 24px;
+}
+
 .appointmentHero {
   display: grid;
   grid-template-columns: 60px minmax(0, 1fr);
@@ -612,7 +616,7 @@
 .horizontalCards {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(224px, 76%);
+  grid-auto-columns: minmax(269px, 91%);
   gap: 12px;
 }
 
@@ -625,6 +629,14 @@
 
 .miniVisitCard__actions {
   padding-top: 12px;
+}
+
+.miniVisitCard__actions .uiButton {
+  width: 100%;
+}
+
+.appointmentDateTitle {
+  margin-bottom: 2px;
 }
 
 .visitCardClickable {
@@ -939,13 +951,23 @@
 .popularCard {
   min-height: 106px;
   padding: 10px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 44px minmax(36px, auto);
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-items: center;
+  align-content: center;
+  gap: 8px;
   text-align: center;
   color: var(--muted-strong);
+}
+
+.popularCard .uiLabel {
+  width: 100%;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
 }
 
 .popularCard--active {
