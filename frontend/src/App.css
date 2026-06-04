@@ -103,8 +103,9 @@
 
 .headerTitle {
   color: var(--muted-strong);
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.2;
+  font-weight: 800;
   text-align: right;
   min-width: 0;
   max-width: 48%;
@@ -576,8 +577,19 @@
   gap: 5px;
 }
 
-.homeGreetingTitle {
-  font-size: 24px;
+.homePage .uiTitle--2,
+.homePage .uiTitle--3 {
+  font-weight: 700;
+}
+
+.homePage .visitInfoPrimary,
+.homePage .cellRow__title {
+  font-weight: 600;
+}
+
+.homePage .uiButton,
+.homePage .sectionLink {
+  font-weight: 700;
 }
 
 .appointmentHero {
@@ -1562,6 +1574,16 @@
   color: var(--text);
   font-size: 19px;
   line-height: 1;
+}
+
+.surveySaveMessage {
+  display: block;
+  color: var(--success);
+  text-align: center;
+}
+
+.surveySaveMessage--error {
+  color: var(--danger);
 }
 
 .surveyOptionDot,

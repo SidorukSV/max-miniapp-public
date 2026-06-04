@@ -567,6 +567,17 @@ export async function updateAppointmentDocument({ payload }) {
     });
 }
 
+export async function updateSurveyDocument({ payload }) {
+    const oneCConfig = getOneCConfig();
+    return onecFetch(oneCConfig.url.concat("/documents/surveys"), {
+        method: "PUT",
+        headers: {
+            Authorization: `Basic ${oneCConfig.basicAuth}`,
+        },
+        body: JSON.stringify(payload),
+    });
+}
+
 export async function forwardMaxWebhookUpdateToOneC(update) {
     const oneCConfig = getOneCConfig();
     const endpoint = "/v1/webhook";

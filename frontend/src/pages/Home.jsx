@@ -201,7 +201,7 @@ export default function Home() {
 
   return (
     <PageLayout showHeader={false}>
-      <Stack gap={20}>
+      <Stack className="homePage" gap={20}>
         <section className="profilePreview">
           <div className="profilePreview__main">
             <Avatar.Container size={58}>
@@ -211,7 +211,7 @@ export default function Home() {
               />
             </Avatar.Container>
             <div className="greetingBlock">
-              <Typography.Title level={2} className="homeGreetingTitle">
+              <Typography.Title level={2}>
                 {getGreeting()}, {firstName}
               </Typography.Title>
               <Typography.Label>Как ваше самочувствие сегодня?</Typography.Label>

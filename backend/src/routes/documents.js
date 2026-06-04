@@ -8,7 +8,20 @@ import {
     getSurveysDocuments,
     getSurveyDocumentById,
     updateAppointmentDocument,
+    updateSurveyDocument,
 } from "../services/onecRouter.js";
+
+function getRequestPayload(body) {
+    if (!body) {
+        return {};
+    }
+
+    if (typeof body === "string") {
+        return JSON.parse(body || "{}");
+    }
+
+    return body;
+}
 
 export async function documentsRoutes(app) {
     app.get("/api/v1/documents/appointments",
@@ -81,7 +94,7 @@ export async function documentsRoutes(app) {
         async (req) => {
             const { patient_id } = req.user;
             const payload = {
-                ...(JSON.parse(req.body) || {}),
+                ...getRequestPayload(req.body),
                 patient_id,
             };
 
@@ -95,11 +108,19 @@ export async function documentsRoutes(app) {
         async (req) => {
             const { patient_id } = req.user;
             const payload = {
-                ...(JSON.parse(req.body) || {}),
+                ...getRequestPayload(req.body),
                 patient_id,
             };
 
             const item = await updateAppointmentDocument({ payload });
+            return { item };
+        });
+
+    app.put("/api/v1/documents/surveys",
+        { preHandler: [authMiddleware] },
+        async (req) => {
+            const payload = getRequestPayload(req.body);
+            const item = await updateSurveyDocument({ payload });
             return { item };
         });
 }

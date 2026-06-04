@@ -152,6 +152,16 @@ export async function getSurveyById(access_token, surveyId) {
     });
 }
 
+export async function updateSurvey(access_token, payload) {
+    return apiFetch("/documents/surveys", {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+        body: JSON.stringify(payload),
+    });
+}
+
 export async function updateAppointment(access_token, payload) {
     return apiFetch("/documents/appointments", {
         method: "PUT",
