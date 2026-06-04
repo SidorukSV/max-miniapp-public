@@ -977,12 +977,17 @@
 
 .popularCard .uiLabel {
   width: 100%;
+  min-width: 0;
   min-height: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
   line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .popularCard--active {

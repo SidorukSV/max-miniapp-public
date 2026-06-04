@@ -69,7 +69,8 @@
       "specializationId": "00000000-0000-0000-0000-000000000010",
       "specializationTitle": "Терапия",
       "appointment_type": "phone",
-      "appointment_phone": "+79990000000"
+      "appointment_phone": "+79990000000",
+      "iconCode": "therapy"
     }
   ],
   "services": [
@@ -88,6 +89,11 @@
 
 - `categoryId`, `doctorId`, `specializationId`, `serviceId` — UUID.
 - `appointment_type` — одно из: `online`, `phone`, `phone_and_chat`.
+- `iconCode` у специализации — опциональный код иконки из белого списка:
+  `default`, `therapy`, `doctor`, `cardiology`, `dentistry`, `surgery`,
+  `gynecology`, `urology`, `neurology`, `ophthalmology`, `pediatrics`, `lab`,
+  `diagnostics`, `xray`, `vaccination`, `cosmetology`, `trichology`,
+  `physiotherapy`.
 - Флаги `isCartAllow`, `isDateRequired`, `isDoctorRequired` — boolean.
 - `employees`, `specializations`, `services` — массивы с валидной структурой.
 

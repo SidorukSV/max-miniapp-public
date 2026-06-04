@@ -8,7 +8,6 @@ import {
   Phone,
   Search,
   Sparkles,
-  Stethoscope,
 } from "lucide-react";
 import PageLayout from "../components/PageLayout.jsx";
 import AuthScreen from "../components/AuthScreen.jsx";
@@ -21,6 +20,7 @@ import {
   getStoredAccessToken,
 } from "../api.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { SpecializationIcon } from "../modules/specializationIcons.jsx";
 import { openExternalLink } from "../utils/safeUrl.js";
 
 const REDIRECT_QUERY_KEYS = ["appointmentId", "specializationId", "doctorId", "branchId"];
@@ -31,6 +31,7 @@ function normalizeSpec(item) {
     title: item?.specializationTitle || "Без названия",
     type: item?.appointment_type || "online",
     phone: item?.appointement_phone || item?.appointment_phone || "",
+    iconCode: item?.iconCode || "",
   };
 }
 
@@ -48,11 +49,10 @@ function openPhone(phoneRaw) {
   window.location.href = `tel:${digits}`;
 }
 
-function SpecialtyPlaceholder({ icon: Icon = Stethoscope }) {
-  const Component = Icon;
+function SpecialtyPlaceholder({ iconCode }) {
   return (
     <span className="specialtyPlaceholder" aria-hidden="true">
-      <Component size={30} />
+      <SpecializationIcon iconCode={iconCode} size={30} />
     </span>
   );
 }
@@ -60,7 +60,7 @@ function SpecialtyPlaceholder({ icon: Icon = Stethoscope }) {
 function PopularCard({ spec, active, onClick }) {
   return (
     <button type="button" className={`card popularCard ${active ? "popularCard--active" : ""}`} onClick={onClick}>
-      <SpecialtyPlaceholder />
+      <SpecialtyPlaceholder iconCode={spec.iconCode} />
       <Typography.Label>{spec.title}</Typography.Label>
     </button>
   );
