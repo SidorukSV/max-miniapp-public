@@ -3,6 +3,7 @@ import { Button, Card, Stack, Typography } from "./ui.jsx";
 export default function QuestionDialog({
   open,
   question,
+  onClose,
   onCancel,
   onConfirm,
   cancelText = "Нет",
@@ -14,8 +15,17 @@ export default function QuestionDialog({
 }) {
   if (!open) return null;
 
+  const closeDialog = onClose || onCancel;
+
   return (
-    <div className="questionDialogOverlay">
+    <div
+      className="questionDialogOverlay"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          closeDialog?.();
+        }
+      }}
+    >
       <Card className="questionDialogCard">
         <Stack gap={16}>
           <Typography.Title level={3}>{question}</Typography.Title>

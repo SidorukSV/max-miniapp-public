@@ -366,6 +366,7 @@ export default function BookVisit() {
       <QuestionDialog
         open={Boolean(contactDialogSpec)}
         question="По выбранному направлению недоступна онлайн-запись. Свяжитесь с нами для записи"
+        onClose={() => setContactDialogSpec(null)}
         cancelText="Позвонить в клинику"
         confirmText="Перейти в чат"
         cancelDisabled={!contactDialogSpec?.phone}
