@@ -12,6 +12,7 @@ import {
 import PageLayout from "../components/PageLayout.jsx";
 import AuthScreen from "../components/AuthScreen.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
+import QuestionDialog from "../components/QuestionDialog.jsx";
 import { Button, Stack, Typography } from "../components/ui.jsx";
 import {
   getAppointments,
@@ -66,12 +67,20 @@ function PopularCard({ spec, active, onClick }) {
   );
 }
 
-function MethodCard({ icon: Icon, title, subtitle, tag, selected, onClick, children, showChevron = true }) {
-  const Component = Icon;
+function MethodIcon({ icon: Icon, iconCode }) {
+  if (iconCode) {
+    return <SpecializationIcon iconCode={iconCode} size={34} />;
+  }
+
+  const Component = Icon || BriefcaseMedical;
+  return <Component size={34} />;
+}
+
+function MethodCard({ icon, iconCode, title, subtitle, tag, selected, onClick, children, showChevron = true }) {
   const content = (
     <>
       <span className="methodCard__icon" aria-hidden="true">
-        <Component size={34} />
+        <MethodIcon icon={icon} iconCode={iconCode} />
       </span>
       <span className="methodCard__body">
         <Typography.Title level={3}>{title}</Typography.Title>
@@ -107,6 +116,7 @@ export default function BookVisit() {
   const [counts, setCounts] = useState(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [contactDialogSpec, setContactDialogSpec] = useState(null);
   const selectedContactSpecId = searchParams.get("contactSpecializationId") || "";
   const chatUrl = import.meta.env.VITE_MAX_CHAT_URL || "";
 
@@ -203,9 +213,20 @@ export default function BookVisit() {
     nav(`/book/flow${params.toString() ? `?${params.toString()}` : ""}`);
   }
 
-  function openContactSpec(specId) {
-    const params = new URLSearchParams({ contactSpecializationId: specId });
-    nav(`/book?${params.toString()}`);
+  function openPopularSpec(spec) {
+    if (spec.type === "online") {
+      openOnline(spec.id);
+      return;
+    }
+
+    if (spec.type === "phone") {
+      openPhone(spec.phone);
+      return;
+    }
+
+    if (spec.type === "phone_and_chat") {
+      setContactDialogSpec(spec);
+    }
   }
 
   if (shouldRedirectToFlow) return null;
@@ -262,13 +283,7 @@ export default function BookVisit() {
                     key={spec.id}
                     spec={spec}
                     active={selectedContactSpecId === spec.id}
-                    onClick={() => {
-                      if (spec.type === "online") {
-                        openOnline(spec.id);
-                        return;
-                      }
-                      openContactSpec(spec.id);
-                    }}
+                    onClick={() => openPopularSpec(spec)}
                   />
                 ))}
               </div>
@@ -299,7 +314,7 @@ export default function BookVisit() {
 
           {!error && !loading && onlineSpecs.length ? (
             <MethodCard
-              icon={BriefcaseMedical}
+              iconCode="doctor"
               title="Консультации"
               subtitle="Запись по врачу или услуге"
               onClick={() => openOnline()}
@@ -309,7 +324,7 @@ export default function BookVisit() {
           {!error && !loading && offlineSpecs.map((spec) => (
             <MethodCard
               key={spec.id}
-              icon={BriefcaseMedical}
+              iconCode={spec.iconCode}
               title={spec.title}
               subtitle={spec.type === "phone_and_chat" ? "Запись по телефону или в чате" : "Запись по телефону"}
               selected={selectedContactSpecId === spec.id}
@@ -347,6 +362,23 @@ export default function BookVisit() {
           ) : null}
         </Stack>
       </Stack>
+
+      <QuestionDialog
+        open={Boolean(contactDialogSpec)}
+        question="По выбранному направлению недоступна онлайн-запись. Свяжитесь с нами для записи"
+        cancelText="Позвонить в клинику"
+        confirmText="Перейти в чат"
+        cancelDisabled={!contactDialogSpec?.phone}
+        confirmDisabled={!chatUrl}
+        onCancel={() => {
+          openPhone(contactDialogSpec?.phone);
+          setContactDialogSpec(null);
+        }}
+        onConfirm={() => {
+          openExternalLink(chatUrl);
+          setContactDialogSpec(null);
+        }}
+      />
     </PageLayout>
   );
 }

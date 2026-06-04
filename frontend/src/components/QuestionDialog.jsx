@@ -7,6 +7,8 @@ export default function QuestionDialog({
   onConfirm,
   cancelText = "Нет",
   confirmText = "Да",
+  cancelDisabled = false,
+  confirmDisabled = false,
   confirmMode = "secondary",
   confirmClassName = "",
 }) {
@@ -18,10 +20,10 @@ export default function QuestionDialog({
         <Stack gap={16}>
           <Typography.Title level={3}>{question}</Typography.Title>
           <div className="questionDialogActions">
-            <Button mode="secondary" onClick={onCancel}>
+            <Button mode="secondary" onClick={onCancel} disabled={cancelDisabled}>
               {cancelText}
             </Button>
-            <Button mode={confirmMode} onClick={onConfirm} className={confirmClassName}>
+            <Button mode={confirmMode} onClick={onConfirm} className={confirmClassName} disabled={confirmDisabled}>
               {confirmText}
             </Button>
           </div>
