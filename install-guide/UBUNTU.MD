@@ -85,6 +85,7 @@ nano backend/.env.production
 Минимум проверьте:
 
 *   `JWT_SECRET` (сильный, длинный),
+`openssl rand -base64 48`
     
 *   `CORS_ALLOWED_ORIGINS` (ваш боевой домен с https),
     
