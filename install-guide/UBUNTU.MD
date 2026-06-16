@@ -20,8 +20,8 @@
 Bash
 
 ```
-sudo apt updates
-udo apt install -y ca-certificates curl gnupg lsb-release git
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release git
 ```
 
 * * *
