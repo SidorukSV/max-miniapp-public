@@ -20,7 +20,8 @@
 Bash
 
 ```
-sudo apt updatesudo apt install -y ca-certificates curl gnupg lsb-release git
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release git
 ```
 
 * * *
@@ -84,6 +85,7 @@ nano backend/.env.production
 Минимум проверьте:
 
 *   `JWT_SECRET` (сильный, длинный),
+`openssl rand -base64 48`
     
 *   `CORS_ALLOWED_ORIGINS` (ваш боевой домен с https),
     
