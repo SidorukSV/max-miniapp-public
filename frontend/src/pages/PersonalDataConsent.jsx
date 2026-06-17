@@ -1,30 +1,32 @@
-import { Flex, Typography } from "@maxhub/max-ui";
+import { Flex, Typography } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
-import { useNavigate } from "react-router-dom";
-
-const CONSENT_URL = "https://aldenta.ru/personal-data-consent/";
+import { appConfig } from "../config.js";
 
 export default function PersonalDataConsent() {
-    const nav = useNavigate();
-    
+    const personalDataConsentUrl = appConfig.personalDataConsentUrl;
+
     return (
         <PageLayout headerTitle="Согласие на обработку персональных данных"
-            showBottom={true}
-            bottomButtonText="Вернуться на главную"
-            onBottomButtonClick={() => { nav("/") }}
+            showBottom
         >
             <Flex direction="column" gap={12} className="card legalCard">
                 <Typography.Label>
                     Согласие на обработку персональных данных опубликовано на сайте клиники.
                 </Typography.Label>
-                <a
-                    href={CONSENT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="legalLink"
-                >
-                    Открыть согласие на сайте aldenta.ru
-                </a>
+                {personalDataConsentUrl ? (
+                    <a
+                        href={personalDataConsentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="legalLink"
+                    >
+                        Открыть согласие на сайте клиники
+                    </a>
+                ) : (
+                    <Typography.Label className="authErrorLabel">
+                        Ссылка на согласие не настроена.
+                    </Typography.Label>
+                )}
             </Flex>
         </PageLayout>
     );

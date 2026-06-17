@@ -1,4 +1,4 @@
-import { Container } from "@maxhub/max-ui";
+import { Container } from "../ui.jsx";
 
 export default function BonusesSkeleton() {
     return (

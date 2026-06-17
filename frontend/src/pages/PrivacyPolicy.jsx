@@ -1,30 +1,32 @@
-import { Flex, Typography } from "@maxhub/max-ui";
+import { Flex, Typography } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
-import { useNavigate } from "react-router-dom";
-
-const PRIVACY_POLICY_URL = "https://aldenta.ru/confidentiality/";
+import { appConfig } from "../config.js";
 
 export default function PrivacyPolicy() {
-    const nav = useNavigate();
+    const privacyPolicyUrl = appConfig.privacyPolicyUrl;
 
     return (
         <PageLayout headerTitle="Политика обработки персональных данных"
-            showBottom={true}
-            bottomButtonText="Вернуться на главную"
-            onBottomButtonClick={() => { nav("/") }}
+            showBottom
         >
             <Flex direction="column" gap={12} className="card legalCard">
                 <Typography.Label>
                     Политика обработки персональных данных размещена на сайте клиники.
                 </Typography.Label>
-                <a
-                    href={PRIVACY_POLICY_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="legalLink"
-                >
-                    Открыть политику на сайте aldenta.ru
-                </a>
+                {privacyPolicyUrl ? (
+                    <a
+                        href={privacyPolicyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="legalLink"
+                    >
+                        Открыть политику на сайте клиники
+                    </a>
+                ) : (
+                    <Typography.Label className="authErrorLabel">
+                        Ссылка на политику не настроена.
+                    </Typography.Label>
+                )}
             </Flex>
         </PageLayout>
     );

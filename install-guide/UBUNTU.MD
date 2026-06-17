@@ -206,6 +206,16 @@ sudo systemctl start max-miniapp
 ```Bash
 cd /opt/max-miniapp
 git pull
+touch .env
+grep -v -E "^(GIT_COMMIT|BUILD_TIME|APP_VERSION|BACKEND_VERSION)=" .env > .env.tmp || true
+mv .env.tmp .env
+COMMIT=$(git rev-parse --short HEAD)
+cat >> .env <<EOF
+GIT_COMMIT=${COMMIT}
+BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+APP_VERSION=${COMMIT}
+BACKEND_VERSION=${COMMIT}
+EOF
 sudo systemctl restart max-miniapp
 ```
 
@@ -214,5 +224,13 @@ sudo systemctl restart max-miniapp
 
 ```Bash
 docker compose -f docker-compose.prod.yml ps
+curl -k https://localhost/api/v1/version
 docker compose -f docker-compose.prod.yml logs -f --tail=200
+```
+
+Файл логов backend сохраняется на сервере в:
+
+```Bash
+tail -f /opt/max-miniapp/logs/backend.log
+grep -i auth /opt/max-miniapp/logs/backend.log
 ```

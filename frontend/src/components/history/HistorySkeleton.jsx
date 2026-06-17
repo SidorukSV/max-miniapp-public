@@ -1,4 +1,4 @@
-import { Container, Flex } from "@maxhub/max-ui";
+import { Container, Flex } from "../ui.jsx";
 
 function HistorySkeletonCard() {
     return (

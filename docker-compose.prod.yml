@@ -6,6 +6,11 @@ services:
   backend:
     build:
       context: ./backend
+      args:
+        APP_VERSION: ${APP_VERSION:-1.0.0}
+        BACKEND_VERSION: ${BACKEND_VERSION:-1.0.0}
+        GIT_COMMIT: ${GIT_COMMIT:-unknown}
+        BUILD_TIME: ${BUILD_TIME:-unknown}
     restart: unless-stopped
     env_file:
       - ./backend/.env.production
@@ -13,8 +18,18 @@ services:
       NODE_ENV: production
       PORT: 3000
       REDIS_URL: redis://redis:6379
+      BACKEND_LOG_FILE: ${BACKEND_LOG_FILE:-/app/logs/backend.log}
+      BACKEND_LOG_LEVEL: ${BACKEND_LOG_LEVEL:-info}
     depends_on:
       - redis
+    volumes:
+      - ./logs:/app/logs
+      - type: bind
+        source: ./backend/onec-config.yml
+        target: /app/onec-config.yml
+        read_only: true
+        bind:
+          create_host_path: false
 
   gateway:
     build:
@@ -22,6 +37,12 @@ services:
       dockerfile: deploy/nginx/Dockerfile
       args:
         VITE_API_BASE: /api/v1
+        VITE_APP_VERSION: ${APP_VERSION:-0.0.0}
+        VITE_GIT_COMMIT: ${GIT_COMMIT:-unknown}
+        VITE_BUILD_TIME: ${BUILD_TIME:-unknown}
+        VITE_THEME_CONFIG_PATH: ${VITE_THEME_CONFIG_PATH:-theme-config.json}
+        VITE_PRIVACY_POLICY_URL: ${VITE_PRIVACY_POLICY_URL:-}
+        VITE_PERSONAL_DATA_CONSENT_URL: ${VITE_PERSONAL_DATA_CONSENT_URL:-}
     restart: unless-stopped
     depends_on:
       - backend

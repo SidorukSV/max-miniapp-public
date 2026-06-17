@@ -1,4 +1,4 @@
-import { Container, Typography } from "@maxhub/max-ui";
+import { Container, Typography } from "../ui.jsx";
 import DateCalendar from "./DateCalendar.jsx";
 import CalendarSkeleton from "./skeletons/CalendarSkeleton.jsx";
 

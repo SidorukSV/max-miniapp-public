@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Flex, Typography, Button } from "@maxhub/max-ui";
+import { Container, Flex, Typography, Button } from "../components/ui.jsx";
+import { BranchInfoRow, DoctorInfoRow, ServicesInfoRow } from "../components/VisitInfoRows.jsx";
 import PageLayout from "../components/PageLayout";
-import AppointmentOptionsSheet from "../components/AppointmentOptionsSheet.jsx";
 import {
     getMedicalHistory,
     getStoredAccessToken,
@@ -11,7 +11,6 @@ import "../App.css";
 import HistorySkeleton from "../components/history/HistorySkeleton.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
 import { FileClock } from "lucide-react";
-import { openExternalLink } from "../utils/safeUrl.js";
 
 function parseMedicalDate(value) {
     if (!value) return null;
@@ -79,7 +78,9 @@ function HistoryCard({ item, onRepeat }) {
     const dateLabel = toLocalDateLabel(item.date);
     const timeLabel = toLocalTimeLabel(item.date);
     const doctorName = getDoctorName(item);
-    const services = Array.isArray(item?.servicesList) ? item.servicesList.filter(Boolean) : [];
+    const services = Array.isArray(item?.servicesList)
+        ? item.servicesList.map((service) => service?.serviceTitle).filter(Boolean)
+        : [];
 
     return (
         <Container className="card">
@@ -88,23 +89,9 @@ function HistoryCard({ item, onRepeat }) {
                     {dateLabel}{timeLabel ? ` • ${timeLabel}` : ""}
                 </Typography.Title>
 
-                <div className="visitLine">
-                    <Typography.Label>Врач</Typography.Label>
-                    <Typography.Label>
-                        {item?.specializationTitle || "Специальность не указана"} • {doctorName}
-                    </Typography.Label>
-                </div>
-
-                <div className="visitLine">
-                    <Typography.Label>Филиал</Typography.Label>
-                    <Typography.Label>{item?.branchTitle || "Не указан"}</Typography.Label>
-                </div>
-
-                {services.length > 0 ? (
-                    <Typography.Label style={{ marginTop: 2 }}>
-                        Услуги: {services.map((item) => { return item.serviceTitle }).join(", ")}
-                    </Typography.Label>
-                ) : null}
+                <DoctorInfoRow doctor={doctorName} specialization={item?.specializationTitle || "Специальность не указана"} />
+                <BranchInfoRow clinic={item?.branchTitle || "Филиал не указан"} />
+                <ServicesInfoRow services={services} />
 
                 <Button mode="secondary" onClick={() => onRepeat(item)}>
                     Повторить запись
@@ -120,8 +107,6 @@ export default function History() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [specSheetOpen, setSpecSheetOpen] = useState(false);
-    const [offlineSpec, setOfflineSpec] = useState(null);
 
     useEffect(() => {
         async function loadHistory() {
@@ -174,13 +159,10 @@ export default function History() {
         }
 
         if (item?.specializationType !== "online") {
-            setOfflineSpec({
-                id: item.specializationId,
-                title: item.specializationTitle || "Без названия",
-                appointmentType: item.specializationType === "phone_and_chat" ? "phone_and_chat" : "phone",
-                appointmentPhone: item.specializationPhone || "",
+            const params = new URLSearchParams({
+                contactSpecializationId: item.specializationId,
             });
-            setSpecSheetOpen(true);
+            nav(`/book?${params.toString()}`);
             return;
         }
 
@@ -191,28 +173,16 @@ export default function History() {
             params.set("branchId", item.branchId);
         }
 
-        nav(`/book?${params.toString()}`);
-    }
-
-    function openPhone(phoneRaw) {
-        const digits = String(phoneRaw || "").replace(/[^\d+]/g, "");
-        if (!digits) return;
-        window.location.href = `tel:${digits}`;
-    }
-
-    function openChat() {
-        const chatUrl = import.meta.env.VITE_MAX_CHAT_URL || "";
-        openExternalLink(chatUrl);
+        nav(`/book/flow?${params.toString()}`);
     }
 
     return (
         <PageLayout
-            showBottom={true}
-            bottomButtonText="Вернуться на главную"
-            onBottomButtonClick={() => { nav("/"); }}
+            showBottom
+            headerTitle="Медкарта"
         >
             <Flex direction="column" gap={12}>
-                <Typography.Title level={2}>История приемов</Typography.Title>
+                <Typography.Title level={2}>Медкарта</Typography.Title>
 
                 {loading ? <HistorySkeleton /> : null}
                 {!loading && error ? <Typography.Label className="authErrorLabel">{error}</Typography.Label> : null}
@@ -250,22 +220,6 @@ export default function History() {
                 ))}
             </Flex>
 
-            <AppointmentOptionsSheet
-                open={specSheetOpen}
-                onlineCount={0}
-                offlineSpecs={offlineSpec ? [offlineSpec] : []}
-                loading={false}
-                error={""}
-                onClose={() => {
-                    setSpecSheetOpen(false);
-                    setOfflineSpec(null);
-                }}
-                onOnlineBook={() => {
-                    setSpecSheetOpen(false);
-                }}
-                onPhoneCall={openPhone}
-                onOpenChat={openChat}
-            />
         </PageLayout>
     );
 }

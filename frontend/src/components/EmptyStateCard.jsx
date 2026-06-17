@@ -1,4 +1,4 @@
-import { Button, Flex, Typography } from "@maxhub/max-ui";
+import { Button, Stack, Typography } from "./ui.jsx";
 import { Sparkles } from "lucide-react";
 import "../App.css";
 
@@ -13,29 +13,26 @@ export default function EmptyStateCard({
 
   return (
     <div className="emptyStateCard">
-      <div className="emptyStateGlow" aria-hidden="true" />
-
       <div className="emptyStateIconWrap" aria-hidden="true">
-        <IconComponent size={28} className="emptyStateIcon" />
+        <IconComponent size={28} />
       </div>
 
-      <Flex direction="column" gap={8}>
+      <Stack gap={8}>
         <Typography.Title level={3}>{title}</Typography.Title>
         {description ? <Typography.Label>{description}</Typography.Label> : null}
-      </Flex>
+      </Stack>
 
       {primaryAction || secondaryAction ? (
-        <Flex direction="column" gap={8} className="emptyStateActions">
+        <div className="emptyStateActions">
           {primaryAction ? (
             <Button onClick={primaryAction.onClick}>{primaryAction.label}</Button>
           ) : null}
-
           {secondaryAction ? (
             <Button mode="secondary" onClick={secondaryAction.onClick}>
               {secondaryAction.label}
             </Button>
           ) : null}
-        </Flex>
+        </div>
       ) : null}
     </div>
   );

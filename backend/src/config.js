@@ -5,6 +5,26 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const MIN_JWT_SECRET_LENGTH = 32;
+const oneCConfigLoadDiagnostics = [];
+
+function addOneCConfigDiagnostic(entry) {
+    oneCConfigLoadDiagnostics.push({
+        event: entry.event,
+        level: entry.level || "info",
+        source: entry.source || "onec_config",
+        ...entry,
+    });
+}
+
+function loadPackageVersion() {
+    try {
+        const packagePath = path.resolve(process.cwd(), "package.json");
+        const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf-8"));
+        return String(packageJson?.version || "").trim() || "unknown";
+    } catch {
+        return "unknown";
+    }
+}
 
 function validateJwtSecret(rawSecret) {
     const jwtSecret = typeof rawSecret === "string" ? rawSecret.trim() : "";
@@ -75,6 +95,28 @@ function normalizeOneCConfig(parsed, sourceLabel) {
         url,
         basicAuth,
         onecTotpSecret,
+    };
+}
+
+function buildSafeOneCConfigMeta(oneCConfig) {
+    if (!oneCConfig) {
+        return null;
+    }
+
+    let parsedUrl = null;
+
+    try {
+        parsedUrl = new URL(oneCConfig.url);
+    } catch {
+        parsedUrl = null;
+    }
+
+    return {
+        hasUrl: Boolean(oneCConfig.url),
+        urlOrigin: parsedUrl ? parsedUrl.origin : null,
+        urlPathname: parsedUrl ? parsedUrl.pathname : null,
+        hasBasicAuth: Boolean(oneCConfig.basicAuth),
+        hasOnecTotpSecret: Boolean(oneCConfig.onecTotpSecret),
     };
 }
 
@@ -155,15 +197,59 @@ function loadOneCConfig() {
     const explicitPath = process.env.ONEC_CONFIG_FILE || "";
     const onecConfigPath = explicitPath || "onec-config.yml";
     const resolvedPath = path.resolve(process.cwd(), onecConfigPath);
+    const fileExists = fs.existsSync(resolvedPath);
 
-    if (fs.existsSync(resolvedPath)) {
+    addOneCConfigDiagnostic({
+        event: "onec_config_file_checked",
+        explicitPath: Boolean(explicitPath),
+        configuredPath: onecConfigPath,
+        resolvedPath,
+        cwd: process.cwd(),
+        exists: fileExists,
+    });
+
+    if (fileExists) {
         const fileContent = fs.readFileSync(resolvedPath, "utf-8");
-        return parseOneCConfigYaml(fileContent, `ONEC config file (${path.basename(resolvedPath)})`);
+        const parsedConfig = parseOneCConfigYaml(fileContent, `ONEC config file (${path.basename(resolvedPath)})`);
+
+        addOneCConfigDiagnostic({
+            event: "onec_config_loaded",
+            sourceType: "file",
+            configuredPath: onecConfigPath,
+            resolvedPath,
+            config: buildSafeOneCConfigMeta(parsedConfig),
+        });
+
+        return parsedConfig;
     }
 
     if (process.env.ONEC_CONFIG) {
-        return parseOneCConfigJson(process.env.ONEC_CONFIG);
+        addOneCConfigDiagnostic({
+            event: "onec_config_env_checked",
+            envVar: "ONEC_CONFIG",
+            present: true,
+        });
+
+        const parsedConfig = parseOneCConfigJson(process.env.ONEC_CONFIG);
+
+        addOneCConfigDiagnostic({
+            event: "onec_config_loaded",
+            sourceType: "env",
+            envVar: "ONEC_CONFIG",
+            config: buildSafeOneCConfigMeta(parsedConfig),
+        });
+
+        return parsedConfig;
     }
+
+    addOneCConfigDiagnostic({
+        event: "onec_config_not_found",
+        level: "warn",
+        configuredPath: onecConfigPath,
+        resolvedPath,
+        cwd: process.cwd(),
+        onecConfigEnvPresent: false,
+    });
 
     return null;
 }
@@ -203,11 +289,26 @@ function parseCorsAllowedOrigins(rawValue) {
     );
 }
 
+function parseLogLevel(rawValue) {
+    const value = String(rawValue || "info").trim().toLowerCase();
+    const allowed = new Set(["fatal", "error", "warn", "info", "debug", "trace", "silent"]);
+    return allowed.has(value) ? value : "info";
+}
+
 const loadedOneCConfig = loadOneCConfig();
+const packageVersion = loadPackageVersion();
+
+export { oneCConfigLoadDiagnostics };
 
 export const config = {
     port: Number(process.env.PORT || 3000),
     nodeEnv: process.env.NODE_ENV || "development",
+    appVersion: process.env.APP_VERSION || packageVersion,
+    backendVersion: process.env.BACKEND_VERSION || packageVersion,
+    gitCommit: process.env.GIT_COMMIT || "unknown",
+    buildTime: process.env.BUILD_TIME || "unknown",
+    backendLogFile: process.env.BACKEND_LOG_FILE || "",
+    backendLogLevel: parseLogLevel(process.env.BACKEND_LOG_LEVEL),
     jwtSecret: validateJwtSecret(process.env.JWT_SECRET),
     maxBotToken: process.env.MAX_BOT_TOKEN || "",
     maxInitDataMaxAgeSeconds: Number(process.env.MAX_INIT_DATA_MAX_AGE_SECONDS || 300),

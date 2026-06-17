@@ -1,4 +1,4 @@
-import { Container, Typography } from "@maxhub/max-ui";
+import { Container, Typography } from "../ui.jsx";
 import Pill from "./Pill.jsx";
 import SpecializationsSkeleton from "./skeletons/SpecializationsSkeleton.jsx";
 

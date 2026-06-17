@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CellHeader, CellList, CellSimple, Container, Flex, Input, SearchInput, Switch, Textarea, Typography } from "@maxhub/max-ui";
+import { Button, CellHeader, CellList, CellSimple, Container, Flex, Input, SearchInput, Switch, Textarea, Typography } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout";
-import { getCatalogSurveyTemplateById, getStoredAccessToken, getSurveyById } from "../api";
+import { getCatalogSurveyTemplateById, getStoredAccessToken, getSurveyById, updateSurvey } from "../api";
 import Pill from "../components/book-visit/Pill";
 
 function toRuDateTime(value) {
@@ -159,7 +159,7 @@ function normalizeSurvey(item, template) {
           ? String(initialSelectedOptionId)
           : (initialNumberValue === "" ? "" : String(initialNumberValue))),
       initialBoolean: Boolean(initialBooleanValue),
-      initialComment: "",
+      initialComment: answerType === "oneValueFrom" ? String(firstAnswer?.openAnswer || "") : "",
       initialSelectedNumbers: selectedNumbers,
       initialOpenAnswersByNumber: openAnswersByNumber,
     });
@@ -194,15 +194,182 @@ function buildInitialState(questions) {
   return state;
 }
 
+function getOptionMeta(question, selectedValue) {
+  const selectedId = String(selectedValue || "").trim();
+  const optionIndex = question.answerItems.findIndex((option, index) => {
+    const optionId = getOptionId(option, index);
+    return optionId === selectedId || String(index + 1) === selectedId;
+  });
+
+  if (optionIndex === -1) {
+    const numberValue = Number(selectedId);
+    return {
+      answerId: selectedId,
+      numberAnswer: Number.isFinite(numberValue) ? numberValue : "",
+      answerTitle: selectedId,
+    };
+  }
+
+  const option = question.answerItems[optionIndex];
+  return {
+    answerId: getOptionId(option, optionIndex),
+    numberAnswer: optionIndex + 1,
+    answerTitle: getOptionTitle(option),
+  };
+}
+
+function getBaseSurveyItem(question, base = {}) {
+  return {
+    ...base,
+    numberQuestion: question.number,
+    questionId: question.id,
+    questionTitle: question.title,
+  };
+}
+
+function setAnswerField(item, field, value) {
+  const normalizedValue = value ?? "";
+  if (normalizedValue !== "" || Object.prototype.hasOwnProperty.call(item, field)) {
+    item[field] = normalizedValue;
+  }
+}
+
+function buildSurveyItem(question, base, fields = {}) {
+  const item = getBaseSurveyItem(question, base);
+
+  setAnswerField(item, "answerId", fields.answerId);
+  setAnswerField(item, "numberAnswer", fields.numberAnswer);
+  setAnswerField(item, "answerTitle", fields.answerTitle);
+  setAnswerField(item, "openAnswer", fields.openAnswer);
+
+  return item;
+}
+
+function findOriginalAnswerForOption(originalAnswers, meta) {
+  return originalAnswers.find((answer) => String(answer?.answerId || "").trim() === String(meta.answerId || "").trim())
+    || originalAnswers.find((answer) => Number(answer?.numberAnswer) === Number(meta.numberAnswer))
+    || originalAnswers.find((answer) => String(answer?.answerTitle || "").trim() === String(meta.answerTitle || "").trim())
+    || originalAnswers[0]
+    || {};
+}
+
+function buildSurveyItems(surveyDocument, questions, answersState) {
+  const originalItems = Array.isArray(surveyDocument?.surveyItems) ? surveyDocument.surveyItems : [];
+  const questionIds = new Set(questions.map((question) => question.id));
+  const untouchedItems = originalItems.filter((item) => !questionIds.has(item?.questionId));
+  const originalByQuestionId = new Map();
+
+  for (const item of originalItems) {
+    const key = item?.questionId;
+    if (!key) continue;
+
+    if (!originalByQuestionId.has(key)) {
+      originalByQuestionId.set(key, []);
+    }
+
+    originalByQuestionId.get(key).push(item);
+  }
+
+  const nextItems = [];
+
+  for (const question of questions) {
+    const state = answersState[question.id] || {};
+    const originalAnswers = originalByQuestionId.get(question.id) || [];
+    const baseAnswer = originalAnswers[0] || {};
+
+    if (question.answerType === "boolean") {
+      const boolValue = Boolean(state.bool);
+      nextItems.push(buildSurveyItem(question, baseAnswer, {
+        numberAnswer: boolValue ? 1 : 0,
+        answerTitle: boolValue,
+      }));
+      continue;
+    }
+
+    if (question.answerType === "string" || question.answerType === "text") {
+      const textValue = String(state.text || "");
+      nextItems.push(buildSurveyItem(question, baseAnswer, {
+        answerTitle: textValue,
+        openAnswer: textValue,
+      }));
+      continue;
+    }
+
+    if (question.answerType === "number") {
+      const rawValue = String(state.number ?? "").trim();
+      const numericValue = Number(rawValue);
+      const answerValue = rawValue === "" ? "" : (Number.isFinite(numericValue) ? numericValue : rawValue);
+      nextItems.push(buildSurveyItem(question, baseAnswer, {
+        numberAnswer: answerValue,
+        answerTitle: answerValue,
+      }));
+      continue;
+    }
+
+    if (question.answerType === "oneValueFrom" || question.answerType === "valueInInfobase") {
+      const selectedValue = String(state.number || "").trim();
+      if (!selectedValue) {
+        nextItems.push(buildSurveyItem(question, baseAnswer));
+        continue;
+      }
+
+      const meta = getOptionMeta(question, selectedValue);
+      nextItems.push(buildSurveyItem(question, findOriginalAnswerForOption(originalAnswers, meta), {
+        ...meta,
+        openAnswer: question.requiresComment ? String(state.comment || "") : "",
+      }));
+      continue;
+    }
+
+    if (question.answerType === "severalValueFrom") {
+      const selectedValues = (state.selectedNumbers || []).map((value) => String(value || "").trim()).filter(Boolean);
+
+      if (!selectedValues.length) {
+        nextItems.push(buildSurveyItem(question, baseAnswer));
+        continue;
+      }
+
+      for (const selectedValue of selectedValues) {
+        const meta = getOptionMeta(question, selectedValue);
+        const openAnswersByNumber = state.openAnswersByNumber || {};
+        nextItems.push(buildSurveyItem(question, findOriginalAnswerForOption(originalAnswers, meta), {
+          ...meta,
+          openAnswer: String(openAnswersByNumber[meta.answerId] ?? openAnswersByNumber[selectedValue] ?? ""),
+        }));
+      }
+      continue;
+    }
+
+    const textValue = String(state.text || "");
+    nextItems.push(buildSurveyItem(question, baseAnswer, {
+      answerTitle: textValue,
+      openAnswer: textValue,
+    }));
+  }
+
+  return [...nextItems, ...untouchedItems];
+}
+
+function buildSurveyPayload(surveyDocument, questions, answersState, isDone) {
+  return {
+    ...surveyDocument,
+    isDone,
+    surveyItems: buildSurveyItems(surveyDocument, questions, answersState),
+  };
+}
+
 export default function SurveyDetails() {
   const { id } = useParams();
   const nav = useNavigate();
   const [survey, setSurvey] = useState(null);
+  const [surveyDocument, setSurveyDocument] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [answersState, setAnswersState] = useState({});
   const [openSelects, setOpenSelects] = useState({});
   const [selectSearch, setSelectSearch] = useState({});
+  const [savingAction, setSavingAction] = useState("");
+  const [saveFeedback, setSaveFeedback] = useState({ type: "", text: "" });
 
   useEffect(() => {
     async function loadSurvey() {
@@ -221,6 +388,7 @@ export default function SurveyDetails() {
 
         if (!found?.surveyTemplateId) {
           setSurvey(null);
+          setSurveyDocument(null);
           setAnswersState({});
           return;
         }
@@ -230,9 +398,11 @@ export default function SurveyDetails() {
         const normalized = normalizeSurvey(found, template);
 
         setSurvey(normalized);
+        setSurveyDocument(found);
         setAnswersState(normalized ? buildInitialState(normalized.questions) : {});
       } catch {
         setError("Не удалось загрузить анкету");
+        setSurveyDocument(null);
       } finally {
         setLoading(false);
       }
@@ -267,6 +437,41 @@ export default function SurveyDetails() {
       ...prev,
       [questionId]: !prev[questionId],
     }));
+  }
+
+  async function handleSaveSurvey(isDone) {
+    const accessToken = getStoredAccessToken();
+    if (!accessToken || !survey || !surveyDocument) {
+      return;
+    }
+
+    try {
+      setSavingAction(isDone ? "done" : "draft");
+      setSaveFeedback({ type: "", text: "" });
+
+      const payload = buildSurveyPayload(surveyDocument, survey.questions, answersState, isDone);
+      const response = await updateSurvey(accessToken, payload);
+      const savedDocument = response?.item && typeof response.item === "object" ? response.item : payload;
+      const savedIsDone = Boolean(savedDocument?.isDone ?? isDone);
+
+      setSurveyDocument(savedDocument);
+      setSurvey((prev) => prev ? {
+        ...prev,
+        isDone: savedIsDone,
+        status: savedIsDone ? "Завершена" : "Новая",
+      } : prev);
+      setSaveFeedback({
+        type: "success",
+        text: isDone ? "Анкета отправлена" : "Черновик сохранён",
+      });
+    } catch {
+      setSaveFeedback({
+        type: "error",
+        text: "Не удалось сохранить анкету",
+      });
+    } finally {
+      setSavingAction("");
+    }
   }
 
   function renderAnswerControl(question) {
@@ -597,9 +802,34 @@ export default function SurveyDetails() {
   }
 
   let previousSection = "";
+  const canEditSurvey = Boolean(survey && !survey.isDone && !loading && !error);
+  const isSaving = Boolean(savingAction);
+  const footerBefore = canEditSurvey ? (
+    <Flex direction="column" gap={8}>
+      {saveFeedback.text ? (
+        <Typography.Label className={`surveySaveMessage ${saveFeedback.type === "error" ? "surveySaveMessage--error" : ""}`}>
+          {saveFeedback.text}
+        </Typography.Label>
+      ) : null}
+      <Button
+        mode="secondary"
+        stretched
+        onClick={() => handleSaveSurvey(false)}
+        disabled={isSaving}
+      >
+        {savingAction === "draft" ? "Сохраняем..." : "Сохранить черновик"}
+      </Button>
+    </Flex>
+  ) : null;
 
   return (
-    <PageLayout showBottom bottomButtonText="К списку анкет" onBottomButtonClick={() => nav("/surveys")}>
+    <PageLayout
+      showBottom
+      bottomButtonText={canEditSurvey ? (savingAction === "done" ? "Отправляем..." : "Завершить и отправить") : "К списку анкет"}
+      onBottomButtonClick={canEditSurvey ? () => handleSaveSurvey(true) : () => nav("/surveys")}
+      bottomButtonDisabled={isSaving}
+      before={footerBefore}
+    >
       <Flex direction="column" gap={10}>
         <CellHeader titleStyle="caps">Анкета</CellHeader>
 

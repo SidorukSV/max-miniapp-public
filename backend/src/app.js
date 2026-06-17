@@ -1,12 +1,41 @@
+import fs from "fs";
+import path from "path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { config } from "./config.js";
+import { config, oneCConfigLoadDiagnostics } from "./config.js";
 import { authRoutes } from "./routes/auth.js";
 import { meRoutes } from "./routes/me.js";
 import { logsRoutes } from "./routes/logs.js";
 import { catalogsRoutes } from "./routes/catalogs.js";
 import { documentsRoutes } from "./routes/documents.js";
 import { maxWebhookRoutes } from "./routes/maxWebhook.js";
+import { versionRoutes } from "./routes/version.js";
+
+function buildLoggerOptions() {
+    const loggerOptions = {
+        level: config.backendLogLevel,
+    };
+
+    if (!config.backendLogFile) {
+        return loggerOptions;
+    }
+
+    const resolvedLogFile = path.resolve(process.cwd(), config.backendLogFile);
+    fs.mkdirSync(path.dirname(resolvedLogFile), { recursive: true });
+
+    return {
+        ...loggerOptions,
+        file: resolvedLogFile,
+    };
+}
+
+function logOneCConfigDiagnostics(app) {
+    for (const diagnostic of oneCConfigLoadDiagnostics) {
+        const { level = "info", ...payload } = diagnostic;
+        const safeLevel = typeof app.log[level] === "function" ? level : "info";
+        app.log[safeLevel](payload, "1C config load diagnostic");
+    }
+}
 
 export async function buildApp() {
     const localhostOrigins = [
@@ -22,8 +51,10 @@ export async function buildApp() {
     ]);
 
     const app = Fastify({
-        logger: true,
+        logger: buildLoggerOptions(),
     });
+
+    logOneCConfigDiagnostics(app);
 
     await app.register(cors, {
         origin(origin, cb) {
@@ -78,6 +109,7 @@ export async function buildApp() {
     app.register(catalogsRoutes);
     app.register(documentsRoutes);
     app.register(maxWebhookRoutes);
+    app.register(versionRoutes);
 
     return app;
 }

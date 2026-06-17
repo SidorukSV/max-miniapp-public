@@ -9,6 +9,26 @@ import {
 } from "../services/onecRouter.js";
 
 const APPOINTMENT_TYPES = new Set(["online", "phone", "phone_and_chat"]);
+const SPECIALIZATION_ICON_CODES = new Set([
+    "default",
+    "therapy",
+    "doctor",
+    "cardiology",
+    "dentistry",
+    "surgery",
+    "gynecology",
+    "urology",
+    "neurology",
+    "ophthalmology",
+    "pediatrics",
+    "lab",
+    "diagnostics",
+    "xray",
+    "vaccination",
+    "cosmetology",
+    "trichology",
+    "physiotherapy",
+]);
 
 function isNonEmptyString(value) {
     return typeof value === "string" && value.trim().length > 0;
@@ -20,6 +40,11 @@ function isUuid(value) {
 
 function isValidAppointmentType(value) {
     return APPOINTMENT_TYPES.has(value);
+}
+
+function isValidIconCode(value) {
+    if (value === undefined || value === null || value === "") return true;
+    return typeof value === "string" && SPECIALIZATION_ICON_CODES.has(value.trim());
 }
 
 function validateCategoryPayload(payload) {
@@ -53,6 +78,7 @@ function validateCategoryPayload(payload) {
         if (!isNonEmptyString(specialization?.specializationTitle)) return "specialization_title_invalid";
         if (!isValidAppointmentType(specialization?.appointment_type)) return "specialization_appointment_type_invalid";
         if (!isNonEmptyString(specialization?.appointment_phone)) return "specialization_appointment_phone_invalid";
+        if (!isValidIconCode(specialization?.iconCode)) return "specialization_icon_code_invalid";
     }
 
     for (const service of payload.services) {

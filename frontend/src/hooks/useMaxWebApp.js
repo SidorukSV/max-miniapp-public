@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useMaxWebApp() {
   const [webApp, setWebApp] = useState(null);
   const [initData, setInitData] = useState("");
   const [initDataUnsafe, setInitDataUnsafe] = useState(null);
-  const [phone, setPhone] = useState(null);
 
   useEffect(() => {
     const wa = window.WebApp;

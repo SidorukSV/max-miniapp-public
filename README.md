@@ -179,6 +179,9 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 ### 3) Сборка и запуск
 
+Опциональные настройки frontend-сборки задаются в корневом `.env`:
+`VITE_THEME_CONFIG_PATH`, `VITE_PRIVACY_POLICY_URL`, `VITE_PERSONAL_DATA_CONSENT_URL`.
+
 ```bash
 docker compose -f docker-compose.prod.yml up -d --build
 ```
@@ -187,10 +190,19 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 ```bash
 curl -k https://localhost/
+curl -k https://localhost/api/v1/version
 curl -k https://localhost/api/v1/auth/start -X POST
 ```
 
 `-k` нужен только для self-signed сертификата.
+
+Backend пишет JSONL-логи в `./logs/backend.log` при production-запуске через Docker Compose.
+Для диагностики авторизации удобно смотреть:
+
+```bash
+tail -f logs/backend.log
+grep -i auth logs/backend.log
+```
 
 ### Что это даёт
 

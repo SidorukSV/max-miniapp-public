@@ -103,6 +103,10 @@ export async function getMe(access_token) {
     });
 }
 
+export async function getVersion() {
+    return apiFetch("/version");
+}
+
 export async function getBonusTransactions(access_token) {
     return apiFetch("/me/bonus-transactions", {
         headers: {
@@ -145,6 +149,16 @@ export async function getSurveyById(access_token, surveyId) {
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
+    });
+}
+
+export async function updateSurvey(access_token, payload) {
+    return apiFetch("/documents/surveys", {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+        body: JSON.stringify(payload),
     });
 }
 

@@ -1,57 +1,43 @@
-import { Container, Button, Typography } from "@maxhub/max-ui";
-import { useEffect, useState } from "react";
-import "../App.css";
+import { NavLink, useLocation } from "react-router-dom";
+import { CalendarCheck, IdCard, LayoutGrid, QrCode, UserRound } from "lucide-react";
 
-export default function AppBottomBar({
-    buttonText,
-    onButtonClick,
-    buttonDisabled = false,
-    showButton = true,
-    before = null,
-    after = null
-}) {
-    const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+const TABS = [
+  { to: "/", label: "Главная", icon: LayoutGrid, exact: true },
+  { to: "/book", label: "Запись", icon: CalendarCheck },
+  { to: "/bonuses", label: "Бонусы", icon: QrCode },
+  { to: "/medcard", label: "Медкарта", icon: IdCard },
+  { to: "/profile", label: "Профиль", icon: UserRound },
+];
 
-    useEffect(() => {
-        const viewport = window.visualViewport;
-        if (!viewport) return undefined;
+function isTabActive(pathname, tab) {
+  if (tab.exact) return pathname === "/";
+  if (tab.to === "/book") return pathname.startsWith("/book");
+  return pathname === tab.to || pathname.startsWith(`${tab.to}/`);
+}
 
-        const handleViewportResize = () => {
-            setIsKeyboardOpen(viewport.height <= 410);
-        };
+export default function AppBottomBar() {
+  const { pathname } = useLocation();
 
-        handleViewportResize();
-        viewport.addEventListener("resize", handleViewportResize);
+  return (
+    <nav className="bottomTabBar" aria-label="Основное меню">
+      <div className="bottomTabBar__inner">
+        {TABS.map((tab) => {
+          const Icon = tab.icon;
+          const active = isTabActive(pathname, tab);
 
-        return () => {
-            viewport.removeEventListener("resize", handleViewportResize);
-        };
-    }, []);
-
-    return (
-        <footer className={`bottomBar ${isKeyboardOpen ? "bottomBar--hidden" : ""}`}>
-            <Container className="bottomBarInner">
-                {before && (
-                    <div className="bottomBefore">
-                        {before}
-                    </div>
-                )}
-                {showButton && (
-                    <Button className="bottomPrimary" onClick={onButtonClick} disabled={buttonDisabled}>
-                        {buttonText}
-                    </Button>
-                )}
-                {after && (
-                    <div className="bottomAfter">
-                        {after}
-                    </div>
-                )}
-            </Container>
-            <div className="bottomNote">
-                <Typography.Label>
-                    БИТ.Медицина / Омни. С заботой о пациентах
-                </Typography.Label>
-            </div>
-        </footer>
-    );
+          return (
+            <NavLink
+              key={tab.to}
+              to={tab.to}
+              end={tab.exact}
+              className={`bottomTab ${active ? "bottomTab--active" : ""}`}
+            >
+              <Icon size={25} aria-hidden="true" />
+              <span>{tab.label}</span>
+            </NavLink>
+          );
+        })}
+      </div>
+    </nav>
+  );
 }

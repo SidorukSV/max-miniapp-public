@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CellHeader, CellList, CellSimple, Container, Flex, Typography } from "@maxhub/max-ui";
+import { CellHeader, CellList, CellSimple, Container, Flex, Typography } from "../components/ui.jsx";
 import { ClipboardList, FileSearch } from "lucide-react";
 import PageLayout from "../components/PageLayout";
 import { getStoredAccessToken, getSurveys } from "../api";
@@ -68,8 +68,7 @@ export default function MySurveys() {
   return (
     <PageLayout
       showBottom
-      bottomButtonText="Вернуться на главную"
-      onBottomButtonClick={() => nav("/")}
+      headerTitle="Анкеты"
     >
       <Flex direction="column" gap={10}>
         <CellHeader titleStyle="caps">Мои анкеты</CellHeader>
