@@ -19,7 +19,7 @@ export default function AuthScreen() {
     const [error, setError] = useState("");
     const [manualPhone, setManualPhone] = useState("");
     const [manualTotpCode, setManualTotpCode] = useState("");
-    const communicationConsentUrl = appConfig.communnicationConsentUrl;
+    const communicationConsentUrl = appConfig.communicationConsentUrl;
 
     const isBrowserLocalhost = useMemo(() => {
         const host = window.location.hostname;
