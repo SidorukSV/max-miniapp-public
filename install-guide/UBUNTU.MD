@@ -109,6 +109,84 @@ README отдельно подчеркивает важность сильног
 
 Получаете сертификат любым удобным способом и кладёте в эти пути.
 
+### Вариант A.1: Let's Encrypt через Certbot standalone
+
+Подходит для первого выпуска сертификата, когда `gateway` ещё не запущен или его можно временно остановить. У домена уже должна быть `A`/`AAAA` DNS-запись на этот сервер, а входящие порты `80` и `443` должны быть открыты.
+
+Официальная инструкция Certbot рекомендует установку через `snap`; режим `standalone` временно поднимает свой HTTP-сервер и требует свободный порт `80`: [Certbot instructions](https://certbot.eff.org/instructions?os=ubuntufocal&ws=other).
+
+Замените домен и email:
+
+```bash
+DOMAIN=miniapp.example.com
+EMAIL=admin@example.com
+```
+
+Установите Certbot:
+
+```bash
+sudo apt update
+sudo apt install -y snapd
+sudo snap install core
+sudo snap refresh core
+sudo apt-get remove -y certbot || true
+sudo snap install --classic certbot
+sudo ln -sf /snap/bin/certbot /usr/local/bin/certbot
+```
+
+Освободите порт `80`, если приложение уже запускалось:
+
+```bash
+sudo systemctl stop max-miniapp || true
+docker compose -f docker-compose.prod.yml stop gateway || true
+```
+
+Выпустите сертификат:
+
+```bash
+sudo certbot certonly --standalone \
+  -d "$DOMAIN" \
+  --email "$EMAIL" \
+  --agree-tos \
+  --no-eff-email
+```
+
+Скопируйте сертификаты туда, где их ждёт `gateway`:
+
+```bash
+mkdir -p deploy/certs
+sudo install -m 644 "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" deploy/certs/fullchain.pem
+sudo install -m 600 "/etc/letsencrypt/live/$DOMAIN/privkey.pem" deploy/certs/privkey.pem
+```
+
+Проверьте автоматическое продление:
+
+```bash
+sudo certbot renew --dry-run
+```
+
+Чтобы после продления сертификаты автоматически копировались в проект и Nginx перечитывал их, создайте deploy hook:
+
+```bash
+sudo mkdir -p /etc/letsencrypt/renewal-hooks/deploy
+sudo tee /etc/letsencrypt/renewal-hooks/deploy/max-miniapp-copy-certs.sh > /dev/null <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+DOMAIN="miniapp.example.com"
+APP_DIR="/opt/max-miniapp"
+
+install -m 644 "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" "${APP_DIR}/deploy/certs/fullchain.pem"
+install -m 600 "/etc/letsencrypt/live/${DOMAIN}/privkey.pem" "${APP_DIR}/deploy/certs/privkey.pem"
+
+cd "${APP_DIR}"
+docker compose -f docker-compose.prod.yml restart gateway
+EOF
+sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/max-miniapp-copy-certs.sh
+```
+
+В hook тоже замените `DOMAIN="miniapp.example.com"` на реальный домен.
+
 ### Вариант B (временный/тест): self-signed
 
 
