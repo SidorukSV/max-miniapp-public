@@ -17,6 +17,7 @@ import PayloadSurveyRedirect from "./components/PayloadSurveyRedirect.jsx";
 import { useMaxWebApp } from "./hooks/useMaxWebApp.js";
 import { MaxContext } from "./context/MaxContext.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import CommunicationConsent from "./pages/CommunicationCosent.jsx";
 
 export default function App() {
 
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="/surveys/:id" element={<SurveyDetails />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/personal-data-consent" element={<PersonalDataConsent />} />
+            <Route path="/communication-consent" element={<CommunicationConsent />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

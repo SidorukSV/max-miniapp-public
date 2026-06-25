@@ -2,7 +2,7 @@ import { Flex, Typography } from "../components/ui.jsx";
 import PageLayout from "../components/PageLayout.jsx";
 import { appConfig } from "../config.js";
 
-export default function PrivacyPolicy() {
+export default function CommunicationConsent() {
     const communicationConsentUrl = appConfig.communicationConsentUrl;
     
     return (
