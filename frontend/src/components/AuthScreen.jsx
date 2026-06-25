@@ -153,10 +153,7 @@ export default function AuthScreen() {
                 <Typography.Label className="authPolicyText">
                     Нажимая кнопку &quot;Подтвердить номер телефона&quot; вы соглашаетесь с 
                      {" "}<Link to="/privacy-policy" className="authPolicyLink">политикой обработки персональных данных</Link>
-                     {(
-                        <span>, <Link to="/communication-consent" className="authPolicyLink">согласием на коммуникацию</Link></span>
-                        )
-                    }
+                      <Link to="/communication-consent" className="authPolicyLink">согласием на коммуникацию</Link>  
                     {" "}и {" "}
                     <Link to="/personal-data-consent" className="authPolicyLink">согласием на обработку персональных данных</Link>.
                 </Typography.Label>
