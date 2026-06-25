@@ -184,6 +184,7 @@ export default function Profile() {
           <CellList>
             <CellSimple title={<Link className="legalLink" to="/privacy-policy">Политика обработки персональных данных</Link>} />
             <CellSimple title={<Link className="legalLink" to="/personal-data-consent">Согласие на обработку персональных данных</Link>} />
+            <CellSimple title={<Link className="legalLink" to="/communication-consent">Согласие на осуществление коммуникации</Link>} />
           </CellList>
         </Card>
 
