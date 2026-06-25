@@ -7,6 +7,7 @@ import "../App.css";
 import { useMaxWebApp } from "../hooks/useMaxWebApp";
 import { dateISOFormat } from "../modules/DateFormat";
 import PageLayout from "./PageLayout";
+import { appConfig } from "../config.js";
 
 export default function AuthScreen() {
     const { webApp, initData } = useMaxWebApp();
@@ -18,6 +19,7 @@ export default function AuthScreen() {
     const [error, setError] = useState("");
     const [manualPhone, setManualPhone] = useState("");
     const [manualTotpCode, setManualTotpCode] = useState("");
+    const communicationConsentUrl = appConfig.communnicationConsentUrl;
 
     const isBrowserLocalhost = useMemo(() => {
         const host = window.location.hostname;
@@ -151,6 +153,10 @@ export default function AuthScreen() {
                 <Typography.Label className="authPolicyText">
                     Нажимая кнопку &quot;Подтвердить номер телефона&quot; вы соглашаетесь с 
                      {" "}<Link to="/privacy-policy" className="authPolicyLink">политикой обработки персональных данных</Link>
+                     {communicationConsentUrl && (
+                        <span>, <Link to="/personal-data-consent" className="authPolicyLink">согласием на обработку персональных данных</Link></span>
+                        )
+                    }
                     {" "}и {" "}
                     <Link to="/personal-data-consent" className="authPolicyLink">согласием на обработку персональных данных</Link>.
                 </Typography.Label>
