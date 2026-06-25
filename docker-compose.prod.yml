@@ -43,6 +43,7 @@ services:
         VITE_THEME_CONFIG_PATH: ${VITE_THEME_CONFIG_PATH:-theme-config.json}
         VITE_PRIVACY_POLICY_URL: ${VITE_PRIVACY_POLICY_URL:-}
         VITE_PERSONAL_DATA_CONSENT_URL: ${VITE_PERSONAL_DATA_CONSENT_URL:-}
+        VITE_COMMUNICATION_CONSENT_URL: ${VITE_COMMUNICATION_CONSENT_URL:-}
     restart: unless-stopped
     depends_on:
       - backend
