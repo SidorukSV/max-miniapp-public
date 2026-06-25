@@ -154,7 +154,7 @@ export default function AuthScreen() {
                     Нажимая кнопку &quot;Подтвердить номер телефона&quot; вы соглашаетесь с 
                      {" "}<Link to="/privacy-policy" className="authPolicyLink">политикой обработки персональных данных</Link>
                      {communicationConsentUrl && (
-                        <span>, <Link to="/personal-data-consent" className="authPolicyLink">согласием на обработку персональных данных</Link></span>
+                        <span>, <Link to="/personal-data-consent" className="authPolicyLink">согласием на коммуникацию</Link></span>
                         )
                     }
                     {" "}и {" "}
