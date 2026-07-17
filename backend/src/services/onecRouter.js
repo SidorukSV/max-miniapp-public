@@ -2,6 +2,13 @@ import { config } from "../config.js";
 
 let ibSessionCookie = null;
 
+export const DEFAULT_APPLICATION_SETTINGS = Object.freeze({
+    visibility_pages: Object.freeze({
+        bonuses: true,
+        survey: true,
+    }),
+});
+
 function validateOneCConfig(oneCConfig) {
     if (!oneCConfig) {
         throw new Error("onec_config_not_found");
@@ -121,6 +128,35 @@ export async function onecFetch(path, options = {}) {
 
 export function getOneCConfig() {
     return validateOneCConfig(config.oneCConfig);
+}
+
+export function normalizeApplicationSettings(payload) {
+    const visibilityPages = payload?.visibility_pages;
+
+    return {
+        visibility_pages: {
+            bonuses: visibilityPages?.bonuses !== false,
+            survey: visibilityPages?.survey !== false,
+        },
+    };
+}
+
+export async function getApplicationSettings() {
+    const oneCConfig = getOneCConfig();
+    const endpoint = "/settings";
+
+    try {
+        const data = await onecFetch(appendOneCPath(oneCConfig.url, endpoint), {
+            method: "GET",
+            headers: {
+                Authorization: `Basic ${oneCConfig.basicAuth}`,
+            },
+        });
+
+        return normalizeApplicationSettings(data);
+    } catch (error) {
+        throw new Error(`onec_request_failed:endpoint=${endpoint};operation=getApplicationSettings;reason=${error.message}`);
+    }
 }
 
 export async function startOneCSessions() {

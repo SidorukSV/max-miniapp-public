@@ -1,0 +1,203 @@
+name: Component versions and CFE release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      force_cfe_build:
+        description: Build and republish the current CFE even when its source hash is unchanged
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: component-release-main
+  cancel-in-progress: false
+
+env:
+  ONEC_EXTENSION_NAME: бит_МедицинаОмни_ПРОФ
+  ONEC_SOURCE_DIR: onec/omni/src/extension/бит_МедицинаОмни_ПРОФ
+  ONEC_CONFIGURATION: onec/omni/src/extension/бит_МедицинаОмни_ПРОФ/Configuration.xml
+
+jobs:
+  prepare:
+    name: Calculate hashes and versions
+    runs-on: ubuntu-latest
+    outputs:
+      any_changed: ${{ steps.versions.outputs.any_changed }}
+      frontend_changed: ${{ steps.versions.outputs.frontend_changed }}
+      frontend_version: ${{ steps.versions.outputs.frontend_version }}
+      backend_changed: ${{ steps.versions.outputs.backend_changed }}
+      backend_version: ${{ steps.versions.outputs.backend_version }}
+      onec_changed: ${{ steps.versions.outputs.onec_changed }}
+      onec_version: ${{ steps.versions.outputs.onec_version }}
+      onec_source_hash: ${{ steps.versions.outputs.onec_source_hash }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Bump versions for changed component hashes
+        id: versions
+        run: node scripts/release/update-component-versions.mjs
+
+      - name: Upload prepared version files
+        if: >-
+          steps.versions.outputs.any_changed == 'true' ||
+          (github.event_name == 'workflow_dispatch' && inputs.force_cfe_build)
+        uses: actions/upload-artifact@v4
+        with:
+          name: prepared-component-versions
+          if-no-files-found: error
+          retention-days: 1
+          path: |
+            .release/components.json
+            frontend/package.json
+            frontend/package-lock.json
+            backend/package.json
+            backend/package-lock.json
+            ${{ env.ONEC_CONFIGURATION }}
+
+  build_cfe:
+    name: Build CFE
+    needs: prepare
+    if: >-
+      needs.prepare.outputs.onec_changed == 'true' ||
+      (github.event_name == 'workflow_dispatch' && inputs.force_cfe_build)
+    runs-on:
+      - self-hosted
+      - Windows
+      - X64
+      - onec
+    env:
+      ONEC_V8_PATH: ${{ vars.ONEC_V8_PATH }}
+      ONEC_BASE_CF: ${{ vars.ONEC_BASE_CF }}
+      ONEC_SEED_CFE: ${{ vars.ONEC_SEED_CFE }}
+    steps:
+      - name: Checkout source commit
+        uses: actions/checkout@v4
+
+      - name: Apply prepared extension version
+        uses: actions/download-artifact@v4
+        with:
+          name: prepared-component-versions
+          path: .
+
+      - name: Build extension
+        shell: pwsh
+        run: |
+          $version = "${{ needs.prepare.outputs.onec_version }}"
+          $output = Join-Path $PWD ".artifacts\бит_МедицинаОмни_ПРОФ_$version.cfe"
+          & ".\.github\scripts\build-cfe.ps1" `
+            -SourceDir "${{ env.ONEC_SOURCE_DIR }}" `
+            -OutputFile $output `
+            -ExtensionName "${{ env.ONEC_EXTENSION_NAME }}"
+
+      - name: Upload CFE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: omni-cfe-${{ needs.prepare.outputs.onec_version }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            .artifacts/*.cfe
+            .artifacts/*.sha256
+
+  commit_versions:
+    name: Commit component versions
+    needs:
+      - prepare
+      - build_cfe
+    if: >-
+      always() &&
+      needs.prepare.outputs.any_changed == 'true' &&
+      (needs.build_cfe.result == 'success' || needs.build_cfe.result == 'skipped')
+    runs-on: ubuntu-latest
+    outputs:
+      release_sha: ${{ steps.commit.outputs.release_sha }}
+    steps:
+      - name: Checkout source commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+
+      - name: Apply prepared version files
+        uses: actions/download-artifact@v4
+        with:
+          name: prepared-component-versions
+          path: .
+
+      - name: Commit versions and hashes
+        id: commit
+        env:
+          TARGET_BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            .release/components.json \
+            frontend/package.json \
+            frontend/package-lock.json \
+            backend/package.json \
+            backend/package-lock.json \
+            "$ONEC_CONFIGURATION"
+
+          if git diff --cached --quiet; then
+            echo "release_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git commit -m "chore(release): bump component versions [skip ci]"
+          git push origin "HEAD:$TARGET_BRANCH"
+          echo "release_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  release_cfe:
+    name: Publish CFE release
+    needs:
+      - prepare
+      - build_cfe
+      - commit_versions
+    if: >-
+      always() &&
+      needs.build_cfe.result == 'success' &&
+      (needs.commit_versions.result == 'success' || needs.commit_versions.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download CFE artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: omni-cfe-${{ needs.prepare.outputs.onec_version }}
+          path: .artifacts
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.prepare.outputs.onec_version }}
+          SOURCE_HASH: ${{ needs.prepare.outputs.onec_source_hash }}
+          RELEASE_SHA: ${{ needs.commit_versions.outputs.release_sha }}
+        run: |
+          if [ -z "$RELEASE_SHA" ]; then
+            RELEASE_SHA="$GITHUB_SHA"
+          fi
+
+          TAG="onec-v$VERSION"
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" .artifacts/* --clobber
+          else
+            gh release create "$TAG" .artifacts/* \
+              --target "$RELEASE_SHA" \
+              --title "1C extension $VERSION" \
+              --notes "Automatically built from source hash: $SOURCE_HASH"
+          fi

@@ -12,6 +12,7 @@ import { getAppointments, getStoredAccessToken, getSurveys, updateAppointment } 
 import { useAuth } from "../context/AuthContext.jsx";
 import { buildRescheduleUrl, normalizeAppointment } from "../modules/appointmentView.js";
 import { getFallbackGradientByInitials } from "../modules/avatarGradient.js";
+import { isPageVisible } from "../modules/featureVisibility.js";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -103,6 +104,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [cancelDialogVisitId, setCancelDialogVisitId] = useState(null);
   const [pendingVisitId, setPendingVisitId] = useState("");
+  const surveysVisible = isPageVisible(me, "survey");
 
   const username = me?.fullName || "Пациент";
   const firstName = getFirstName(username);
@@ -126,7 +128,9 @@ export default function Home() {
       setError("");
       const [appointmentsResponse, surveysResponse] = await Promise.allSettled([
         getAppointments(accessToken),
-        getSurveys(accessToken),
+        surveysVisible
+          ? getSurveys(accessToken)
+          : Promise.resolve({ items: [] }),
       ]);
 
       if (appointmentsResponse.status === "fulfilled") {
@@ -152,7 +156,7 @@ export default function Home() {
   useEffect(() => {
     loadHomeData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+  }, [accessToken, surveysVisible]);
 
   const nearestAppointment = useMemo(() => {
     const now = Date.now();
@@ -217,12 +221,14 @@ export default function Home() {
               <Typography.Label>Как ваше самочувствие сегодня?</Typography.Label>
             </div>
           </div>
-          <div className="profilePreview__actions">
-            <IconButton className="notificationButton" onClick={() => nav("/surveys")} aria-label="Открыть сообщения">
-              <Bell size={25} />
-              {newSurveysCount > 0 ? <span className="notificationBadge">{newSurveysCount}</span> : null}
-            </IconButton>
-          </div>
+          {surveysVisible ? (
+            <div className="profilePreview__actions">
+              <IconButton className="notificationButton" onClick={() => nav("/surveys")} aria-label="Открыть сообщения">
+                <Bell size={25} />
+                {newSurveysCount > 0 ? <span className="notificationBadge">{newSurveysCount}</span> : null}
+              </IconButton>
+            </div>
+          ) : null}
         </section>
 
         {error ? <Typography.Label className="authErrorLabel">{error}</Typography.Label> : null}
@@ -276,52 +282,54 @@ export default function Home() {
           </Stack>
         ) : null}
 
-        <Stack gap={12}>
-          <div className="sectionHeaderRow">
-            <Typography.Title level={2}>Сообщения</Typography.Title>
-            <button type="button" className="sectionLink" onClick={() => nav("/surveys")}>
-              Все сообщения
-              <ChevronRight size={18} />
-            </button>
-          </div>
-          <Card className="messageCard">
-            {contentLoading ? (
-              <>
-                <div className="skeletonRow" />
-                <div className="skeletonRow" />
-              </>
-            ) : surveys.length ? (
-              surveys.slice(0, 2).map((survey) => (
-                <button
-                  key={survey.id}
-                  type="button"
-                  className="cellRow"
-                  onClick={() => nav(`/surveys/${survey.id}`)}
-                >
+        {surveysVisible ? (
+          <Stack gap={12}>
+            <div className="sectionHeaderRow">
+              <Typography.Title level={2}>Сообщения</Typography.Title>
+              <button type="button" className="sectionLink" onClick={() => nav("/surveys")}>
+                Все сообщения
+                <ChevronRight size={18} />
+              </button>
+            </div>
+            <Card className="messageCard">
+              {contentLoading ? (
+                <>
+                  <div className="skeletonRow" />
+                  <div className="skeletonRow" />
+                </>
+              ) : surveys.length ? (
+                surveys.slice(0, 2).map((survey) => (
+                  <button
+                    key={survey.id}
+                    type="button"
+                    className="cellRow"
+                    onClick={() => nav(`/surveys/${survey.id}`)}
+                  >
+                    <span className="cellRow__before">
+                      <Mail size={22} />
+                    </span>
+                    <span className="cellRow__body">
+                      <span className="cellRow__title">{survey.title}</span>
+                      <span className="cellRow__subtitle">{survey.dateLabel}</span>
+                    </span>
+                    {!survey.isDone ? <span className="notificationBadge">1</span> : null}
+                    <ChevronRight className="cellRow__chevron" size={20} />
+                  </button>
+                ))
+              ) : (
+                <div className="cellRow">
                   <span className="cellRow__before">
                     <Mail size={22} />
                   </span>
                   <span className="cellRow__body">
-                    <span className="cellRow__title">{survey.title}</span>
-                    <span className="cellRow__subtitle">{survey.dateLabel}</span>
+                    <span className="cellRow__title">Анкет пока нет</span>
+                    <span className="cellRow__subtitle">Новые анкеты появятся здесь</span>
                   </span>
-                  {!survey.isDone ? <span className="notificationBadge">1</span> : null}
-                  <ChevronRight className="cellRow__chevron" size={20} />
-                </button>
-              ))
-            ) : (
-              <div className="cellRow">
-                <span className="cellRow__before">
-                  <Mail size={22} />
-                </span>
-                <span className="cellRow__body">
-                  <span className="cellRow__title">Анкет пока нет</span>
-                  <span className="cellRow__subtitle">Новые анкеты появятся здесь</span>
-                </span>
-              </div>
-            )}
-          </Card>
-        </Stack>
+                </div>
+              )}
+            </Card>
+          </Stack>
+        ) : null}
       </Stack>
 
       <QuestionDialog

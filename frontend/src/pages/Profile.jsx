@@ -17,6 +17,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { FRONTEND_BUILD } from "../buildInfo.js";
 import { dateISOFormat } from "../modules/DateFormat.js";
 import { getFallbackGradientByInitials } from "../modules/avatarGradient.js";
+import { isPageVisible } from "../modules/featureVisibility.js";
 
 function formatPhoneToInternational(phone) {
   if (!phone) return "";
@@ -62,6 +63,7 @@ export default function Profile() {
     .join("");
   const patientsByPhone = Array.isArray(me?.patients_by_phone) ? me.patients_by_phone : [];
   const balance = useMemo(() => Number(me?.bonus || 0), [me?.bonus]);
+  const bonusesVisible = isPageVisible(me, "bonuses");
 
   useEffect(() => {
     async function loadVersion() {
@@ -145,17 +147,19 @@ export default function Profile() {
           </div>
         </Card>
 
-        <Card>
-          <CellList>
-            <CellSimple
-              before={<Gift size={22} />}
-              title={`${balance} бонусов`}
-              subtitle="Текущий баланс"
-              showChevron
-              onClick={() => nav("/bonuses")}
-            />
-          </CellList>
-        </Card>
+        {bonusesVisible ? (
+          <Card>
+            <CellList>
+              <CellSimple
+                before={<Gift size={22} />}
+                title={`${balance} бонусов`}
+                subtitle="Текущий баланс"
+                showChevron
+                onClick={() => nav("/bonuses")}
+              />
+            </CellList>
+          </Card>
+        ) : null}
 
         {patientsByPhone.length > 1 ? (
           <Card>

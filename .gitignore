@@ -31,3 +31,9 @@ deploy/nginx/*.pem
 frontend/public/*.png
 frontend/public/*.json 
 !frontend/public/theme-config.json
+
+# Local 1C file database
+database/
+
+# Local release artifacts
+.artifacts/

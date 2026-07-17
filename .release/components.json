@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "components": {
+    "frontend": {
+      "version": "0.0.0",
+      "sourceHash": ""
+    },
+    "backend": {
+      "version": "1.0.0",
+      "sourceHash": ""
+    },
+    "onec": {
+      "version": "1.1.0.1",
+      "sourceHash": ""
+    }
+  }
+}

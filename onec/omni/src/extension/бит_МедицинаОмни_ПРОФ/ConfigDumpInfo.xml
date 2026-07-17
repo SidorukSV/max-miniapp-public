@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ConfigDumpInfo xmlns="http://v8.1c.ru/8.3/xcf/dumpinfo" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" format="Hierarchical" version="2.20">
+	<ConfigVersions>
+		<Metadata name="AccumulationRegister.НакопленияПоСкидкам" id="e7ba6f25-8343-40e6-93da-ac88644e8082" configVersion="ff7dcf7a62765ed279275d1b97655af549aedcdd"/>
+		<Metadata name="AccumulationRegister.НакопленияПоСкидкам.ManagerModule" id="e7ba6f25-8343-40e6-93da-ac88644e8082.2" configVersion="fc417ac194c1cbca628555ca595c9ca9af211e87"/>
+		<Metadata name="Catalog.ВидыКонтактнойИнформации" id="62387f68-6701-4e55-9e6c-4ca8916fed4c" configVersion="9a97bbe617ab0469a789cd6a09d2b4db2814e11a"/>
+		<Metadata name="Catalog.ВидыСостоянийЗаявок" id="41c34b3c-3d4e-4704-8cda-dfdfe0a4742c" configVersion="f70af91140d7a0dc625c66c59b13997061ac4a09">
+			<Metadata name="Catalog.ВидыСостоянийЗаявок.Attribute.бит_омни_ЗаголовокДляВыгрузки" id="9da5ff86-b60b-419f-af4e-a4b81db50f88"/>
+		</Metadata>
+		<Metadata name="Catalog.ВидыСостоянийЗаявок.Form.ФормаЭлементаУпр" id="1bf0cc64-0844-45ba-b13c-3f31bd4ef5d0" configVersion="806a0f96092e2f8d0f064b64f4912f4c9829b142"/>
+		<Metadata name="Catalog.ВидыСостоянийЗаявок.Form.ФормаЭлементаУпр.Form" id="1bf0cc64-0844-45ba-b13c-3f31bd4ef5d0.0" configVersion="432023575c19148034ca2dad9b0cae5502c9674d"/>
+		<Metadata name="Catalog.КатегорииВыработки" id="0dbf7aad-ab78-4e4a-9bfe-be8a20985ba0" configVersion="bc91ebdcd6155256d58e33bd52e46f539f64ffee">
+			<Metadata name="Catalog.КатегорииВыработки.Attribute.НомерСекции" id="00583aec-3b1b-4fc6-92cc-49da1afb754a"/>
+			<Metadata name="Catalog.КатегорииВыработки.Attribute.ДлительностьПриема" id="4d76ece5-d184-4be8-938d-5ea93401c340"/>
+			<Metadata name="Catalog.КатегорииВыработки.Attribute.бит_омни_НеВыгружать" id="7dcc0edd-c3f1-4d93-bc16-7d277e3e8c5d"/>
+			<Metadata name="Catalog.КатегорииВыработки.Attribute.бит_омни_ИконкаСпециализации" id="85058b49-7f3a-4d84-b491-8f46143df47b"/>
+			<Metadata name="Catalog.КатегорииВыработки.Attribute.бит_омни_НаименованиеДляСайта" id="88cd4c8d-6220-4237-a81b-08013de81cce"/>
+			<Metadata name="Catalog.КатегорииВыработки.Attribute.бит_омни_ТипЗаписи" id="d1d78b7a-df33-466b-b047-168dac606e51"/>
+			<Metadata name="Catalog.КатегорииВыработки.Attribute.бит_омни_ТелефонДляЗаписи" id="f994fb4e-dc01-40a3-beff-4903237b354d"/>
+		</Metadata>
+		<Metadata name="Catalog.КатегорииВыработки.Form.ФормаЭлементаУпр" id="43222807-4641-4af7-bfa8-661cbd0a067f" configVersion="a33b06d5d5326c30c6813d3f8db6e376c7bb9814"/>
+		<Metadata name="Catalog.КатегорииВыработки.Form.ФормаЭлементаУпр.Form" id="43222807-4641-4af7-bfa8-661cbd0a067f.0" configVersion="209c74cd8f3395fc3e24da5b3d38db7cd0fa61ce"/>
+		<Metadata name="Catalog.КатегорииВыработки.ManagerModule" id="0dbf7aad-ab78-4e4a-9bfe-be8a20985ba0.3" configVersion="7d782fb65564da7a4913e087bc516b6f0b27863d"/>
+		<Metadata name="Catalog.Клиенты" id="aac034c0-5271-464e-beb8-3105783b96a7" configVersion="4d0782c3cfc5a68c55e538a646da29eec786f896"/>
+		<Metadata name="Catalog.Клиенты.ManagerModule" id="aac034c0-5271-464e-beb8-3105783b96a7.3" configVersion="453d85a59c8fc8239aa62f5cf3aa79536cfc68ac"/>
+		<Metadata name="Catalog.Номенклатура" id="193ff9dc-710f-4978-801c-0f74fce316c1" configVersion="93ef73a8984d944b299149c6653e255aecf9302e">
+			<Metadata name="Catalog.Номенклатура.Attribute.бит_омни_НеВыгружать" id="3c8d3833-8dcc-4649-8778-2a69bd9a6a94"/>
+		</Metadata>
+		<Metadata name="Catalog.Оборудование" id="fd6a7525-8742-435b-a0c5-62a6f8ca6d61" configVersion="1cea9b6d150fac6a03d0e08cbbef6080c5df4dce"/>
+		<Metadata name="Catalog.Оборудование.ManagerModule" id="fd6a7525-8742-435b-a0c5-62a6f8ca6d61.3" configVersion="c46ece010212bd1a28f9a85962e14ad9c3b968aa"/>
+		<Metadata name="Catalog.Сотрудники" id="a9d4c917-ac5a-41db-8c68-c5df6c1a62b6" configVersion="8730b333d1512ce7c90c72d78499ebcb5c829a4a">
+			<Metadata name="Catalog.Сотрудники.Attribute.бит_омни_НеВыгружать" id="73668141-0403-4980-8d4f-29e52d2907a5"/>
+		</Metadata>
+		<Metadata name="Catalog.Сотрудники.ManagerModule" id="a9d4c917-ac5a-41db-8c68-c5df6c1a62b6.3" configVersion="cfea18422f27649869f06b3f6457390d734c9e89"/>
+		<Metadata name="Catalog.Филиалы" id="4b4f22b2-2a57-463d-8f6a-8c4b45586253" configVersion="8169d59ed275e62ad10eb33ad6ebfc36ed1870aa"/>
+		<Metadata name="Catalog.Филиалы.ManagerModule" id="4b4f22b2-2a57-463d-8f6a-8c4b45586253.3" configVersion="eab2e5b9da8485491af17bc0f66863c1640e4d4f"/>
+		<Metadata name="Catalog.ШаблоныАнкет" id="03c5ed5a-75eb-4f3e-8d79-131ad0ef760b" configVersion="60aadabbab38d5379068817773c55fa96d1a06bf"/>
+		<Metadata name="Catalog.ШаблоныАнкет.ManagerModule" id="03c5ed5a-75eb-4f3e-8d79-131ad0ef760b.3" configVersion="ef2a3f42eae04d13aa3f0c4d5cfb3847883877cc"/>
+		<Metadata name="Catalog.бит_омни_Боты" id="76ca1896-7b3b-4f45-9f71-4e073ee20113" configVersion="6530da6fb1d8b30fc993c9f48cadceb9c50144d1">
+			<Metadata name="Catalog.бит_омни_Боты.Attribute.Канал" id="35303e6c-ff2f-4183-8f78-f069245f4546"/>
+			<Metadata name="Catalog.бит_омни_Боты.Attribute.Идентификатор" id="6513abf4-2c49-4fd7-9a10-b81bda56f4a0"/>
+			<Metadata name="Catalog.бит_омни_Боты.Attribute.Использовать" id="95a1344f-bfcc-40ae-9431-f90cdf5398a8"/>
+			<Metadata name="Catalog.бит_омни_Боты.Attribute.Токен" id="b9d9f6ef-d817-4172-a61d-8cb82273a7c9"/>
+			<Metadata name="Catalog.бит_омни_Боты.Attribute.ИмяПользователя" id="cf4474ff-eb16-4b13-81fe-6a0672ae5e43"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_Боты.Form.ФормаЭлемента" id="4bead282-2028-456f-bfc5-09bfa2cd1b16" configVersion="418ff62e45cc7f2ee80babfc5e042fe64a310601"/>
+		<Metadata name="Catalog.бит_омни_Боты.Form.ФормаЭлемента.Form" id="4bead282-2028-456f-bfc5-09bfa2cd1b16.0" configVersion="b4103c7e5ca0a507d45e9893097a071e798aaedd"/>
+		<Metadata name="Catalog.бит_омни_ВариантыЛичногоКабинета" id="26925340-f0d7-4a44-80bc-6e5dc013bc2b" configVersion="59450e22ccdb32731337c431db1bf1d37c2c0a2a">
+			<Metadata name="Catalog.бит_омни_ВариантыЛичногоКабинета.Attribute.ПутьКЛоготипу" id="64493d67-568d-4940-8450-f7896ccaa997"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_Действия" id="5c781870-ffd5-47ce-9ae4-53076b6ec49f" configVersion="dbcb62609ab04bbbaad083e0c93d3148320f41af">
+			<Metadata name="Catalog.бит_омни_Действия.TabularSection.ШаблоныСообщений.Attribute.Шаблон" id="1e673926-a5d3-46f4-b866-94351b5f1b58"/>
+			<Metadata name="Catalog.бит_омни_Действия.Attribute.Алгоритм" id="9a0bbdd7-642d-47fd-82a4-79ceae7ef440"/>
+			<Metadata name="Catalog.бит_омни_Действия.TabularSection.Параметры.Attribute.ИмяПараметра" id="cd85a66f-11d1-4a2c-9be5-b29e2249233c"/>
+			<Metadata name="Catalog.бит_омни_Действия.TabularSection.Параметры" id="df4dfd9d-a6e3-4e03-a245-d6f0b9292066"/>
+			<Metadata name="Catalog.бит_омни_Действия.TabularSection.ШаблоныСообщений.Attribute.ОбозначениеВАлгоритме" id="e2835aa5-9e0a-4b77-8019-369c92113301"/>
+			<Metadata name="Catalog.бит_омни_Действия.TabularSection.ШаблоныСообщений" id="eb4a42b1-231a-4c99-a90d-e124c2ecdccd"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_Действия.Form.ФормаЭлемента" id="4cfb8fde-5a87-47ea-94f6-0b015b3f3296" configVersion="c9e978b0b67b9b070052d41b85e94f3c7f1604c6"/>
+		<Metadata name="Catalog.бит_омни_Действия.Form.ФормаЭлемента.Form" id="4cfb8fde-5a87-47ea-94f6-0b015b3f3296.0" configVersion="adf05f5797f1e37cdd67a5545415711636607d8a"/>
+		<Metadata name="Catalog.бит_омни_Действия.ManagerModule" id="5c781870-ffd5-47ce-9ae4-53076b6ec49f.3" configVersion="4f3cbdd33c90649b797d851ec603a2a9c33d9130"/>
+		<Metadata name="Catalog.бит_омни_КатегорииЗаписи" id="ea4151e1-2f64-4555-bb98-bc5e345b8b18" configVersion="509a5fe95b3228f440d4d3f034eb143a3d42b570">
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.Attribute.ОграничиватьСписокСпециализаций" id="021b2337-0d58-4e44-b222-66508eabc88e"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Сотрудники.Attribute.Режим" id="121b6083-8a78-4944-a0d6-ce7f21a97b19"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Сотрудники.Attribute.Сотрудник" id="176395a1-8344-4d4a-86f8-70557db36041"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Сотрудники" id="306cf1bf-58ab-4c8d-9d13-99f284e6e3d4"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Услуги.Attribute.Режим" id="7dfd1c0a-e586-4cfd-8a61-c41de7443821"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Услуги.Attribute.Услуга" id="8ed3b7f2-3ed0-40bd-83f3-deaadc738025"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Специализации" id="a24be994-03ea-4356-bf27-4e81b1cf4849"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Специализации.Attribute.Специализация" id="b08a01cf-b5d5-417a-871a-4e6b1c820bff"/>
+			<Metadata name="Catalog.бит_омни_КатегорииЗаписи.TabularSection.Услуги" id="eb2250b7-7ada-4a37-bcc5-03535309557e"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_КатегорииЗаписи.Form.ФормаЭлемента" id="1afedd0d-4571-4f7e-87c7-8b0dd59932e9" configVersion="34ceaa5e300e20eaf629753f8bbd39baf0647e2a"/>
+		<Metadata name="Catalog.бит_омни_КатегорииЗаписи.Form.ФормаЭлемента.Form" id="1afedd0d-4571-4f7e-87c7-8b0dd59932e9.0" configVersion="9b166ac30235070f470134f15b4f15e7a91d2136"/>
+		<Metadata name="Catalog.бит_омни_Контакты" id="7fb6b48d-a1ac-4c23-a91d-cb36bec8a87d" configVersion="2646822db6fabcdeb7e188589897b0198543e051">
+			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Бот" id="01f3c2ef-f80f-4887-9e0f-892ccce4e713"/>
+			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Заблокирован" id="0362dd3d-4f65-4820-8e02-3154db984721"/>
+			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Получатель" id="3dddbbc3-0bc4-4beb-b84e-be36b51d25c4"/>
+			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Канал" id="41c98ba5-e0d6-4488-bd9a-bcdab640efd4"/>
+			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Идентификатор" id="7475144d-b3cf-4a1d-ad82-bc3bc342c6a4"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_Контакты.Form.ФормаЭлемента" id="4071d623-360b-47c9-a3ab-7bf308c9cd2e" configVersion="fc96c3418fc90e7ae3ebc784e8ee9afefe090d06"/>
+		<Metadata name="Catalog.бит_омни_Контакты.Form.ФормаЭлемента.Form" id="4071d623-360b-47c9-a3ab-7bf308c9cd2e.0" configVersion="1e97c7f820019e6a82c30ee75a8e2593cf1fd35a"/>
+		<Metadata name="Catalog.бит_омни_Настройки" id="47746b08-b7ac-44d3-81c1-c316d0084b0b" configVersion="06af3396758ece80c040b2257e87940c96f2ea6f">
+			<Metadata name="Catalog.бит_омни_Настройки.Attribute.Описание" id="04bcb0a1-c07e-4156-b4e6-4ea4fc4cf5d5"/>
+			<Metadata name="Catalog.бит_омни_Настройки.Attribute.Идентификатор" id="5d47f78e-dc44-4248-ae4e-87634b5cff3e"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_Настройки.Form.ФормаСписка" id="501dc10b-69cc-435f-be8f-7a3978cb96b4" configVersion="c1be9d713ba6b24b0f07db3b1b697fa578292ef1"/>
+		<Metadata name="Catalog.бит_омни_Настройки.Form.ФормаСписка.Form" id="501dc10b-69cc-435f-be8f-7a3978cb96b4.0" configVersion="237b27b005ac3a299545559b7c8452b7aa3c6a7d"/>
+		<Metadata name="Catalog.бит_омни_Настройки.Form.ФормаЭлемента" id="6567b830-1118-4ed7-a114-ef28f83503f7" configVersion="f1b007691c0a7f7c84c202203751a097dd8ea141"/>
+		<Metadata name="Catalog.бит_омни_Настройки.Form.ФормаЭлемента.Form" id="6567b830-1118-4ed7-a114-ef28f83503f7.0" configVersion="0cd0c097ec3dfa8e83931d7abd02c313e43418a5"/>
+		<Metadata name="Catalog.бит_омни_Настройки.ManagerModule" id="47746b08-b7ac-44d3-81c1-c316d0084b0b.3" configVersion="5439d67bb025ca487525b4246852291e92e6d921"/>
+		<Metadata name="Catalog.бит_омни_Настройки.ObjectModule" id="47746b08-b7ac-44d3-81c1-c316d0084b0b.0" configVersion="43b83590ad270c7ad796d9470a536fe9d7b13e44"/>
+		<Metadata name="Catalog.бит_омни_Рассылки" id="fdc75333-b5c9-4a9e-b498-e318120e9faa" configVersion="c02beb3c57202a852f1f8afa1ee9e71f12515b4c">
+			<Metadata name="Catalog.бит_омни_Рассылки.Attribute.Шаблон" id="026fb00e-3227-41cf-874f-198bf7849c4f"/>
+			<Metadata name="Catalog.бит_омни_Рассылки.TabularSection.Принадлежность.Attribute.Объект" id="1fdca3e5-5d63-4d68-96cb-746079e9dab9"/>
+			<Metadata name="Catalog.бит_омни_Рассылки.Attribute.СКДКонтекст" id="333b98df-f92f-4695-88d2-a48977c3b9e4"/>
+			<Metadata name="Catalog.бит_омни_Рассылки.Attribute.СКДПолучатели" id="3cf6652d-d21f-495d-b254-37cb5b7eebe5"/>
+			<Metadata name="Catalog.бит_омни_Рассылки.Attribute.РежимРассылки" id="9ea7cc21-3e75-43fc-9733-c95e1303ef29"/>
+			<Metadata name="Catalog.бит_омни_Рассылки.Attribute.Расписание" id="b24e1ac6-aa6f-43d0-8d9c-917b186e6af5"/>
+			<Metadata name="Catalog.бит_омни_Рассылки.TabularSection.Принадлежность" id="dc9d85fc-211f-418a-b15f-5282c121c2ef"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_Рассылки.Form.ФормаЭлемента" id="c058679f-aae6-4ecc-af67-980584f0e7c1" configVersion="280fab5e7613114fd58eceb5791d85cfd2ca5a6a"/>
+		<Metadata name="Catalog.бит_омни_Рассылки.Form.ФормаЭлемента.Form" id="c058679f-aae6-4ecc-af67-980584f0e7c1.0" configVersion="75089229d7d26c8285613ec769f0925b92595d90"/>
+		<Metadata name="Catalog.бит_омни_Рассылки.ObjectModule" id="fdc75333-b5c9-4a9e-b498-e318120e9faa.0" configVersion="bdf2c08ec2439b2d9bcef654e27294349f6c162e"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных" id="38521610-eaaa-4976-b6fb-4965356b1746" configVersion="ec62328de381e8fd57a3547a206620206c5e846d">
+			<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Attribute.ХранилищеСКД" id="3e4dbb3e-2c81-4288-ae3d-f00925b4fb36"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Form.ФормаПредпросмотр" id="fb5d906c-8a88-4d2e-b7d6-caf135dc36dd" configVersion="91fc5c784c2f38bfb3b182e38bd6ef2f07ad6911"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Form.ФормаПредпросмотр.Form" id="fb5d906c-8a88-4d2e-b7d6-caf135dc36dd.0" configVersion="2462fcc1cb87c8e763b5157f77930543652158a0"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Form.ФормаСозданияПоМетаданным" id="bb091b4f-72e5-433e-9879-5e57ae6fd5c6" configVersion="7eb44736cef6586c29f5762e394a5f8eb01d482c"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Form.ФормаСозданияПоМетаданным.Form" id="bb091b4f-72e5-433e-9879-5e57ae6fd5c6.0" configVersion="d5eed575706542e7a22790fb6d1b94d40858b944"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Form.ФормаЭлемента" id="b122295c-d041-4dd9-b2de-7ca269958aaa" configVersion="f0934bb8e6cd8c8f7a414f639a440da8046d6f77"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Form.ФормаЭлемента.Form" id="b122295c-d041-4dd9-b2de-7ca269958aaa.0" configVersion="55046cce8844c0406adca24738e58989c9141373"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.ManagerModule" id="38521610-eaaa-4976-b6fb-4965356b1746.3" configVersion="379c8746284c3e9d2e4029774c082922564805f0"/>
+		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.ObjectModule" id="38521610-eaaa-4976-b6fb-4965356b1746.0" configVersion="6f0973d105be76fb00a709317224b69a7ad0c0a1"/>
+		<Metadata name="Catalog.бит_омни_ШаблоныСообщений" id="19544061-bf6b-4d21-8fd9-1185af08ff5e" configVersion="1487d66b533a831d396d073c497fd24378088b5e">
+			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Attribute.ВариантФормата" id="14cf06b6-a43b-4525-88d4-3c072a59cf86"/>
+			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Attribute.ШаблонСообщения" id="3d0d8763-5a49-44bf-bd09-de4deea09c3b"/>
+			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.TabularSection.ПоляШаблона.Attribute.Поле" id="642ea01a-1cd2-4422-8345-f4af6b846915"/>
+			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.TabularSection.ПоляШаблона" id="676db00b-1f4a-48cf-a73a-729019db22aa"/>
+			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.TabularSection.ПоляШаблона.Attribute.АлгоритмРасчета" id="c1ba6ca0-0a48-4114-b503-850ca06d4acb"/>
+		</Metadata>
+		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Form.ФормаЭлемента" id="24d8302f-b2eb-4feb-acdf-e06dc57d93fc" configVersion="61766d40e1961d2ef7565a33d0ff77b72cfeb1f7"/>
+		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Form.ФормаЭлемента.Form" id="24d8302f-b2eb-4feb-acdf-e06dc57d93fc.0" configVersion="66b25c7cc4172b8631048489183b0027d1787ea9"/>
+		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.ManagerModule" id="19544061-bf6b-4d21-8fd9-1185af08ff5e.3" configVersion="bfb2d3c1cc4e23593c9507a60dae7b34e757e42c"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияПовтИсп" id="80ac0e35-2a8c-49ad-9b3d-60e4850d21d2" configVersion="41fd9f13a1b3e690f88a362beeebf9423b1b03d3"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияПовтИсп.Module" id="80ac0e35-2a8c-49ad-9b3d-60e4850d21d2.0" configVersion="934eb4ac2414657d4df23bbddaa4dc4c2f6564b8"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСMAX" id="e805ae56-421c-42ea-838a-b9f2c26f0933" configVersion="d3e14d7405a843b5989d9e4125b2316689ac86f5"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСMAX.Module" id="e805ae56-421c-42ea-838a-b9f2c26f0933.0" configVersion="dc2bb6d4889dc1f5b23bdbf57c93d90999020bd5"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСMAXПовтИсп" id="73700fdf-19d8-48a6-95c8-307ef7911ea3" configVersion="4e1fae84110f77103fa7b7c1b9a013b825d72772"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСMAXПовтИсп.Module" id="73700fdf-19d8-48a6-95c8-307ef7911ea3.0" configVersion="b5d881721a3f24747f977d6b8d252be9fde12ada"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСервер" id="8993080a-f4be-4ebe-928d-72cfa0118566" configVersion="a56653fcc6a8176f21212a309dcb2d80a61392b6"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСервер.Module" id="8993080a-f4be-4ebe-928d-72cfa0118566.0" configVersion="431c04ede1d37d4d06b589c5f66e30ba790bf1ec"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСерверСлужебный" id="acb940d8-6acd-4af7-86bf-aa0b22bdbc97" configVersion="f78f4839a10fd94ddd4bd324ed4486d1bcca8ef3"/>
+		<Metadata name="CommonModule.бит_омни_ИнтеграцияСерверСлужебный.Module" id="acb940d8-6acd-4af7-86bf-aa0b22bdbc97.0" configVersion="2412f6bc978379ecdea92393b2367eb3a166e4aa"/>
+		<Metadata name="CommonModule.бит_омни_КонтактнаяИнформацияСерверПереопределяемый" id="b16cb0f7-2714-4abd-a08e-7b8d0e8a2fdd" configVersion="aa128ab4a6a6e1408859c7a29c409bf39371ac27"/>
+		<Metadata name="CommonModule.бит_омни_КонтактнаяИнформацияСерверПереопределяемый.Module" id="b16cb0f7-2714-4abd-a08e-7b8d0e8a2fdd.0" configVersion="0d4eac082377d2fb08b05a089b95a96a4bf18f57"/>
+		<Metadata name="CommonModule.бит_омни_ОбщегоНазначения" id="577e6468-3c8b-46ac-8c90-6a0de909f82d" configVersion="d79609158bac1f604f82b2a01f9627243356b4a4"/>
+		<Metadata name="CommonModule.бит_омни_ОбщегоНазначения.Module" id="577e6468-3c8b-46ac-8c90-6a0de909f82d.0" configVersion="da3157e0c58c6e2b7b48657c42568de63b9ee684"/>
+		<Metadata name="CommonModule.бит_омни_ОбщегоНазначенияПовтИсп" id="db836233-a7f4-4513-914b-8cd245774bdc" configVersion="a7cac0623cd51a11788b5b6c2d8510aeb60d4981"/>
+		<Metadata name="CommonModule.бит_омни_ОбщегоНазначенияПовтИсп.Module" id="db836233-a7f4-4513-914b-8cd245774bdc.0" configVersion="0919d5e7bfaf6f6108c4bd26c812de0bff23fe5e"/>
+		<Metadata name="CommonModule.бит_омни_ОбщегоНазначенияПолныеПрава" id="fd03c573-c7f4-437b-ae00-5f1e3bcb85be" configVersion="dc784b05e784353ea673b08b6ab994c684117215"/>
+		<Metadata name="CommonModule.бит_омни_ОбщегоНазначенияПолныеПрава.Module" id="fd03c573-c7f4-437b-ae00-5f1e3bcb85be.0" configVersion="61555432226444a60f3dbeb197dbc18cc0ed326d"/>
+		<Metadata name="CommonModule.бит_омни_ПодпискиНаСобытия" id="c9ff7d8c-7dcd-4f21-993a-9ae80beffaba" configVersion="1ac24e70f3d182f884014e36ae6a3aff3aebe8c5"/>
+		<Metadata name="CommonModule.бит_омни_ПодпискиНаСобытия.Module" id="c9ff7d8c-7dcd-4f21-993a-9ae80beffaba.0" configVersion="7cd0af21ced9e52bd8b1b3d04ebcecff63cfcb0a"/>
+		<Metadata name="CommonModule.бит_омни_РаботаССообщениямПовтИсп" id="369b8cb4-0369-4ff3-a927-77a4aea32fca" configVersion="6284f9a561d1d7146ec24a8250bd1925a8779bac"/>
+		<Metadata name="CommonModule.бит_омни_РаботаССообщениямПовтИсп.Module" id="369b8cb4-0369-4ff3-a927-77a4aea32fca.0" configVersion="f6daa59f9e1f6daf3c97d02638366c327be75c54"/>
+		<Metadata name="CommonModule.бит_омни_РаботаССообщениями" id="214ff051-ca52-4c28-9723-056444d1f9f8" configVersion="22e6cadbe86f3e8140da4abd0af2623a34803ff3"/>
+		<Metadata name="CommonModule.бит_омни_РаботаССообщениями.Module" id="214ff051-ca52-4c28-9723-056444d1f9f8.0" configVersion="848da7a67f47dd8047e7e760d00746409c4b530b"/>
+		<Metadata name="CommonModule.бит_омни_СхемыКомпоновки" id="0fc20d51-edb6-46bb-81b4-eb15f76117ca" configVersion="9c84d1689247dd72e2b3e6d24a5f5dcd847b5adc"/>
+		<Metadata name="CommonModule.бит_омни_СхемыКомпоновки.Module" id="0fc20d51-edb6-46bb-81b4-eb15f76117ca.0" configVersion="c876cd7c8510639606796ae681d3985b98b84b06"/>
+		<Metadata name="CommonPicture.ВыделитьОсновным" id="a5c3874d-9792-4b60-b15d-72d47cd0a9c9" configVersion="a3d50bb767e563c5db5f9eb576479467971512bd"/>
+		<Metadata name="CommonPicture.ПоискНоменклатуры_16х16" id="827733d0-f687-40a4-b706-19ca48db0767" configVersion="c699c98277d810bf61f8e64048a324f0dc1c9175"/>
+		<Metadata name="CommonPicture.бит_омни_Логотип" id="9146c7cf-4b5b-4cb0-996c-00d8912616d1" configVersion="1767db7e3317ae5a175221b65bb051c9a0688865"/>
+		<Metadata name="CommonPicture.бит_омни_Логотип.Picture" id="9146c7cf-4b5b-4cb0-996c-00d8912616d1.0" configVersion="29688f305c37394a2f09d8d6b718762268b01c46"/>
+		<Metadata name="CommonTemplate.ОписаниеОбновлений" id="3c69e645-8508-4028-9028-40e35489d30b" configVersion="12e5dc71421c9844287807f3fbc34a0f8686193f"/>
+		<Metadata name="CommonTemplate.ОписаниеОбновлений.Template" id="3c69e645-8508-4028-9028-40e35489d30b.0" configVersion="9bf4bd9f4ed0233de7191d7dd6c63be5f750f2bc"/>
+		<Metadata name="Configuration.бит_МедицинаОмни_ПРОФ" id="c680a789-1641-4f88-b7b0-05988964fe15" configVersion="bc7c84aff45a85d7fb5b59c90737f40a5dc632c6"/>
+		<Metadata name="Configuration.бит_МедицинаОмни_ПРОФ.SessionModule" id="c0c4f4c9-474f-4f63-b05b-a4ef3d5a6539.7" configVersion="b98247d1c1f1962925fdade7a1d464447f3daea3"/>
+		<Metadata name="Document.Анкета" id="fa073f41-50f1-4e1c-8609-1f06c6c307b8" configVersion="9973c3ab9515bed58b93a6876df710756d3e168d"/>
+		<Metadata name="Document.Анкета.ManagerModule" id="fa073f41-50f1-4e1c-8609-1f06c6c307b8.2" configVersion="973bc3125f9e20c1f52107f17586af62e84aa97e"/>
+		<Metadata name="Document.Заявка" id="4d1219be-2042-4634-a7a2-07896dd23cc3" configVersion="1854d725aa6a7332a5e82a22c2c088c34477ce5f">
+			<Metadata name="Document.Заявка.Attribute.бит_омни_Специализация" id="0978bc60-35ec-4cd4-a8d8-7399977dcc7d"/>
+		</Metadata>
+		<Metadata name="Document.Заявка.ManagerModule" id="4d1219be-2042-4634-a7a2-07896dd23cc3.2" configVersion="6943a703d4dfa158c1f8f2a8dcb4769dd07df77b"/>
+		<Metadata name="Document.Заявка.ObjectModule" id="4d1219be-2042-4634-a7a2-07896dd23cc3.0" configVersion="a74c93934d4e125c3b01105035195a9e190f3335"/>
+		<Metadata name="Document.Прием" id="28717318-928d-4605-8250-4383affaa37a" configVersion="963d949fb1c4493c1a1eec84d1d201cffb30c4e3"/>
+		<Metadata name="Document.Прием.ManagerModule" id="28717318-928d-4605-8250-4383affaa37a.2" configVersion="a4c3fd62292bf59c1b51c72ef619dc32cfce0963"/>
+		<Metadata name="Document.УстановкаГрафиковРаботы" id="e4619f3b-d9f8-4447-998a-ab9cb55371a4" configVersion="950ff8619e3459919767352bfe7256df868da348"/>
+		<Metadata name="Document.УстановкаГрафиковРаботы.ManagerModule" id="e4619f3b-d9f8-4447-998a-ab9cb55371a4.2" configVersion="9371ee1fa6d1ae77fe76cf242c28289074e89ac5"/>
+		<Metadata name="Enum.ВидыНоменклатуры" id="2697faa6-43d8-4711-87c3-029abd53fae6" configVersion="fd9522287d187354a25d0bcb85440a4872cc81bc"/>
+		<Metadata name="Enum.бит_омни_ИконкиСпециализаций" id="32ce9668-859a-40b9-b2ff-e952812cbfb2" configVersion="08610c6efdab94052a1eedd401e2cd319b1d1444">
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.cosmetology" id="06900930-6422-40eb-afa6-a1f8a9513a3b"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.neurology" id="20d4ff86-b86e-4be5-a931-b02a21ae6a99"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.therapy" id="3053501b-2a16-493d-b6d9-7e7325891bfe"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.diagnostics" id="46ca38cc-9376-4218-b349-85536c53b68b"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.pediatrics" id="4a547986-73bf-480a-8ea1-37aeadd91d08"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.lab" id="6027f063-fa30-4e57-9184-64fa99a92777"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.cardiology" id="6e606b5b-a572-4053-9747-0431544e49ec"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.physiotherapy" id="6ea604a0-80a2-4dd0-b0b2-2ff7d5d6cf5c"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.urology" id="70701a91-9280-47d8-aad5-8e2735f31715"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.ophtalmology" id="8ba19f2a-c501-4cc3-829b-9e0f4dd34bed"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.doctor" id="8e3f52bb-eef1-49ad-a1a6-42b36c45051c"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.surgery" id="aefe3a81-4516-4b79-8349-b2a31c4b6710"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.vaccination" id="b4e09e2a-2c2b-4e4c-b41c-b9677d676fa7"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.dentistry" id="dbf65fab-c57b-4152-aeb1-ac84324cc008"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.xray" id="f0c840a6-fd28-44a1-a136-3a8bbc56ca55"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.default" id="f5f86270-0fe5-46b5-bf1a-2aa338efbf63"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.trichology" id="fb446cf4-dee1-4d0a-9219-05b065df10e4"/>
+			<Metadata name="Enum.бит_омни_ИконкиСпециализаций.EnumValue.gynecology" id="feed676a-8f26-407a-addf-53f1b464dd16"/>
+		</Metadata>
+		<Metadata name="Enum.бит_омни_КаналыСвязи" id="82a7f97f-0836-4328-bda1-d43b2ec03b01" configVersion="afc4a4d62cc3d835509173c8bb006ae339be655b">
+			<Metadata name="Enum.бит_омни_КаналыСвязи.EnumValue.MAX" id="da35cbe2-b74c-4e73-aa6a-c49981bebdca"/>
+		</Metadata>
+		<Metadata name="Enum.бит_омни_РежимОграниченияКатегорий" id="937f8a55-d26e-44e3-b5e5-be220ab3a932" configVersion="0d238fe52fe1ae618cd72b64ddd60d0996d45c2e">
+			<Metadata name="Enum.бит_омни_РежимОграниченияКатегорий.EnumValue.Исключать" id="0d55b227-6780-462c-b171-e2111b764495"/>
+			<Metadata name="Enum.бит_омни_РежимОграниченияКатегорий.EnumValue.Добавлять" id="910682e1-ab7e-4944-9418-78a4d154f0b8"/>
+			<Metadata name="Enum.бит_омни_РежимОграниченияКатегорий.EnumValue.Фильтровать" id="f9313889-28ed-40dd-9abf-b06059b6443e"/>
+		</Metadata>
+		<Metadata name="Enum.бит_омни_РежимыРассылки" id="275b763e-6555-4d53-9802-1bcc409b292c" configVersion="1ba8a3c3f3500b486ea4df71b51a0998d6129269">
+			<Metadata name="Enum.бит_омни_РежимыРассылки.EnumValue.ПоРасписанию" id="1e0b9802-1927-45be-af38-fcebea5b4400"/>
+			<Metadata name="Enum.бит_омни_РежимыРассылки.EnumValue.ПриЗаписиОбъекта" id="e84e0880-cd7a-4efd-9111-4e8341f983ab"/>
+		</Metadata>
+		<Metadata name="Enum.бит_омни_ТипыЗаписи" id="317fbc2c-409d-47ff-9e20-4499da50f903" configVersion="b183a6664822a7e1a2e8a7f27e9a4c2ab1e0fa44">
+			<Metadata name="Enum.бит_омни_ТипыЗаписи.EnumValue.online" id="0d0e9e40-d4e7-4bfe-9a96-5f293e89ef69"/>
+			<Metadata name="Enum.бит_омни_ТипыЗаписи.EnumValue.phone" id="6f7a31f5-3cd0-43da-a99f-fb73d51b2329"/>
+			<Metadata name="Enum.бит_омни_ТипыЗаписи.EnumValue.phone_and_chat" id="fa9178d6-3c43-46c8-a733-ae83e30b207a"/>
+		</Metadata>
+		<Metadata name="EventSubscription.бит_омни_ДокументыПередЗаписью" id="4e68cd2c-3082-48e0-81b5-e69be9894fce" configVersion="47e53f6d14a0ce5bbbec2f41f4e8c3ceb6b76dda"/>
+		<Metadata name="EventSubscription.бит_омни_ПриЗаписиОбъекта" id="3263c432-5793-4e16-9cbe-5cda9546f652" configVersion="4a2e2da36383e772e30f5ff32eecd48a02e56578"/>
+		<Metadata name="EventSubscription.бит_омни_СправочникиПередЗаписью" id="441096f1-220a-4a22-87c1-4c57f4239e4c" configVersion="94f044e775223a661c462385fab30471ff5ccb50"/>
+		<Metadata name="HTTPService.бит_омни_Интеграция" id="4efc1b27-71a8-4c19-866a-b071b04bc77c" configVersion="97dd432b9b45be1ee987497f44717a4b080ddd52">
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.MAXWebhook" id="18c78faa-e309-4373-a7bb-fb60a447ca25"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Catalogs.Method.GET" id="3dad0d14-6b6f-4f12-a10b-7472866a1368"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Documents.Method.POST" id="4aa08eaf-6652-4dc0-843e-199ca77ba643"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Catalogs" id="585673b4-af20-437a-94cf-3e9e03ef1701"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Documents" id="5aef0fd2-3c8c-478c-9cc1-5cbc98494044"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.FinishIBSession.Method.HEAD" id="63641fec-20bb-4c76-8647-6b0eb01e4b39"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Transactions" id="70b9e220-3a8d-46ed-804a-a3725bcc431d"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.FinishIBSession" id="73b404cc-bfc0-4d82-b6a6-8a3307a37dae"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.StartIBSession" id="966fce3b-6133-494f-8872-6a2900eb0073"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Settings.Method.GET" id="ad0a8aea-8e81-4425-a169-3190a1fb3aa4"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.StartIBSession.Method.HEAD" id="b4254982-5c06-4970-a2f2-1a248d7cf5be"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Documents.Method.PUT" id="c106e7ce-0e0c-4d8a-bbf1-ddd2abec90e2"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Transactions.Method.POST" id="c1508f43-b14d-4345-85a5-0ee9a7775918"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Settings" id="c7f55756-72de-41ce-af49-b6df9507ad3b"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.MAXWebhook.Method.POST" id="df6f3d41-db3e-40f9-8383-7313c9cbb53e"/>
+			<Metadata name="HTTPService.бит_омни_Интеграция.URLTemplate.Documents.Method.GET" id="fb09ff9e-f1ad-4f69-bcbf-fe983a736bc6"/>
+		</Metadata>
+		<Metadata name="HTTPService.бит_омни_Интеграция.Module" id="4efc1b27-71a8-4c19-866a-b071b04bc77c.0" configVersion="04fce67e399923e3f3662768ca7e0f77f7173949"/>
+		<Metadata name="InformationRegister.бит_омни_АктивныеРассылки" id="7f8db7bc-e248-4f4c-97fc-9cde517d1fac" configVersion="52fab45f28508956ec435c4a858697ced7a4bb0f">
+			<Metadata name="InformationRegister.бит_омни_АктивныеРассылки.Resource.ДатаЗавершенияПоследнегоЗапуска" id="0917efd4-7bab-403f-b083-f64bfe7b93b1"/>
+			<Metadata name="InformationRegister.бит_омни_АктивныеРассылки.Dimension.Рассылка" id="6a05abf4-6816-478d-bf8e-8fc16a2e0ec6"/>
+			<Metadata name="InformationRegister.бит_омни_АктивныеРассылки.Dimension.Бот" id="7633c65d-d89b-4ea6-af29-cdaf12516e43"/>
+			<Metadata name="InformationRegister.бит_омни_АктивныеРассылки.Resource.ДатаНачалаПоследнегоЗапуска" id="b8e2d5ad-c2f5-479a-9544-449fe8c6703b"/>
+		</Metadata>
+		<Metadata name="InformationRegister.бит_омни_АктивныеРассылки.RecordSetModule" id="7f8db7bc-e248-4f4c-97fc-9cde517d1fac.1" configVersion="1acf0896c8355171241ee7f9649fb6e59e382189"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек" id="85820ad6-5338-4856-adad-4b40c40a5b3a" configVersion="a748408626080548204b8735adc043d99f1a7d2c">
+			<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Dimension.Константа" id="194067a0-9685-45b2-878c-d441af61caed"/>
+			<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Dimension.Разрез" id="1ba34d6c-c6cc-416c-a1b7-98df287d97d3"/>
+			<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Resource.Значение" id="92545bd0-0b1b-49a6-aa38-7296a979ef95"/>
+			<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Command.Настройки" id="b3d29b14-c44f-4332-8135-df74aa0aa389"/>
+		</Metadata>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Command.Настройки.CommandModule" id="b3d29b14-c44f-4332-8135-df74aa0aa389.2" configVersion="721904c50b81d7080f64fd5eed527a3070d61453"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Form.ФормаВводаЗначенийПоРазрезу" id="091660d2-a2c9-479b-85d5-c8c7bda89c98" configVersion="675bfc9e25d73261e22782df7e5868b7000b6a20"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Form.ФормаВводаЗначенийПоРазрезу.Form" id="091660d2-a2c9-479b-85d5-c8c7bda89c98.0" configVersion="0d0b577d34956ccaad1f46688901591dff4b466a"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Form.ФормаНастроек" id="2bbd60f9-e64b-4dc9-8bce-3335e7b2c433" configVersion="09dfde619984036da1def3cbdcf5b88193657dad"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Form.ФормаНастроек.Form" id="2bbd60f9-e64b-4dc9-8bce-3335e7b2c433.0" configVersion="670a83fb4dab6b6bdcb645cda82de5612c62794f"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Form.ФормаСписка" id="b2545e5e-df0a-4064-9ba9-1ae45624032b" configVersion="d9acd06e56869824597e7f6b4d76164921869051"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.Form.ФормаСписка.Form" id="b2545e5e-df0a-4064-9ba9-1ae45624032b.0" configVersion="8f9e39e9b29a371882fb3542e744a03de3d4325e"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.ManagerModule" id="85820ad6-5338-4856-adad-4b40c40a5b3a.2" configVersion="120dc3845270d11ded0d904c2ed866fcab98bb42"/>
+		<Metadata name="InformationRegister.бит_омни_ЗначенияНастроек.RecordSetModule" id="85820ad6-5338-4856-adad-4b40c40a5b3a.1" configVersion="8f5b1c2f8d5c93bc88a4d6b7b7798b72e2badf31"/>
+		<Metadata name="InformationRegister.бит_омни_Команды" id="b8e0710f-8a11-4ba4-966b-9adc432ec4f6" configVersion="97b74e2e7d9b552c243198025c40a6ba7e508f73">
+			<Metadata name="InformationRegister.бит_омни_Команды.Dimension.Команда" id="8e91adca-0fe5-4479-8dca-a5cb349cc2bd"/>
+			<Metadata name="InformationRegister.бит_омни_Команды.Resource.Действие" id="b745e929-8ff9-4674-9266-849dfe7a9164"/>
+		</Metadata>
+		<Metadata name="InformationRegister.бит_омни_Сообщения" id="05f6f77e-ce88-4f8b-a3eb-30d4263f8c7a" configVersion="550b83fd5799e590f6d6c19a02bd6eeafce3a3ae">
+			<Metadata name="InformationRegister.бит_омни_Сообщения.Resource.ИдентификаторОбсуждения" id="7c6775be-1565-4894-8cc9-9afd1b23c23b"/>
+			<Metadata name="InformationRegister.бит_омни_Сообщения.Dimension.Контакт" id="a849ade6-684d-4311-934f-bfc0fe0d456f"/>
+			<Metadata name="InformationRegister.бит_омни_Сообщения.Dimension.Бот" id="b8873f52-61de-4f0b-877a-593bca47ee8e"/>
+			<Metadata name="InformationRegister.бит_омни_Сообщения.Dimension.Message_id" id="f9ac2f5f-8542-4122-912f-b6b22e7d380b"/>
+		</Metadata>
+		<Metadata name="Language.Русский" id="c178ec34-31df-40df-8d05-5f074d269107" configVersion="114a3c4deb499c3d0dde1b3e9eb2bb4a9dafa521"/>
+		<Metadata name="Role.бит_омни_ОсновнаяРоль" id="eb265577-520a-43c3-ae23-e2d3213d855f" configVersion="563bfcc95351757d7b8993ef3db6e24f00e97d39"/>
+		<Metadata name="SessionParameter.бит_омни_КешОбъектовДляРассылки" id="440acded-a511-40b4-a005-6679849112da" configVersion="0cabcbb2709effd1d5d1e8b34a8e115a3f28d6c7"/>
+		<Metadata name="Subsystem.бит_омни" id="f5e7ada2-342a-44b7-bdfd-a882e40a8fca" configVersion="1b902af35ec2aa11f1deca7f17d3cf1d207c578d"/>
+	</ConfigVersions>
+</ConfigDumpInfo>

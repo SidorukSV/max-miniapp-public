@@ -1,5 +1,11 @@
 import { authMiddleware } from "../middleware/auth.js";
-import { getBonusTransactions, getPatientById, getPatientsByPhone } from "../services/onecRouter.js";
+import {
+    DEFAULT_APPLICATION_SETTINGS,
+    getApplicationSettings,
+    getBonusTransactions,
+    getPatientById,
+    getPatientsByPhone,
+} from "../services/onecRouter.js";
 import { sendApiError } from "../utils/apiErrors.js";
 
 export async function meRoutes(app) {
@@ -8,9 +14,18 @@ export async function meRoutes(app) {
         async (req, reply) => {
             const { patient_id, phone, channel } = req.user;
             try {
-                const [patient, patientsByPhone] = await Promise.all([
+                const [patient, patientsByPhone, applicationSettings] = await Promise.all([
                     getPatientById({ patient_id }),
                     getPatientsByPhone({ phone }).catch(() => []),
+                    getApplicationSettings().catch((error) => {
+                        req.log.warn({
+                            endpoint: "/api/v1/me",
+                            operation: "getApplicationSettings",
+                            err: error,
+                        }, "Failed to load application settings; using defaults");
+
+                        return DEFAULT_APPLICATION_SETTINGS;
+                    }),
                 ]);
 
                 const patientsByPhoneSorted = Array.isArray(patientsByPhone)
@@ -23,6 +38,7 @@ export async function meRoutes(app) {
                     phone,
                     channel,
                     patients_by_phone: patientsByPhoneSorted,
+                    ...applicationSettings,
                 };
             } catch (error) {
                 req.log.error({

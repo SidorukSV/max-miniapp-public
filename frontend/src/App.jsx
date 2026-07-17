@@ -16,38 +16,75 @@ import NotFound from "./pages/NotFound.jsx";
 import PayloadSurveyRedirect from "./components/PayloadSurveyRedirect.jsx";
 import { useMaxWebApp } from "./hooks/useMaxWebApp.js";
 import { MaxContext } from "./context/MaxContext.jsx";
-import { AuthProvider } from "./context/AuthContext.jsx";
+import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 import CommunicationConsent from "./pages/CommunicationCosent.jsx";
+import { isPageVisible } from "./modules/featureVisibility.js";
 
-export default function App() {
+function PageVisibilityRoute({ page, children }) {
+  const { me, loading, isAuthorized } = useAuth();
 
+  if (!loading && isAuthorized && !isPageVisible(me, page)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
+
+function AppContent() {
   const max = useMaxWebApp();
 
   return (
+    <MaxContext.Provider value={max}>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
+        <PayloadSurveyRedirect />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/book" element={<BookVisit />} />
+          <Route path="/book/flow" element={<BookVisitFlow />} />
+          <Route path="/book/summary" element={<BookVisitSummary />} />
+          <Route path="/visits" element={<MyVisits />} />
+          <Route path="/visits/:id" element={<VisitDetails />} />
+          <Route path="/history" element={<Navigate to="/medcard" replace />} />
+          <Route path="/medcard" element={<History />} />
+          <Route
+            path="/bonuses"
+            element={(
+              <PageVisibilityRoute page="bonuses">
+                <Bonuses />
+              </PageVisibilityRoute>
+            )}
+          />
+          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/surveys"
+            element={(
+              <PageVisibilityRoute page="survey">
+                <MySurveys />
+              </PageVisibilityRoute>
+            )}
+          />
+          <Route
+            path="/surveys/:id"
+            element={(
+              <PageVisibilityRoute page="survey">
+                <SurveyDetails />
+              </PageVisibilityRoute>
+            )}
+          />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/personal-data-consent" element={<PersonalDataConsent />} />
+          <Route path="/communication-consent" element={<CommunicationConsent />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </MaxContext.Provider>
+  );
+}
+
+export default function App() {
+  return (
     <AuthProvider>
-      <MaxContext.Provider value={max}>
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <PayloadSurveyRedirect />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/book" element={<BookVisit />} />
-            <Route path="/book/flow" element={<BookVisitFlow />} />
-            <Route path="/book/summary" element={<BookVisitSummary />} />
-            <Route path="/visits" element={<MyVisits />} />
-            <Route path="/visits/:id" element={<VisitDetails />} />
-            <Route path="/history" element={<Navigate to="/medcard" replace />} />
-            <Route path="/medcard" element={<History />} />
-            <Route path="/bonuses" element={<Bonuses />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/surveys" element={<MySurveys />} />
-            <Route path="/surveys/:id" element={<SurveyDetails />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/personal-data-consent" element={<PersonalDataConsent />} />
-            <Route path="/communication-consent" element={<CommunicationConsent />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </MaxContext.Provider>
+      <AppContent />
     </AuthProvider>
   );
 }
