@@ -1,13 +1,75 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { authStart, authPhone, authSelectPatient, storeTokens, getMe } from "../api";
+import {
+    authStart,
+    authPhone,
+    authSelectPatient,
+    storeTokens,
+    getMe,
+    sendAuthDiagnostic,
+} from "../api";
 import { Flex, Container, Typography, CellList, CellSimple, CellHeader, Input } from "./ui.jsx";
 import "../App.css";
 import { useMaxWebApp } from "../hooks/useMaxWebApp";
 import { dateISOFormat } from "../modules/DateFormat";
 import PageLayout from "./PageLayout";
 import { appConfig } from "../config.js";
+
+function createAuthTraceId() {
+    if (globalThis.crypto?.randomUUID) {
+        return globalThis.crypto.randomUUID();
+    }
+
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 14)}`;
+}
+
+function getErrorDetails(error) {
+    const nestedCode = error && typeof error === "object"
+        ? error.error?.code
+        : null;
+    const directCode = error && typeof error === "object"
+        ? error.code
+        : null;
+    const message = error instanceof Error
+        ? error.message
+        : (typeof error === "string" ? error : "");
+    const name = error instanceof Error ? error.name : typeof error;
+
+    return {
+        errorCode: typeof nestedCode === "string"
+            ? nestedCode
+            : (typeof directCode === "string" ? directCode : ""),
+        errorMessage: message,
+        errorName: name,
+    };
+}
+
+function getAuthErrorMessage(error) {
+    const { errorCode, errorMessage } = getErrorDetails(error);
+    const code = errorCode || errorMessage;
+
+    switch (code) {
+        case "manual_phone_required":
+            return "Введите номер телефона для теста в localhost.";
+        case "manual_totp_required":
+            return "Введите 6-значный TOTP код из приложения-аутентификатора.";
+        case "dev_totp_invalid":
+            return "Неверный TOTP код для dev-авторизации. Проверьте код в приложении.";
+        case "dev_totp_not_configured":
+            return "Backend не настроен: задайте DEV_TOTP_SECRET.";
+        case "request_contact_unavailable":
+            return "Запрос контакта недоступен в данном клиенте.";
+        case "contact_not_send":
+            return "MAX не вернул номер телефона.";
+        case "client.request_phone.user_refused_provide_phone_number":
+            return "Передача контакта отменена пользователем.";
+        case "client.request_phone.request_error":
+            return "MAX не смог обработать запрос контакта.";
+        default:
+            return "Авторизация не пройдена. Попробуйте ещё раз.";
+    }
+}
 
 export default function AuthScreen() {
     const { webApp, initData } = useMaxWebApp();
@@ -26,7 +88,16 @@ export default function AuthScreen() {
         return host === "localhost" || host === "127.0.0.1";
     }, []);
 
-    async function getPhonePayload() {
+    function reportAuthDiagnostic(event, traceId, details = {}, level = "info") {
+        void sendAuthDiagnostic({
+            event,
+            trace_id: traceId,
+            level,
+            details,
+        });
+    }
+
+    async function getPhonePayload(traceId) {
         if (isBrowserLocalhost) {
             if (!manualPhone.trim()) {
                 throw new Error("manual_phone_required");
@@ -47,14 +118,48 @@ export default function AuthScreen() {
         }
 
         if (!webApp?.requestContact) {
+            reportAuthDiagnostic("contact_request_unavailable", traceId, {
+                webAppPresent: Boolean(webApp),
+                requestMethodPresent: Boolean(webApp?.requestContact),
+                launchDataPresent: Boolean(initData),
+            }, "error");
             throw new Error("request_contact_unavailable");
         }
+
+        reportAuthDiagnostic("contact_request_started", traceId, {
+            platform: webApp.platform || "unknown",
+            bridgeVersion: webApp.version || "unknown",
+            launchDataPresent: Boolean(initData),
+            launchDataLength: initData.length,
+            launchUserPresent: Boolean(webApp.initDataUnsafe?.user),
+            queryIdPresent: Boolean(webApp.initDataUnsafe?.query_id),
+            online: navigator.onLine,
+            visibilityState: document.visibilityState,
+        });
 
         const sendContact = await webApp.requestContact();
         const phone = sendContact?.phone || "";
 
+        reportAuthDiagnostic("contact_request_completed", traceId, {
+            responseType: sendContact === null ? "null" : typeof sendContact,
+            responseKeys: sendContact && typeof sendContact === "object"
+                ? Object.keys(sendContact).slice(0, 10).join(",")
+                : "",
+            numberPresent: Boolean(phone),
+            authDatePresent: Boolean(sendContact?.authDate),
+            hashPresent: Boolean(sendContact?.hash),
+            bridgeErrorCode: typeof sendContact?.error?.code === "string"
+                ? sendContact.error.code
+                : "",
+        }, phone ? "info" : "warn");
+
         if (!phone) {
-            throw new Error("contact_not_send");
+            const bridgeErrorCode = sendContact?.error?.code;
+            throw new Error(
+                typeof bridgeErrorCode === "string"
+                    ? bridgeErrorCode
+                    : "contact_not_send"
+            );
         }
 
         return {
@@ -68,12 +173,32 @@ export default function AuthScreen() {
         setBusy(true);
         setError("");
 
+        const traceId = createAuthTraceId();
+        let stage = "auth_start";
+
+        reportAuthDiagnostic("auth_flow_started", traceId, {
+            platform: webApp?.platform || "unknown",
+            bridgeVersion: webApp?.version || "unknown",
+            webAppPresent: Boolean(webApp),
+            launchDataPresent: Boolean(initData),
+            launchDataLength: initData.length,
+        });
+
         try {
             const start = await authStart();
             setAuthSessionId(start.auth_session_id);
+            reportAuthDiagnostic("auth_start_completed", traceId, {
+                startResponseValid: Boolean(start.auth_session_id),
+            });
 
-            const phonePayload = await getPhonePayload();
+            stage = "contact_request";
+            const phonePayload = await getPhonePayload(traceId);
 
+            stage = "auth_phone";
+            reportAuthDiagnostic("auth_phone_started", traceId, {
+                channel: phonePayload.channel,
+                launchDataPresent: Boolean(initData),
+            });
             const phoneResult = await authPhone({
                 auth_session_id: start.auth_session_id,
                 phone: phonePayload.phone,
@@ -83,36 +208,24 @@ export default function AuthScreen() {
             });
 
             const matchedPatients = phoneResult.patients || [];
+            reportAuthDiagnostic("auth_phone_completed", traceId, {
+                patientCount: matchedPatients.length,
+            });
             setPatients(matchedPatients);
 
             if (matchedPatients.length === 1) {
+                stage = "select_patient";
                 await handleSelectPatient(matchedPatients[0].id, start.auth_session_id);
             }
         } catch (err) {
             console.error(err);
+            reportAuthDiagnostic("auth_flow_failed", traceId, {
+                stage,
+                ...getErrorDetails(err),
+            }, "error");
 
-            switch (err.message) {
-                case "manual_phone_required":
-                    setError("Введите номер телефона для теста в localhost.");
-                    break;
-                case "manual_totp_required":
-                    setError("Введите 6-значный TOTP код из приложения-аутентификатора.");
-                    break;
-                case "dev_totp_invalid":
-                    setError("Неверный TOTP код для dev-авторизации. Проверьте код в приложении.");
-                    break;
-                case "dev_totp_not_configured":
-                    setError("Backend не настроен: задайте DEV_TOTP_SECRET.");
-                    break;
-                case "request_contact_unavailable":
-                    setError("Запрос контакта недоступен в данном клиенте");
-                    break;
-                case "contact_not_send":
-                    setError("Контакт не отправлен. Попробуйте ещё раз");
-                    break;
-                default:
-                    setError("Авторизация не пройдена. Попробуйте ещё раз");
-            }
+            const diagnosticCode = traceId.slice(-8);
+            setError(`${getAuthErrorMessage(err)} Код диагностики: ${diagnosticCode}`);
         } finally {
             setBusy(false);
         }

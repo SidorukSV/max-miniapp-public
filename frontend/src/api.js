@@ -49,6 +49,27 @@ export async function authStart() {
     });
 }
 
+export async function sendAuthDiagnostic({ event, trace_id, level = "info", details = {} }) {
+    try {
+        await fetch(`${API_BASE}/auth/client-log`, {
+            method: "POST",
+            credentials: "omit",
+            keepalive: true,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                event,
+                trace_id,
+                level,
+                details,
+            }),
+        });
+    } catch {
+        // Диагностика не должна влиять на основной сценарий авторизации.
+    }
+}
+
 export async function authPhone({ auth_session_id, phone, channel, proof, init_data }) {
     return apiFetch("/auth/phone", {
         method: "POST",

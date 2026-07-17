@@ -62,6 +62,44 @@ const logRequestSchema = {
     },
 };
 
+const authDiagnosticSchema = {
+    body: {
+        type: "object",
+        additionalProperties: false,
+        required: ["event", "trace_id"],
+        properties: {
+            event: {
+                type: "string",
+                minLength: 1,
+                maxLength: 80,
+                pattern: "^[a-z0-9_]+$",
+            },
+            trace_id: {
+                type: "string",
+                minLength: 8,
+                maxLength: 80,
+                pattern: "^[A-Za-z0-9_-]+$",
+            },
+            level: {
+                type: "string",
+                enum: ["debug", "info", "warn", "error"],
+            },
+            details: {
+                type: "object",
+                maxProperties: 20,
+                additionalProperties: {
+                    anyOf: [
+                        { type: "boolean" },
+                        { type: "number" },
+                        { type: "string", maxLength: 500 },
+                        { type: "null" },
+                    ],
+                },
+            },
+        },
+    },
+};
+
 function isInternalApiKeyValid(req) {
     const expectedInternalApiKey = config.logsInternalApiKey;
     if (!expectedInternalApiKey) {
@@ -168,6 +206,32 @@ function sanitizeLogValue(value, depth = 0) {
 }
 
 export async function logsRoutes(app) {
+    app.post("/api/v1/auth/client-log",
+        {
+            preHandler: [logsRateLimitMiddleware],
+            schema: authDiagnosticSchema,
+        },
+        async (req) => {
+            const {
+                event: diagnosticEvent,
+                trace_id: traceId,
+                level = "info",
+                details = {},
+            } = req.body;
+
+            req.log[level](
+                {
+                    event: "auth_client_diagnostic",
+                    diagnosticEvent,
+                    traceId,
+                    details: sanitizeLogValue(details),
+                },
+                "Pre-auth client diagnostic"
+            );
+
+            return { ok: true };
+        });
+
     app.post("/api/v1/send-log",
         {
             preHandler: [logsAccessMiddleware, logsRateLimitMiddleware],
