@@ -1,6 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
-import { authRefresh, getMe, getStoredAccessToken, storeTokens, clearTokens } from "../api";
+import {
+    authRefresh,
+    getMe,
+    getStoredAccessToken,
+    storeTokens,
+    clearAccessToken,
+    clearTokens,
+} from "../api";
 
 const AuthContext = createContext(null);
 
@@ -11,13 +18,17 @@ export function AuthProvider({ children }) {
     async function refreshAndLoadMe() {
         try {
             const refreshed = await authRefresh();
-            storeTokens(refreshed);
+            await storeTokens(refreshed);
 
             const meData = await getMe(refreshed.access_token);
             setMe(meData);
 
             return true;
-        } catch {
+        } catch (error) {
+            clearAccessToken();
+            if (error?.status === 401) {
+                clearTokens();
+            }
             return false;
         }
     }
@@ -35,7 +46,7 @@ export function AuthProvider({ children }) {
                     const isRefreshed = await refreshAndLoadMe();
 
                     if (!isRefreshed) {
-                        clearTokens();
+                        clearAccessToken();
                         setMe(null);
                     }
 
@@ -46,11 +57,11 @@ export function AuthProvider({ children }) {
             const isRefreshed = await refreshAndLoadMe();
 
             if (!isRefreshed) {
-                clearTokens();
+                clearAccessToken();
                 setMe(null);
             }
         } catch {
-            clearTokens();
+            clearAccessToken();
             setMe(null);
         } finally {
             setLoading(false);

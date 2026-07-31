@@ -90,7 +90,7 @@ export default function Profile() {
         access_token: accessToken,
         patient_id: patientId,
       });
-      storeTokens(switched);
+      await storeTokens(switched);
       const meData = await getMe(switched.access_token);
       setMe(meData);
     } catch {

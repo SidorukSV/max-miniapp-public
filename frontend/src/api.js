@@ -2,7 +2,6 @@ import {
     saveRefreshToken,
     loadRefreshToken,
     clearRefreshToken,
-    isMaxMobilePlatform,
 } from "./maxSecureStorage";
 
 const API_BASE = import.meta.env.VITE_API_BASE || (import.meta.env.DEV ? "http://localhost:3000/api/v1" : "/api/v1");
@@ -23,7 +22,10 @@ export async function apiFetch(path, options = {}) {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-        throw new Error(data.error || "api_error");
+        const error = new Error(data.error || "api_error");
+        error.code = data.error || "api_error";
+        error.status = res.status;
+        throw error;
     }
 
     return data;
@@ -33,13 +35,17 @@ export function getStoredAccessToken() {
     return inMemoryAccessToken;
 }
 
-export function storeTokens({ access_token, refresh_token }) {
+export async function storeTokens({ access_token, refresh_token }) {
     inMemoryAccessToken = access_token || null;
-    saveRefreshToken(refresh_token).catch(() => {});
+    await saveRefreshToken(refresh_token);
+}
+
+export function clearAccessToken() {
+    inMemoryAccessToken = null;
 }
 
 export function clearTokens() {
-    inMemoryAccessToken = null;
+    clearAccessToken();
     clearRefreshToken().catch(() => {});
 }
 
@@ -95,10 +101,11 @@ export async function authSwitchPatient({ access_token, patient_id }) {
 }
 
 export async function authRefresh() {
-    const refreshToken = await loadRefreshToken();
-
-    if (isMaxMobilePlatform() && !refreshToken) {
-        throw new Error("refresh_token_unavailable");
+    let refreshToken = null;
+    try {
+        refreshToken = await loadRefreshToken();
+    } catch {
+        // A valid HttpOnly refresh cookie may still restore the session.
     }
 
     return apiFetch("/auth/refresh", {

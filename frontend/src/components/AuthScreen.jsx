@@ -243,7 +243,7 @@ export default function AuthScreen() {
                 patient_id: patientId,
             });
 
-            storeTokens(result);
+            await storeTokens(result);
 
             const meData = await getMe(result.access_token);
             setMe(meData);

@@ -8,6 +8,7 @@ async function createTestApp() {
     process.env.NODE_ENV = "test";
     process.env.REFRESH_COOKIE_SECURE = "true";
     process.env.REFRESH_COOKIE_SAMESITE = "none";
+    process.env.CORS_ALLOWED_ORIGINS = "https://miniapp.example.com";
 
     const { buildApp } = await import("../src/app.js");
     const app = await buildApp();
@@ -68,4 +69,62 @@ test("logout clears refresh cookie with secure attributes", async (t) => {
     assert.match(setCookie, /Secure/i);
     assert.match(setCookie, /SameSite=None/i);
     assert.match(setCookie, /Max-Age=0/i);
+});
+
+test("cookie refresh requires a trusted browser origin", async (t) => {
+    const app = await createTestApp();
+    t.after(async () => {
+        await app.close();
+    });
+
+    const response = await app.inject({
+        method: "POST",
+        url: "/api/v1/auth/refresh",
+        headers: {
+            cookie: "refresh_token=aaa.bbb.ccc",
+        },
+    });
+
+    assert.equal(response.statusCode, 403);
+    assert.equal(response.json().error, "csrf_origin_invalid");
+});
+
+test("explicit refresh token does not require browser origin", async (t) => {
+    const app = await createTestApp();
+    t.after(async () => {
+        await app.close();
+    });
+
+    const response = await app.inject({
+        method: "POST",
+        url: "/api/v1/auth/refresh",
+        headers: {
+            cookie: "refresh_token=stale.cookie.value",
+        },
+        payload: {
+            refresh_token: "aaa.bbb.ccc",
+        },
+    });
+
+    assert.equal(response.statusCode, 401);
+    assert.equal(response.json().error, "invalid_refresh_token");
+});
+
+test("cookie refresh accepts a configured browser origin", async (t) => {
+    const app = await createTestApp();
+    t.after(async () => {
+        await app.close();
+    });
+
+    const response = await app.inject({
+        method: "POST",
+        url: "/api/v1/auth/refresh",
+        headers: {
+            cookie: "refresh_token=aaa.bbb.ccc",
+            origin: "https://miniapp.example.com",
+        },
+    });
+
+    assert.equal(response.statusCode, 401);
+    assert.equal(response.json().error, "invalid_refresh_token");
 });

@@ -282,25 +282,83 @@ function getRefreshTokenFromRequest(req) {
         return normalized;
     };
 
-    const fromCookie = parseCookies(req)?.[config.refreshCookieName];
-    const normalizedCookie = normalizeRefreshToken(fromCookie);
-    if (normalizedCookie) {
-        return normalizedCookie;
-    }
-
     const fromHeader = req.headers?.["x-refresh-token"];
     const normalizedHeader = normalizeRefreshToken(fromHeader);
     if (normalizedHeader) {
-        return normalizedHeader;
+        return { token: normalizedHeader, source: "header" };
     }
 
     const fromBody = req.body?.refresh_token || req.body?.refreshToken;
     const normalizedBody = normalizeRefreshToken(fromBody);
     if (normalizedBody) {
-        return normalizedBody;
+        return { token: normalizedBody, source: "body" };
     }
 
-    return null;
+    const fromCookie = parseCookies(req)?.[config.refreshCookieName];
+    const normalizedCookie = normalizeRefreshToken(fromCookie);
+    if (normalizedCookie) {
+        return { token: normalizedCookie, source: "cookie" };
+    }
+
+    return { token: null, source: null };
+}
+
+function getRequestOrigin(req) {
+    const forwardedProto = req.headers?.["x-forwarded-proto"];
+    const forwardedHost = req.headers?.["x-forwarded-host"];
+    const protocol = (typeof forwardedProto === "string" ? forwardedProto.split(",")[0] : req.protocol || "http").trim();
+    const host = (typeof forwardedHost === "string" ? forwardedHost.split(",")[0] : req.headers?.host || "").trim();
+
+    return protocol && host ? `${protocol}://${host}` : null;
+}
+
+function getBrowserRequestOrigin(req) {
+    const origin = req.headers?.origin;
+    if (typeof origin === "string" && origin.trim()) {
+        return origin.trim();
+    }
+
+    const referer = req.headers?.referer;
+    if (typeof referer !== "string" || !referer.trim()) {
+        return null;
+    }
+
+    try {
+        return new URL(referer).origin;
+    } catch {
+        return null;
+    }
+}
+
+export function isCookieAuthRequestOriginAllowed(req) {
+    const browserOrigin = getBrowserRequestOrigin(req);
+    if (!browserOrigin) {
+        return false;
+    }
+
+    const allowedOrigins = new Set(config.corsAllowedOrigins);
+    const requestOrigin = getRequestOrigin(req);
+    if (requestOrigin) {
+        allowedOrigins.add(requestOrigin);
+    }
+
+    if (config.nodeEnv !== "production") {
+        allowedOrigins.add("http://localhost:3000");
+        allowedOrigins.add("http://127.0.0.1:3000");
+        allowedOrigins.add("http://localhost:5173");
+        allowedOrigins.add("http://127.0.0.1:5173");
+    }
+
+    return allowedOrigins.has(browserOrigin);
+}
+
+function validateRefreshTokenRequestOrigin(req, reply, tokenSource) {
+    if (tokenSource !== "cookie" || isCookieAuthRequestOriginAllowed(req)) {
+        return true;
+    }
+
+    sendApiError(reply, 403, "csrf_origin_invalid");
+    return false;
 }
 
 function shouldExposeRefreshToken(channel) {
@@ -673,10 +731,13 @@ export async function authRoutes(app) {
         });
 
     app.post("/api/v1/auth/refresh", async (req, reply) => {
-        const refresh_token = getRefreshTokenFromRequest(req);
+        const { token: refresh_token, source: refreshTokenSource } = getRefreshTokenFromRequest(req);
 
         if (!refresh_token) {
             return sendApiError(reply, 400, "refresh_token_required");
+        }
+        if (!validateRefreshTokenRequestOrigin(req, reply, refreshTokenSource)) {
+            return;
         }
 
         let decoded;
@@ -761,11 +822,14 @@ export async function authRoutes(app) {
 
     app.post("/api/v1/auth/logout", async (req, reply) => {
         const { revoke_scope } = req.body || {};
-        const refresh_token = getRefreshTokenFromRequest(req);
+        const { token: refresh_token, source: refreshTokenSource } = getRefreshTokenFromRequest(req);
 
         if (!refresh_token) {
             clearRefreshCookie(req, reply);
             return sendApiError(reply, 400, "refresh_token_required");
+        }
+        if (!validateRefreshTokenRequestOrigin(req, reply, refreshTokenSource)) {
+            return;
         }
 
         let revokedCount = 0;
