@@ -27,6 +27,7 @@ onec-config*.yml
 !backend/onec-config.example.yml
 *.env
 backend/.env
+backend/.env.production
 deploy/nginx/*.pem
 frontend/public/*.png
 frontend/public/*.json 
