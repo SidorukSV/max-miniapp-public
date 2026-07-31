@@ -7,7 +7,6 @@
 		</v8:item>
 	</Title>
 	<AutoTitle>false</AutoTitle>
-	<SaveDataInSettings>Use</SaveDataInSettings>
 	<Width>150</Width>
 	<Height>45</Height>
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
