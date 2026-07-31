@@ -185,6 +185,7 @@ jobs:
       - name: Create or update GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           VERSION: ${{ needs.prepare.outputs.onec_version }}
           SOURCE_HASH: ${{ needs.prepare.outputs.onec_source_hash }}
           RELEASE_SHA: ${{ needs.commit_versions.outputs.release_sha }}
