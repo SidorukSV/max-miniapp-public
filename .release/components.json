@@ -2,16 +2,16 @@
   "schemaVersion": 1,
   "components": {
     "frontend": {
-      "version": "0.0.0",
-      "sourceHash": ""
+      "version": "0.0.1",
+      "sourceHash": "sha256:e79cdfe15027ea4844f8b0cedd983d8b7a7e7992e9ed982a2e426ec874708450"
     },
     "backend": {
-      "version": "1.0.0",
-      "sourceHash": ""
+      "version": "1.0.1",
+      "sourceHash": "sha256:dfc172e073f791f41d63695c62464375911dd6602c113c12745931266b772de9"
     },
     "onec": {
-      "version": "1.1.0.1",
-      "sourceHash": ""
+      "version": "1.1.0.2",
+      "sourceHash": "sha256:38a47ac9187d2cc2315f976cc50b38409dbb4aed5b5a3922d6950c548628754f"
     }
   }
 }
