@@ -20,6 +20,7 @@ concurrency:
 
 env:
   ONEC_EXTENSION_NAME: бит_МедицинаОмни_ПРОФ
+  ONEC_ARTIFACT_BASENAME: bit_medicina_omni_prof
   ONEC_SOURCE_DIR: onec/omni/src/extension/бит_МедицинаОмни_ПРОФ
   ONEC_CONFIGURATION: onec/omni/src/extension/бит_МедицинаОмни_ПРОФ/Configuration.xml
 
@@ -98,7 +99,7 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ needs.prepare.outputs.onec_version }}"
-          $output = Join-Path $PWD ".artifacts\бит_МедицинаОмни_ПРОФ_$version.cfe"
+          $output = Join-Path $PWD ".artifacts\$($env:ONEC_ARTIFACT_BASENAME)_$version.cfe"
           & ".\.github\scripts\build-cfe.ps1" `
             -SourceDir "${{ env.ONEC_SOURCE_DIR }}" `
             -OutputFile $output `
