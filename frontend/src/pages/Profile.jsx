@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Gift, LogOut, RefreshCw, UserRound } from "lucide-react";
+import { ChevronDown, Gift, LogOut, RefreshCw, UserRound } from "lucide-react";
 import PageLayout from "../components/PageLayout.jsx";
 import AuthScreen from "../components/AuthScreen.jsx";
 import { Avatar, Button, Card, CellList, CellSimple, Stack, Typography } from "../components/ui.jsx";
@@ -53,6 +53,7 @@ export default function Profile() {
   const [patientSwitchBusy, setPatientSwitchBusy] = useState("");
   const [error, setError] = useState("");
   const [backendVersion, setBackendVersion] = useState(null);
+  const [supportInfoVisible, setSupportInfoVisible] = useState(false);
 
   const username = me?.fullName || "Пациент";
   const phone = formatPhoneToInternational(me?.phone || "");
@@ -197,12 +198,31 @@ export default function Profile() {
             <Typography.Title level={3}>Версия</Typography.Title>
             <div className="versionGrid">
               <VersionRow label="Frontend" value={FRONTEND_BUILD.appVersion} />
-              <VersionRow label="Frontend commit" value={FRONTEND_BUILD.gitCommit} />
-              <VersionRow label="Frontend build" value={FRONTEND_BUILD.buildTime} />
               <VersionRow label="Backend" value={backendVersion?.backendVersion || backendVersion?.appVersion} />
-              <VersionRow label="Backend commit" value={backendVersion?.gitCommit} />
-              <VersionRow label="Backend build" value={backendVersion?.buildTime} />
             </div>
+            <Button
+              mode="ghost"
+              className="supportInfoToggle"
+              aria-expanded={supportInfoVisible}
+              aria-controls="technical-support-build-info"
+              onClick={() => setSupportInfoVisible((visible) => !visible)}
+              stretched
+            >
+              <span>Информация для технической поддержки</span>
+              <ChevronDown
+                className={supportInfoVisible ? "supportInfoToggle__icon supportInfoToggle__icon--open" : "supportInfoToggle__icon"}
+                size={18}
+                aria-hidden="true"
+              />
+            </Button>
+            {supportInfoVisible ? (
+              <div id="technical-support-build-info" className="versionGrid supportInfoGrid">
+                <VersionRow label="Frontend commit" value={FRONTEND_BUILD.gitCommit} />
+                <VersionRow label="Frontend build" value={FRONTEND_BUILD.buildTime} />
+                <VersionRow label="Backend commit" value={backendVersion?.gitCommit} />
+                <VersionRow label="Backend build" value={backendVersion?.buildTime} />
+              </div>
+            ) : null}
           </Stack>
         </Card>
 
