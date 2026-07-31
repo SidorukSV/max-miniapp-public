@@ -311,6 +311,7 @@ export const config = {
     backendLogLevel: parseLogLevel(process.env.BACKEND_LOG_LEVEL),
     jwtSecret: validateJwtSecret(process.env.JWT_SECRET),
     maxBotToken: process.env.MAX_BOT_TOKEN || "",
+    maxBotId: process.env.MAX_BOT_ID || "",
     maxInitDataMaxAgeSeconds: Number(process.env.MAX_INIT_DATA_MAX_AGE_SECONDS || 300),
     maxWebhookSecret: process.env.MAX_WEBHOOK_SECRET || "",
     maxWebhookForwardTimeoutMs: parsePositiveInteger(process.env.MAX_WEBHOOK_FORWARD_TIMEOUT_MS, 25000),

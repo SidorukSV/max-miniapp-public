@@ -616,7 +616,12 @@ export async function updateSurveyDocument({ payload }) {
 
 export async function forwardMaxWebhookUpdateToOneC(update) {
     const oneCConfig = getOneCConfig();
-    const endpoint = "/v1/webhook";
+    const botId = String(config.maxBotId || "").trim();
+    if (!botId) {
+        throw new Error("max_bot_id_missing");
+    }
+
+    const endpoint = `/webhook/${encodeURIComponent(botId)}`;
     const timeout = createTimeoutSignal(config.maxWebhookForwardTimeoutMs);
 
     try {

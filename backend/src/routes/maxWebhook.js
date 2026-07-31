@@ -42,7 +42,8 @@ function isConfigurationError(error) {
     const message = error?.message || "";
 
     return message.startsWith("onec_config_")
-        || message === "onec_config_not_found";
+        || message === "onec_config_not_found"
+        || message === "max_bot_id_missing";
 }
 
 export async function maxWebhookRoutes(app) {

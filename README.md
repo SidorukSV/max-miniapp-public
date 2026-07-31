@@ -36,6 +36,8 @@ JWT_SECRET='YourStrongRandomSecretAtLeast32Chars!2026' REDIS_URL=redis://<host>:
 ```env
 # Обязательные
 JWT_SECRET=replace_with_strong_random_secret
+MAX_BOT_TOKEN=replace_with_max_bot_token
+MAX_BOT_ID=replace_with_max_bot_id
 
 # Опциональные (с дефолтами)
 PORT=3000

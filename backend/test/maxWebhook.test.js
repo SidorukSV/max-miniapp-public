@@ -11,6 +11,7 @@ process.env.ONEC_CONFIG = JSON.stringify(
     }
 );
 process.env.MAX_WEBHOOK_SECRET = "secret-test";
+process.env.MAX_BOT_ID = "bot-42";
 process.env.MAX_WEBHOOK_FORWARD_TIMEOUT_MS = "1000";
 
 const { buildApp } = await import("../src/app.js");
@@ -61,7 +62,7 @@ test("MAX webhook rejects requests when configured secret does not match", async
     assert.equal(fetchCalled, false);
 });
 
-test("MAX webhook forwards Update body to 1C /v1/webhook", async (t) => {
+test("MAX webhook forwards Update body to the configured 1C bot webhook", async (t) => {
     const app = await buildApp();
     const originalFetch = global.fetch;
     const calls = [];
@@ -81,7 +82,7 @@ test("MAX webhook forwards Update body to 1C /v1/webhook", async (t) => {
             });
         }
 
-        if (url === "https://onec.example/base/v1/webhook") {
+        if (url === "https://onec.example/base/webhook/bot-42") {
             return createJsonResponse(200, { success: true });
         }
 
@@ -111,7 +112,7 @@ test("MAX webhook forwards Update body to 1C /v1/webhook", async (t) => {
     assert.equal(response.statusCode, 200);
     assert.equal(response.json().ok, true);
 
-    const webhookCall = calls.find((call) => call.url === "https://onec.example/base/v1/webhook");
+    const webhookCall = calls.find((call) => call.url === "https://onec.example/base/webhook/bot-42");
     assert.ok(webhookCall);
     assert.equal(webhookCall.method, "POST");
     assert.equal(webhookCall.headers.get("Authorization"), "Basic basic-onec");
@@ -131,7 +132,7 @@ test("MAX webhook returns retryable error when 1C forwarding fails", async (t) =
             });
         }
 
-        if (url === "https://onec.example/base/v1/webhook") {
+        if (url === "https://onec.example/base/webhook/bot-42") {
             return createJsonResponse(500, { desc: "webhook_failed" });
         }
 
