@@ -92,6 +92,7 @@
 						</v8:item>
 					</Title>
 					<ChangeRowSet>false</ChangeRowSet>
+					<Header>false</Header>
 					<CommandBarLocation>None</CommandBarLocation>
 					<SearchStringLocation>None</SearchStringLocation>
 					<Width>52</Width>
@@ -124,50 +125,14 @@
 						<ExtendedTooltip name="ПациентыУправлениеПоискомРасширеннаяПодсказка" id="27"/>
 					</SearchControlAddition>
 					<ChildItems>
-						<LabelField name="ПациентыПациент" id="28">
-							<DataPath>Пациенты.Пациент</DataPath>
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Пациент</v8:content>
-								</v8:item>
-							</Title>
-							<ContextMenu name="ПациентыПациентКонтекстноеМеню" id="29"/>
-							<ExtendedTooltip name="ПациентыПациентРасширеннаяПодсказка" id="30"/>
-						</LabelField>
-						<LabelField name="ПациентыИмяMAX" id="31">
-							<DataPath>Пациенты.ИмяMAX</DataPath>
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>MAX</v8:content>
-								</v8:item>
-							</Title>
-							<ContextMenu name="ПациентыИмяMAXКонтекстноеМеню" id="32"/>
-							<ExtendedTooltip name="ПациентыИмяMAXРасширеннаяПодсказка" id="33"/>
-						</LabelField>
-						<LabelField name="ПациентыПоследнееСообщение" id="34">
-							<DataPath>Пациенты.ПоследнееСообщение</DataPath>
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Последнее сообщение</v8:content>
-								</v8:item>
-							</Title>
-							<ContextMenu name="ПациентыПоследнееСообщениеКонтекстноеМеню" id="35"/>
-							<ExtendedTooltip name="ПациентыПоследнееСообщениеРасширеннаяПодсказка" id="36"/>
-						</LabelField>
-						<LabelField name="ПациентыНепрочитано" id="37">
-							<DataPath>Пациенты.Непрочитано</DataPath>
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Новых</v8:content>
-								</v8:item>
-							</Title>
-							<ContextMenu name="ПациентыНепрочитаноКонтекстноеМеню" id="38"/>
-							<ExtendedTooltip name="ПациентыНепрочитаноРасширеннаяПодсказка" id="39"/>
-						</LabelField>
+						<InputField name="ПациентыПредставлениеДиалога" id="28">
+							<DataPath>Пациенты.ПредставлениеДиалога</DataPath>
+							<ReadOnly>true</ReadOnly>
+							<EditMode>EnterOnInput</EditMode>
+							<MultiLine>true</MultiLine>
+							<ContextMenu name="ПациентыПредставлениеДиалогаКонтекстноеМеню" id="29"/>
+							<ExtendedTooltip name="ПациентыПредставлениеДиалогаРасширеннаяПодсказка" id="30"/>
+						</InputField>
 					</ChildItems>
 					<Events>
 						<Event name="OnActivateRow">ПациентыПриАктивизацииСтроки</Event>
@@ -333,6 +298,15 @@
 							<v8:FractionDigits>0</v8:FractionDigits>
 							<v8:AllowedSign>Nonnegative</v8:AllowedSign>
 						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="ПредставлениеДиалога" id="102">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
 					</Type>
 				</Column>
 			</Columns>
