@@ -37,3 +37,6 @@ database/
 
 # Local release artifacts
 .artifacts/
+
+# Local deployment runtime
+.runtime/
