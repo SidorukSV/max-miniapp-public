@@ -231,39 +231,28 @@ curl -k https://localhost/api/v1/auth/start -X POST
 
 ## 6) Оформляем как службу systemd
 
-Создайте unit-файл:
-
-
-```Bash
-sudo nano /etc/systemd/system/max-miniapp.service
-```
-
-Содержимое:
-
-```INI
-[Unit]
-Description=Max Miniapp (Docker Compose)
-Requires=docker.service
-After=docker.service network-online.target
-Wants=network-online.target
-
-[Service]
-Type=oneshot
-WorkingDirectory=/opt/max-miniapp
-RemainAfterExit=yes
-ExecStart=/usr/bin/docker compose -f docker-compose.prod.yml up -d --build
-ExecStop=/usr/bin/docker compose -f docker-compose.prod.yml down
-TimeoutStartSec=0
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Активируйте:
+В репозитории есть идемпотентный установщик. Он создаёт или восстанавливает
+unit-файл, включает автозапуск, выполняет чистую пересборку образов и
+принудительно пересоздаёт контейнеры:
 
 ```Bash
-sudo systemctl daemon-reloadsudo systemctl enable max-miniapp
-sudo systemctl start max-miniappsudo systemctl status max-miniapp --no-pager
+cd /opt/max-miniapp
+chmod +x install-service.sh
+sudo ./install-service.sh
+```
+
+Если образы уже собраны и требуется только восстановить службу:
+
+```Bash
+sudo ./install-service.sh --skip-rebuild
+```
+
+Для нестандартного каталога или имени службы:
+
+```Bash
+sudo ./install-service.sh \
+  --project-dir /opt/max-miniapp \
+  --service-name max-miniapp
 ```
 
 Теперь приложение управляется как служба:
