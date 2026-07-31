@@ -23,6 +23,38 @@ function extractSurveyId(payload) {
   return match?.[1] || null;
 }
 
+function extractAppointmentTarget(payload) {
+  if (!payload || typeof payload !== "string") {
+    return null;
+  }
+
+  const normalized = payload.trim();
+
+  try {
+    const params = new URLSearchParams(normalized);
+    const appointmentId = params.get("appointment_id");
+    if (appointmentId) {
+      return {
+        appointmentId,
+        intent: params.get("intent") || "",
+      };
+    }
+  } catch {
+    // noop
+  }
+
+  const idMatch = normalized.match(/appointment_id=([0-9a-fA-F-]{36})/);
+  if (!idMatch?.[1]) {
+    return null;
+  }
+
+  const intentMatch = normalized.match(/(?:^|&)intent=(confirm|reschedule|cancel)(?:&|$)/);
+  return {
+    appointmentId: idMatch[1],
+    intent: intentMatch?.[1] || "",
+  };
+}
+
 function getPayloadSources(max, locationSearch, locationHash) {
   const fromSearch = new URLSearchParams(locationSearch).get("payload");
 
@@ -54,6 +86,16 @@ export default function PayloadSurveyRedirect() {
     const payloads = getPayloadSources(max, location.search, location.hash);
 
     for (const payload of payloads) {
+      const appointment = extractAppointmentTarget(payload);
+      if (appointment) {
+        handledRef.current = true;
+        const query = appointment.intent
+          ? `?intent=${encodeURIComponent(appointment.intent)}`
+          : "";
+        nav(`/visits/${appointment.appointmentId}${query}`, { replace: true });
+        return;
+      }
+
       const surveyId = extractSurveyId(payload);
       if (surveyId) {
         handledRef.current = true;

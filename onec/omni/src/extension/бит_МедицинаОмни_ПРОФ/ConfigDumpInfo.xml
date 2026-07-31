@@ -116,6 +116,8 @@
 		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.ObjectModule" id="38521610-eaaa-4976-b6fb-4965356b1746.0" configVersion="6f0973d105be76fb00a709317224b69a7ad0c0a1"/>
 		<Metadata name="Catalog.бит_омни_ШаблоныСообщений" id="19544061-bf6b-4d21-8fd9-1185af08ff5e" configVersion="1487d66b533a831d396d073c497fd24378088b5e">
 			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Attribute.ВариантФормата" id="14cf06b6-a43b-4525-88d4-3c072a59cf86"/>
+			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Attribute.ИдентификаторСтандартногоШаблона" id="977be2b6-164f-4c5b-af58-53d3ae01da58"/>
+			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Attribute.КнопкиMAX" id="1e2bb349-c8aa-44fd-b56d-38aff6dba3d7"/>
 			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Attribute.ШаблонСообщения" id="3d0d8763-5a49-44bf-bd09-de4deea09c3b"/>
 			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.TabularSection.ПоляШаблона.Attribute.Поле" id="642ea01a-1cd2-4422-8345-f4af6b846915"/>
 			<Metadata name="Catalog.бит_омни_ШаблоныСообщений.TabularSection.ПоляШаблона" id="676db00b-1f4a-48cf-a73a-729019db22aa"/>
@@ -123,6 +125,8 @@
 		</Metadata>
 		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Form.ФормаЭлемента" id="24d8302f-b2eb-4feb-acdf-e06dc57d93fc" configVersion="61766d40e1961d2ef7565a33d0ff77b72cfeb1f7"/>
 		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Form.ФормаЭлемента.Form" id="24d8302f-b2eb-4feb-acdf-e06dc57d93fc.0" configVersion="66b25c7cc4172b8631048489183b0027d1787ea9"/>
+		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Form.ФормаСписка" id="85c8bbd3-67a4-4acb-8928-ab5173bbfd5b"/>
+		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.Form.ФормаСписка.Form" id="85c8bbd3-67a4-4acb-8928-ab5173bbfd5b.0"/>
 		<Metadata name="Catalog.бит_омни_ШаблоныСообщений.ManagerModule" id="19544061-bf6b-4d21-8fd9-1185af08ff5e.3" configVersion="bfb2d3c1cc4e23593c9507a60dae7b34e757e42c"/>
 		<Metadata name="CommonModule.бит_омни_ИнтеграцияПовтИсп" id="80ac0e35-2a8c-49ad-9b3d-60e4850d21d2" configVersion="41fd9f13a1b3e690f88a362beeebf9423b1b03d3"/>
 		<Metadata name="CommonModule.бит_омни_ИнтеграцияПовтИсп.Module" id="80ac0e35-2a8c-49ad-9b3d-60e4850d21d2.0" configVersion="934eb4ac2414657d4df23bbddaa4dc4c2f6564b8"/>

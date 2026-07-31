@@ -97,7 +97,7 @@
 
 Функция АдресAPI()
 	
-	Возврат "https://platform-api.max.ru/";
+	Возврат "https://platform-api2.max.ru/";
 	
 КонецФункции
 

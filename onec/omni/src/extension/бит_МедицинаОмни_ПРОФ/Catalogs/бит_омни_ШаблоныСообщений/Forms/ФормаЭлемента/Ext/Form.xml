@@ -23,6 +23,12 @@
 					<ContextMenu name="НаименованиеКонтекстноеМеню" id="5"/>
 					<ExtendedTooltip name="НаименованиеРасширеннаяПодсказка" id="6"/>
 				</InputField>
+				<InputField name="ИдентификаторСтандартногоШаблона" id="54">
+					<DataPath>Объект.ИдентификаторСтандартногоШаблона</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<ContextMenu name="ИдентификаторСтандартногоШаблонаКонтекстноеМеню" id="55"/>
+					<ExtendedTooltip name="ИдентификаторСтандартногоШаблонаРасширеннаяПодсказка" id="56"/>
+				</InputField>
 				<UsualGroup name="Группа4" id="44">
 					<Group>Vertical</Group>
 					<Behavior>Usual</Behavior>
@@ -161,6 +167,19 @@
 			<ContextMenu name="ШаблонСообщенияКонтекстноеМеню" id="8"/>
 			<ExtendedTooltip name="ШаблонСообщенияРасширеннаяПодсказка" id="9"/>
 		</TextDocumentField>
+		<InputField name="КнопкиMAX" id="57">
+			<DataPath>Объект.КнопкиMAX</DataPath>
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Кнопки MAX (JSON)</v8:content>
+				</v8:item>
+			</Title>
+			<MultiLine>true</MultiLine>
+			<Height>5</Height>
+			<ContextMenu name="КнопкиMAXКонтекстноеМеню" id="58"/>
+			<ExtendedTooltip name="КнопкиMAXРасширеннаяПодсказка" id="59"/>
+		</InputField>
 		<UsualGroup name="Группа1" id="32">
 			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
