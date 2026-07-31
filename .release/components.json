@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "components": {
     "frontend": {
-      "version": "0.0.1",
-      "sourceHash": "sha256:e79cdfe15027ea4844f8b0cedd983d8b7a7e7992e9ed982a2e426ec874708450"
+      "version": "0.0.2",
+      "sourceHash": "sha256:5ec75b46d2651e0d4739a984c71c894258ee22eb5c099afd85deb69c3bde25a9"
     },
     "backend": {
       "version": "1.0.1",
