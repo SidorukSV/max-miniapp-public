@@ -7,8 +7,8 @@
 		</v8:item>
 	</Title>
 	<AutoTitle>false</AutoTitle>
-	<Width>150</Width>
-	<Height>45</Height>
+	<Width>160</Width>
+	<Height>48</Height>
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
 		<Autofill>false</Autofill>
 		<ChildItems>
@@ -23,10 +23,21 @@
 				</Title>
 				<ExtendedTooltip name="ОбновитьКнопкаРасширеннаяПодсказка" id="2"/>
 			</Button>
-			<Button name="Закрыть" id="3">
+			<Button name="КарточкаПациентаКнопка" id="3">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.ОткрытьКарточкуПациента</CommandName>
+				<Title>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Карточка пациента</v8:content>
+					</v8:item>
+				</Title>
+				<ExtendedTooltip name="КарточкаПациентаКнопкаРасширеннаяПодсказка" id="4"/>
+			</Button>
+			<Button name="Закрыть" id="5">
 				<Type>CommandBarButton</Type>
 				<CommandName>Form.StandardCommand.Close</CommandName>
-				<ExtendedTooltip name="ЗакрытьРасширеннаяПодсказка" id="4"/>
+				<ExtendedTooltip name="ЗакрытьРасширеннаяПодсказка" id="6"/>
 			</Button>
 		</ChildItems>
 	</AutoCommandBar>
@@ -35,145 +46,264 @@
 		<Event name="OnOpen">ПриОткрытии</Event>
 	</Events>
 	<ChildItems>
-		<UsualGroup name="ГруппаОтбор" id="5">
+		<UsualGroup name="ГруппаРабочаяОбласть" id="10">
 			<Group>AlwaysHorizontal</Group>
-			<ExtendedTooltip name="ГруппаОтборРасширеннаяПодсказка" id="6"/>
+			<ShowTitle>false</ShowTitle>
+			<Representation>None</Representation>
+			<ExtendedTooltip name="ГруппаРабочаяОбластьРасширеннаяПодсказка" id="11"/>
 			<ChildItems>
-				<InputField name="СтрокаПоиска" id="7">
-					<DataPath>СтрокаПоиска</DataPath>
-					<Title>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Поиск пациента</v8:content>
-						</v8:item>
-					</Title>
-					<ClearButton>true</ClearButton>
-					<HorizontalStretch>true</HorizontalStretch>
-					<InputHint>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>ФИО или имя в MAX</v8:content>
-						</v8:item>
-					</InputHint>
-					<ContextMenu name="СтрокаПоискаКонтекстноеМеню" id="8"/>
-					<ExtendedTooltip name="СтрокаПоискаРасширеннаяПодсказка" id="9"/>
-					<Events>
-						<Event name="OnChange">СтрокаПоискаПриИзменении</Event>
-					</Events>
-				</InputField>
-				<CheckBoxField name="ТолькоНепрочитанные" id="10">
-					<DataPath>ТолькоНепрочитанные</DataPath>
-					<Title>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Только непрочитанные</v8:content>
-						</v8:item>
-					</Title>
-					<CheckBoxType>Auto</CheckBoxType>
-					<TitleLocation>Right</TitleLocation>
-					<ContextMenu name="ТолькоНепрочитанныеКонтекстноеМеню" id="11"/>
-					<ExtendedTooltip name="ТолькоНепрочитанныеРасширеннаяПодсказка" id="12"/>
-					<Events>
-						<Event name="OnChange">ТолькоНепрочитанныеПриИзменении</Event>
-					</Events>
-				</CheckBoxField>
-			</ChildItems>
-		</UsualGroup>
-		<UsualGroup name="ГруппаРабочаяОбласть" id="13">
-			<Group>AlwaysHorizontal</Group>
-			<ExtendedTooltip name="ГруппаРабочаяОбластьРасширеннаяПодсказка" id="14"/>
-			<ChildItems>
-				<Table name="Пациенты" id="15">
-					<DataPath>Пациенты</DataPath>
-					<Title>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Пациенты MAX</v8:content>
-						</v8:item>
-					</Title>
-					<ChangeRowSet>false</ChangeRowSet>
-					<Header>false</Header>
-					<CommandBarLocation>None</CommandBarLocation>
-					<SearchStringLocation>None</SearchStringLocation>
-					<Width>52</Width>
-					<Height>28</Height>
-					<ContextMenu name="ПациентыКонтекстноеМеню" id="16"/>
-					<AutoCommandBar name="ПациентыКоманднаяПанель" id="17"/>
-					<ExtendedTooltip name="ПациентыРасширеннаяПодсказка" id="18"/>
-					<SearchStringAddition name="ПациентыСтрокаПоиска" id="19">
-						<AdditionSource>
-							<Item>Пациенты</Item>
-							<Type>SearchStringRepresentation</Type>
-						</AdditionSource>
-						<ContextMenu name="ПациентыСтрокаПоискаКонтекстноеМеню" id="20"/>
-						<ExtendedTooltip name="ПациентыСтрокаПоискаРасширеннаяПодсказка" id="21"/>
-					</SearchStringAddition>
-					<ViewStatusAddition name="ПациентыСостояниеПросмотра" id="22">
-						<AdditionSource>
-							<Item>Пациенты</Item>
-							<Type>ViewStatusRepresentation</Type>
-						</AdditionSource>
-						<ContextMenu name="ПациентыСостояниеПросмотраКонтекстноеМеню" id="23"/>
-						<ExtendedTooltip name="ПациентыСостояниеПросмотраРасширеннаяПодсказка" id="24"/>
-					</ViewStatusAddition>
-					<SearchControlAddition name="ПациентыУправлениеПоиском" id="25">
-						<AdditionSource>
-							<Item>Пациенты</Item>
-							<Type>SearchControl</Type>
-						</AdditionSource>
-						<ContextMenu name="ПациентыУправлениеПоискомКонтекстноеМеню" id="26"/>
-						<ExtendedTooltip name="ПациентыУправлениеПоискомРасширеннаяПодсказка" id="27"/>
-					</SearchControlAddition>
-					<ChildItems>
-						<InputField name="ПациентыПредставлениеДиалога" id="28">
-							<DataPath>Пациенты.ПредставлениеДиалога</DataPath>
-							<ReadOnly>true</ReadOnly>
-							<EditMode>EnterOnInput</EditMode>
-							<MultiLine>true</MultiLine>
-							<ContextMenu name="ПациентыПредставлениеДиалогаКонтекстноеМеню" id="29"/>
-							<ExtendedTooltip name="ПациентыПредставлениеДиалогаРасширеннаяПодсказка" id="30"/>
-						</InputField>
-					</ChildItems>
-					<Events>
-						<Event name="OnActivateRow">ПациентыПриАктивизацииСтроки</Event>
-					</Events>
-				</Table>
-				<UsualGroup name="ГруппаЧат" id="40">
+				<UsualGroup name="ГруппаДиалоги" id="12">
 					<Group>Vertical</Group>
-					<ExtendedTooltip name="ГруппаЧатРасширеннаяПодсказка" id="41"/>
+					<ShowTitle>false</ShowTitle>
+					<Representation>None</Representation>
+					<ExtendedTooltip name="ГруппаДиалогиРасширеннаяПодсказка" id="13"/>
 					<ChildItems>
-						<LabelDecoration name="ЗаголовокЧата" id="42">
-							<Title formatted="false">
+						<InputField name="ПолеПоиска" id="14">
+							<DataPath>СтрокаПоиска</DataPath>
+							<Title>
 								<v8:item>
 									<v8:lang>ru</v8:lang>
-									<v8:content>Выберите пациента слева</v8:content>
+									<v8:content>Поиск</v8:content>
 								</v8:item>
 							</Title>
-							<ContextMenu name="ЗаголовокЧатаКонтекстноеМеню" id="43"/>
-							<ExtendedTooltip name="ЗаголовокЧатаРасширеннаяПодсказка" id="44"/>
-						</LabelDecoration>
-						<FormattedDocumentField name="ЛентаСообщений" id="45">
-							<DataPath>ЛентаСообщений</DataPath>
+							<ClearButton>true</ClearButton>
+							<HorizontalStretch>true</HorizontalStretch>
+							<InputHint>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Поиск: пациент или имя в MAX</v8:content>
+								</v8:item>
+							</InputHint>
+							<ContextMenu name="ПолеПоискаКонтекстноеМеню" id="15"/>
+							<ExtendedTooltip name="ПолеПоискаРасширеннаяПодсказка" id="16"/>
+							<Events>
+								<Event name="OnChange">ПолеПоискаПриИзменении</Event>
+							</Events>
+						</InputField>
+						<UsualGroup name="ГруппаФильтр" id="17">
+							<Group>AlwaysHorizontal</Group>
+							<ShowTitle>false</ShowTitle>
+							<Representation>None</Representation>
+							<ExtendedTooltip name="ГруппаФильтрРасширеннаяПодсказка" id="18"/>
+							<ChildItems>
+								<CheckBoxField name="ФлажокТолькоНепрочитанные" id="19">
+									<DataPath>ТолькоНепрочитанные</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Только новые</v8:content>
+										</v8:item>
+									</Title>
+									<CheckBoxType>CheckBox</CheckBoxType>
+									<TitleLocation>Right</TitleLocation>
+									<ContextMenu name="ФлажокТолькоНепрочитанныеКонтекстноеМеню" id="20"/>
+									<ExtendedTooltip name="ФлажокТолькоНепрочитанныеРасширеннаяПодсказка" id="21"/>
+									<Events>
+										<Event name="OnChange">ФлажокТолькоНепрочитанныеПриИзменении</Event>
+									</Events>
+								</CheckBoxField>
+								<LabelDecoration name="НадписьСчетчик" id="22">
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content> </v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="НадписьСчетчикКонтекстноеМеню" id="23"/>
+									<ExtendedTooltip name="НадписьСчетчикРасширеннаяПодсказка" id="24"/>
+								</LabelDecoration>
+								<LabelDecoration name="НадписьНовых" id="90">
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content> </v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="НадписьНовыхКонтекстноеМеню" id="91"/>
+									<ExtendedTooltip name="НадписьНовыхРасширеннаяПодсказка" id="92"/>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+						<Table name="Диалоги" id="25">
+							<DataPath>Диалоги</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Диалоги</v8:content>
+								</v8:item>
+							</Title>
+							<ChangeRowSet>false</ChangeRowSet>
+							<Header>false</Header>
+							<CommandBarLocation>None</CommandBarLocation>
+							<SearchStringLocation>None</SearchStringLocation>
+							<Width>52</Width>
+							<Height>28</Height>
+							<ContextMenu name="ДиалогиКонтекстноеМеню" id="26"/>
+							<AutoCommandBar name="ДиалогиКоманднаяПанель" id="27"/>
+							<ExtendedTooltip name="ДиалогиРасширеннаяПодсказка" id="28"/>
+							<SearchStringAddition name="ДиалогиСтрокаПоиска" id="29">
+								<AdditionSource>
+									<Item>Диалоги</Item>
+									<Type>SearchStringRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ДиалогиСтрокаПоискаКонтекстноеМеню" id="30"/>
+								<ExtendedTooltip name="ДиалогиСтрокаПоискаРасширеннаяПодсказка" id="31"/>
+							</SearchStringAddition>
+							<ViewStatusAddition name="ДиалогиСостояниеПросмотра" id="32">
+								<AdditionSource>
+									<Item>Диалоги</Item>
+									<Type>ViewStatusRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ДиалогиСостояниеПросмотраКонтекстноеМеню" id="33"/>
+								<ExtendedTooltip name="ДиалогиСостояниеПросмотраРасширеннаяПодсказка" id="34"/>
+							</ViewStatusAddition>
+							<SearchControlAddition name="ДиалогиУправлениеПоиском" id="35">
+								<AdditionSource>
+									<Item>Диалоги</Item>
+									<Type>SearchControl</Type>
+								</AdditionSource>
+								<ContextMenu name="ДиалогиУправлениеПоискомКонтекстноеМеню" id="36"/>
+								<ExtendedTooltip name="ДиалогиУправлениеПоискомРасширеннаяПодсказка" id="37"/>
+							</SearchControlAddition>
+							<ChildItems>
+								<ColumnGroup name="ГруппаКолонокДиалог" id="38">
+									<Group>Vertical</Group>
+									<ExtendedTooltip name="ГруппаКолонокДиалогРасширеннаяПодсказка" id="39"/>
+									<ChildItems>
+										<InputField name="ДиалогиИмяДиалога" id="40">
+											<DataPath>Диалоги.ИмяДиалога</DataPath>
+											<ReadOnly>true</ReadOnly>
+											<ContextMenu name="ДиалогиИмяДиалогаКонтекстноеМеню" id="41"/>
+											<ExtendedTooltip name="ДиалогиИмяДиалогаРасширеннаяПодсказка" id="42"/>
+										</InputField>
+										<InputField name="ДиалогиСнипет" id="43">
+											<DataPath>Диалоги.Снипет</DataPath>
+											<ReadOnly>true</ReadOnly>
+											<ContextMenu name="ДиалогиСнипетКонтекстноеМеню" id="44"/>
+											<ExtendedTooltip name="ДиалогиСнипетРасширеннаяПодсказка" id="45"/>
+										</InputField>
+									</ChildItems>
+								</ColumnGroup>
+								<ColumnGroup name="ГруппаКолонокМетка" id="46">
+									<Group>Vertical</Group>
+									<ExtendedTooltip name="ГруппаКолонокМеткаРасширеннаяПодсказка" id="47"/>
+									<ChildItems>
+										<InputField name="ДиалогиВремя" id="48">
+											<DataPath>Диалоги.Время</DataPath>
+											<ReadOnly>true</ReadOnly>
+											<ContextMenu name="ДиалогиВремяКонтекстноеМеню" id="49"/>
+											<ExtendedTooltip name="ДиалогиВремяРасширеннаяПодсказка" id="50"/>
+										</InputField>
+										<InputField name="ДиалогиМеткаНепрочитанных" id="51">
+											<DataPath>Диалоги.МеткаНепрочитанных</DataPath>
+											<ReadOnly>true</ReadOnly>
+											<ContextMenu name="ДиалогиМеткаНепрочитанныхКонтекстноеМеню" id="52"/>
+											<ExtendedTooltip name="ДиалогиМеткаНепрочитанныхРасширеннаяПодсказка" id="53"/>
+										</InputField>
+									</ChildItems>
+								</ColumnGroup>
+							</ChildItems>
+							<Events>
+								<Event name="OnActivateRow">ДиалогиПриАктивизацииСтроки</Event>
+							</Events>
+						</Table>
+						<UsualGroup name="ГруппаСостояние" id="54">
+							<Group>AlwaysHorizontal</Group>
+							<ShowTitle>false</ShowTitle>
+							<Representation>None</Representation>
+							<ExtendedTooltip name="ГруппаСостояниеРасширеннаяПодсказка" id="55"/>
+							<ChildItems>
+								<CheckBoxField name="ФлажокАвтообновление" id="56">
+									<DataPath>Автообновление</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Автообновление</v8:content>
+										</v8:item>
+									</Title>
+									<CheckBoxType>CheckBox</CheckBoxType>
+									<TitleLocation>Right</TitleLocation>
+									<ContextMenu name="ФлажокАвтообновлениеКонтекстноеМеню" id="57"/>
+									<ExtendedTooltip name="ФлажокАвтообновлениеРасширеннаяПодсказка" id="58"/>
+									<Events>
+										<Event name="OnChange">ФлажокАвтообновлениеПриИзменении</Event>
+									</Events>
+								</CheckBoxField>
+								<LabelDecoration name="НадписьОбновлено" id="59">
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content> </v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="НадписьОбновленоКонтекстноеМеню" id="60"/>
+									<ExtendedTooltip name="НадписьОбновленоРасширеннаяПодсказка" id="61"/>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</UsualGroup>
+				<UsualGroup name="ГруппаЧат" id="62">
+					<Group>Vertical</Group>
+					<ShowTitle>false</ShowTitle>
+					<Representation>None</Representation>
+					<ExtendedTooltip name="ГруппаЧатРасширеннаяПодсказка" id="63"/>
+					<ChildItems>
+						<UsualGroup name="ГруппаШапкаЧата" id="64">
+							<Group>Vertical</Group>
+							<ShowTitle>false</ShowTitle>
+							<Representation>None</Representation>
+							<ExtendedTooltip name="ГруппаШапкаЧатаРасширеннаяПодсказка" id="65"/>
+							<ChildItems>
+								<LabelDecoration name="ЗаголовокЧата" id="66">
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Диалог не выбран</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ЗаголовокЧатаКонтекстноеМеню" id="67"/>
+									<ExtendedTooltip name="ЗаголовокЧатаРасширеннаяПодсказка" id="68"/>
+								</LabelDecoration>
+								<LabelDecoration name="ПодзаголовокЧата" id="69">
+									<Title formatted="false">
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Выберите пациента в списке слева</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="ПодзаголовокЧатаКонтекстноеМеню" id="70"/>
+									<ExtendedTooltip name="ПодзаголовокЧатаРасширеннаяПодсказка" id="71"/>
+								</LabelDecoration>
+							</ChildItems>
+						</UsualGroup>
+						<HTMLDocumentField name="ЛентаЧата" id="72">
+							<DataPath>ЛентаЧата</DataPath>
 							<ReadOnly>true</ReadOnly>
 							<TitleLocation>None</TitleLocation>
-							<Height>23</Height>
+							<Height>24</Height>
 							<HorizontalStretch>true</HorizontalStretch>
-							<ContextMenu name="ЛентаСообщенийКонтекстноеМеню" id="46"/>
-							<ExtendedTooltip name="ЛентаСообщенийРасширеннаяПодсказка" id="47"/>
-						</FormattedDocumentField>
-						<UsualGroup name="ГруппаОтвет" id="70">
-							<Group>AlwaysHorizontal</Group>
-							<ExtendedTooltip name="ГруппаОтветРасширеннаяПодсказка" id="71"/>
+							<ContextMenu name="ЛентаЧатаКонтекстноеМеню" id="73"/>
+							<ExtendedTooltip name="ЛентаЧатаРасширеннаяПодсказка" id="74"/>
+							<Events>
+								<Event name="DocumentComplete">ЛентаЧатаДокументСформирован</Event>
+							</Events>
+						</HTMLDocumentField>
+						<UsualGroup name="ГруппаОтправка" id="75">
+							<Group>Vertical</Group>
+							<ShowTitle>false</ShowTitle>
+							<Representation>None</Representation>
+							<ExtendedTooltip name="ГруппаОтправкаРасширеннаяПодсказка" id="76"/>
 							<ChildItems>
-								<InputField name="ТекстОтвета" id="72">
+								<InputField name="ТекстОтвета" id="77">
 									<DataPath>ТекстОтвета</DataPath>
 									<Title>
 										<v8:item>
 											<v8:lang>ru</v8:lang>
-											<v8:content>Ответ</v8:content>
+											<v8:content>Сообщение</v8:content>
 										</v8:item>
 									</Title>
-									<TitleLocation>Top</TitleLocation>
+									<TitleLocation>None</TitleLocation>
 									<MultiLine>true</MultiLine>
 									<AutoMaxWidth>false</AutoMaxWidth>
 									<Height>4</Height>
@@ -181,23 +311,41 @@
 									<InputHint>
 										<v8:item>
 											<v8:lang>ru</v8:lang>
-											<v8:content>Введите сообщение пациенту</v8:content>
+											<v8:content>Напишите сообщение пациенту…</v8:content>
 										</v8:item>
 									</InputHint>
-									<ContextMenu name="ТекстОтветаКонтекстноеМеню" id="73"/>
-									<ExtendedTooltip name="ТекстОтветаРасширеннаяПодсказка" id="74"/>
+									<ContextMenu name="ТекстОтветаКонтекстноеМеню" id="78"/>
+									<ExtendedTooltip name="ТекстОтветаРасширеннаяПодсказка" id="79"/>
 								</InputField>
-								<Button name="ОтправитьКнопка" id="75">
-									<CommandName>Form.Command.Отправить</CommandName>
-									<Title>
-										<v8:item>
-											<v8:lang>ru</v8:lang>
-											<v8:content>Отправить</v8:content>
-										</v8:item>
-									</Title>
-									<DefaultButton>true</DefaultButton>
-									<ExtendedTooltip name="ОтправитьКнопкаРасширеннаяПодсказка" id="76"/>
-								</Button>
+								<UsualGroup name="ГруппаКнопкиОтправки" id="80">
+									<Group>AlwaysHorizontal</Group>
+									<ShowTitle>false</ShowTitle>
+									<Representation>None</Representation>
+									<ExtendedTooltip name="ГруппаКнопкиОтправкиРасширеннаяПодсказка" id="81"/>
+									<ChildItems>
+										<LabelDecoration name="ПодсказкаОтправки" id="82">
+											<Title formatted="false">
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Ctrl+Enter — отправить</v8:content>
+												</v8:item>
+											</Title>
+											<ContextMenu name="ПодсказкаОтправкиКонтекстноеМеню" id="83"/>
+											<ExtendedTooltip name="ПодсказкаОтправкиРасширеннаяПодсказка" id="84"/>
+										</LabelDecoration>
+										<Button name="ОтправитьКнопка" id="85">
+											<CommandName>Form.Command.Отправить</CommandName>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Отправить</v8:content>
+												</v8:item>
+											</Title>
+											<DefaultButton>true</DefaultButton>
+											<ExtendedTooltip name="ОтправитьКнопкаРасширеннаяПодсказка" id="86"/>
+										</Button>
+									</ChildItems>
+								</UsualGroup>
 							</ChildItems>
 						</UsualGroup>
 					</ChildItems>
@@ -206,13 +354,13 @@
 		</UsualGroup>
 	</ChildItems>
 	<Attributes>
-		<Attribute name="Объект" id="77">
+		<Attribute name="Объект" id="100">
 			<Type>
 				<v8:Type>cfg:DataProcessorObject.бит_омни_ЕдиныйЧат</v8:Type>
 			</Type>
 			<MainAttribute>true</MainAttribute>
 		</Attribute>
-		<Attribute name="СтрокаПоиска" id="78">
+		<Attribute name="СтрокаПоиска" id="101">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -227,39 +375,50 @@
 				</v8:StringQualifiers>
 			</Type>
 		</Attribute>
-		<Attribute name="ТолькоНепрочитанные" id="79">
+		<Attribute name="ТолькоНепрочитанные" id="102">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Только непрочитанные</v8:content>
+					<v8:content>Только новые</v8:content>
 				</v8:item>
 			</Title>
 			<Type>
 				<v8:Type>xs:boolean</v8:Type>
 			</Type>
 		</Attribute>
-		<Attribute name="Пациенты" id="80">
+		<Attribute name="Автообновление" id="103">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Пациенты</v8:content>
+					<v8:content>Автообновление</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
+		</Attribute>
+		<Attribute name="Диалоги" id="104">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Диалоги</v8:content>
 				</v8:item>
 			</Title>
 			<Type>
 				<v8:Type>v8:ValueTable</v8:Type>
 			</Type>
 			<Columns>
-				<Column name="Контакт" id="81">
+				<Column name="Контакт" id="105">
 					<Type>
 						<v8:Type>cfg:CatalogRef.бит_омни_Контакты</v8:Type>
 					</Type>
 				</Column>
-				<Column name="Пациент" id="82">
+				<Column name="Пациент" id="106">
 					<Type>
 						<v8:Type>cfg:CatalogRef.Клиенты</v8:Type>
 					</Type>
 				</Column>
-				<Column name="ИмяMAX" id="83">
+				<Column name="ИмяMAX" id="107">
 					<Type>
 						<v8:Type>xs:string</v8:Type>
 						<v8:StringQualifiers>
@@ -268,12 +427,12 @@
 						</v8:StringQualifiers>
 					</Type>
 				</Column>
-				<Column name="Бот" id="84">
+				<Column name="Бот" id="108">
 					<Type>
 						<v8:Type>cfg:CatalogRef.бит_омни_Боты</v8:Type>
 					</Type>
 				</Column>
-				<Column name="ПоследнееСообщение" id="85">
+				<Column name="ПоследнееСообщение" id="109">
 					<Type>
 						<v8:Type>xs:string</v8:Type>
 						<v8:StringQualifiers>
@@ -282,7 +441,7 @@
 						</v8:StringQualifiers>
 					</Type>
 				</Column>
-				<Column name="ДатаПоследнегоСообщения" id="86">
+				<Column name="ДатаПоследнегоСообщения" id="110">
 					<Type>
 						<v8:Type>xs:dateTime</v8:Type>
 						<v8:DateQualifiers>
@@ -290,7 +449,7 @@
 						</v8:DateQualifiers>
 					</Type>
 				</Column>
-				<Column name="Непрочитано" id="87">
+				<Column name="Непрочитано" id="111">
 					<Type>
 						<v8:Type>xs:decimal</v8:Type>
 						<v8:NumberQualifiers>
@@ -300,42 +459,12 @@
 						</v8:NumberQualifiers>
 					</Type>
 				</Column>
-				<Column name="ПредставлениеДиалога" id="102">
-					<Type>
-						<v8:Type>xs:string</v8:Type>
-						<v8:StringQualifiers>
-							<v8:Length>0</v8:Length>
-							<v8:AllowedLength>Variable</v8:AllowedLength>
-						</v8:StringQualifiers>
-					</Type>
-				</Column>
-			</Columns>
-		</Attribute>
-		<Attribute name="Сообщения" id="88">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Сообщения</v8:content>
-				</v8:item>
-			</Title>
-			<Type>
-				<v8:Type>v8:ValueTable</v8:Type>
-			</Type>
-			<Columns>
-				<Column name="Период" id="89">
-					<Type>
-						<v8:Type>xs:dateTime</v8:Type>
-						<v8:DateQualifiers>
-							<v8:DateFractions>DateTime</v8:DateFractions>
-						</v8:DateQualifiers>
-					</Type>
-				</Column>
-				<Column name="Входящее" id="90">
+				<Column name="ПоследнееВходящее" id="112">
 					<Type>
 						<v8:Type>xs:boolean</v8:Type>
 					</Type>
 				</Column>
-				<Column name="Автор" id="91">
+				<Column name="ИмяДиалога" id="113">
 					<Type>
 						<v8:Type>xs:string</v8:Type>
 						<v8:StringQualifiers>
@@ -344,47 +473,60 @@
 						</v8:StringQualifiers>
 					</Type>
 				</Column>
-				<Column name="Текст" id="92">
+				<Column name="Снипет" id="114">
 					<Type>
 						<v8:Type>xs:string</v8:Type>
 						<v8:StringQualifiers>
-							<v8:Length>0</v8:Length>
+							<v8:Length>250</v8:Length>
 							<v8:AllowedLength>Variable</v8:AllowedLength>
 						</v8:StringQualifiers>
 					</Type>
 				</Column>
-				<Column name="Статус" id="93">
+				<Column name="Время" id="115">
 					<Type>
 						<v8:Type>xs:string</v8:Type>
 						<v8:StringQualifiers>
-							<v8:Length>30</v8:Length>
+							<v8:Length>20</v8:Length>
 							<v8:AllowedLength>Variable</v8:AllowedLength>
 						</v8:StringQualifiers>
 					</Type>
 				</Column>
-				<Column name="ВидСообщения" id="94">
+				<Column name="МеткаНепрочитанных" id="116">
 					<Type>
 						<v8:Type>xs:string</v8:Type>
 						<v8:StringQualifiers>
-							<v8:Length>50</v8:Length>
+							<v8:Length>10</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="КлючДиалога" id="117">
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>100</v8:Length>
 							<v8:AllowedLength>Variable</v8:AllowedLength>
 						</v8:StringQualifiers>
 					</Type>
 				</Column>
 			</Columns>
 		</Attribute>
-		<Attribute name="ЛентаСообщений" id="100">
+		<Attribute name="ЛентаЧата" id="118">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Лента сообщений</v8:content>
+					<v8:content>Лента чата</v8:content>
 				</v8:item>
 			</Title>
 			<Type>
-				<v8:Type xmlns:fd="http://v8.1c.ru/8.2/data/formatted-document">fd:FormattedDocument</v8:Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
 			</Type>
 		</Attribute>
-		<Attribute name="ТекущийКонтакт" id="95">
+		<Attribute name="ТекущийКонтакт" id="119">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -395,7 +537,7 @@
 				<v8:Type>cfg:CatalogRef.бит_омни_Контакты</v8:Type>
 			</Type>
 		</Attribute>
-		<Attribute name="ТекущийПациент" id="101">
+		<Attribute name="ТекущийПациент" id="120">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -406,7 +548,7 @@
 				<v8:Type>cfg:CatalogRef.Клиенты</v8:Type>
 			</Type>
 		</Attribute>
-		<Attribute name="ТекущийБот" id="96">
+		<Attribute name="ТекущийБот" id="121">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -417,7 +559,7 @@
 				<v8:Type>cfg:CatalogRef.бит_омни_Боты</v8:Type>
 			</Type>
 		</Attribute>
-		<Attribute name="ТекстОтвета" id="97">
+		<Attribute name="ТекстОтвета" id="122">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -432,9 +574,53 @@
 				</v8:StringQualifiers>
 			</Type>
 		</Attribute>
+		<Attribute name="ОтпечатокЛенты" id="123">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Отпечаток ленты</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>100</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="ГраницаОповещений" id="125">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Граница оповещений</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:dateTime</v8:Type>
+				<v8:DateQualifiers>
+					<v8:DateFractions>DateTime</v8:DateFractions>
+				</v8:DateQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="КлючТекущегоДиалога" id="124">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Ключ текущего диалога</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>100</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
 	</Attributes>
 	<Commands>
-		<Command name="Обновить" id="98">
+		<Command name="Обновить" id="200">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -447,7 +633,7 @@
 				<xr:LoadTransparent>true</xr:LoadTransparent>
 			</Picture>
 		</Command>
-		<Command name="Отправить" id="99">
+		<Command name="Отправить" id="201">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -459,6 +645,15 @@
 				<xr:Ref>StdPicture.SendMessage</xr:Ref>
 				<xr:LoadTransparent>true</xr:LoadTransparent>
 			</Picture>
+		</Command>
+		<Command name="ОткрытьКарточкуПациента" id="202">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Карточка пациента</v8:content>
+				</v8:item>
+			</Title>
+			<Action>ОткрытьКарточкуПациентаОбработка</Action>
 		</Command>
 	</Commands>
 </Form>
