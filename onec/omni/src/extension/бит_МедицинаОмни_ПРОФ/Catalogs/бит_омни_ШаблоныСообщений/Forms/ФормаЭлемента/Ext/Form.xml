@@ -175,8 +175,8 @@
 					<v8:content>Кнопки MAX (JSON)</v8:content>
 				</v8:item>
 			</Title>
-			<MultiLine>true</MultiLine>
 			<Height>5</Height>
+			<MultiLine>true</MultiLine>
 			<ContextMenu name="КнопкиMAXКонтекстноеМеню" id="58"/>
 			<ExtendedTooltip name="КнопкиMAXРасширеннаяПодсказка" id="59"/>
 		</InputField>

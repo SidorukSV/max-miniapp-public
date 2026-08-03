@@ -9,11 +9,11 @@
 					<v8:content>Омни</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment />
+			<Comment/>
 			<IncludeHelpInContents>true</IncludeHelpInContents>
 			<IncludeInCommandInterface>true</IncludeInCommandInterface>
 			<UseOneCommand>false</UseOneCommand>
-			<Explanation />
+			<Explanation/>
 			<Picture>
 				<xr:Ref>CommonPicture.бит_омни_Логотип</xr:Ref>
 				<xr:LoadTransparent>true</xr:LoadTransparent>
@@ -33,6 +33,6 @@
 				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.бит_омни_ЕдиныйЧат</xr:Item>
 			</Content>
 		</Properties>
-		<ChildObjects />
+		<ChildObjects/>
 	</Subsystem>
 </MetaDataObject>

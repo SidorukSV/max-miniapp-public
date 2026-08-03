@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
 	<Configuration uuid="c680a789-1641-4f88-b7b0-05988964fe15">
 		<InternalInfo>
@@ -44,7 +44,7 @@
 					<v8:content>БИТ.Медицина / Омни: ПРОФ</v8:content>
 				</v8:item>
 			</Synonym>
-			<Comment />
+			<Comment/>
 			<ConfigurationExtensionPurpose>Customization</ConfigurationExtensionPurpose>
 			<KeepMappingToExtendedConfigurationObjectsByIDs>true</KeepMappingToExtendedConfigurationObjectsByIDs>
 			<NamePrefix>бит_омни_</NamePrefix>
@@ -60,11 +60,11 @@
 			<Vendor>Первый Бит, офис Челябинск</Vendor>
 			<Version>1.1.0.16</Version>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
-			<BriefInformation />
-			<DetailedInformation />
-			<Copyright />
-			<VendorInformationAddress />
-			<ConfigurationInformationAddress />
+			<BriefInformation/>
+			<DetailedInformation/>
+			<Copyright/>
+			<VendorInformationAddress/>
+			<ConfigurationInformationAddress/>
 			<InterfaceCompatibilityMode>TaxiEnableVersion8_2</InterfaceCompatibilityMode>
 		</Properties>
 		<ChildObjects>
@@ -73,6 +73,25 @@
 			<CommonPicture>ВыделитьОсновным</CommonPicture>
 			<CommonPicture>бит_омни_Логотип</CommonPicture>
 			<CommonPicture>ПоискНоменклатуры_16х16</CommonPicture>
+			<CommonPicture>бит_омни_ГоризонтальныйРазделитель</CommonPicture>
+			<CommonPicture>Заявка_16х16</CommonPicture>
+			<CommonPicture>ОчередьНаЗапись</CommonPicture>
+			<CommonPicture>СкопироватьВБуфер</CommonPicture>
+			<CommonPicture>ЖурналЗаписи</CommonPicture>
+			<CommonPicture>ОказаниеУслуг_16х16</CommonPicture>
+			<CommonPicture>Клиент_16х16</CommonPicture>
+			<CommonPicture>ЛупаБольшая</CommonPicture>
+			<CommonPicture>Медицина</CommonPicture>
+			<CommonPicture>Вырезать</CommonPicture>
+			<CommonPicture>Информация_Синий</CommonPicture>
+			<CommonPicture>ВставитьИзБуфера</CommonPicture>
+			<CommonPicture>Комментарий</CommonPicture>
+			<CommonPicture>ПоискКлиента_16х16</CommonPicture>
+			<CommonPicture>Рассылка_SMS_16х16</CommonPicture>
+			<CommonPicture>Оповещение</CommonPicture>
+			<CommonPicture>ОчередьНаЗаписьБледный</CommonPicture>
+			<CommonPicture>КрасныйКруг</CommonPicture>
+			<CommonPicture>СостояниеПользователя05</CommonPicture>
 			<SessionParameter>бит_омни_КешОбъектовДляРассылки</SessionParameter>
 			<Role>бит_омни_ОсновнаяРоль</Role>
 			<CommonTemplate>ОписаниеОбновлений</CommonTemplate>
@@ -121,12 +140,16 @@
 			<Enum>бит_омни_КаналыСвязи</Enum>
 			<Enum>бит_омни_РежимыРассылки</Enum>
 			<Enum>бит_омни_ИконкиСпециализаций</Enum>
+			<Enum>бит_омни_ВидыОтправителейMAX</Enum>
+			<Enum>бит_омни_СостоянияДиалоговMAX</Enum>
+			<Report>КалендарьПланирования</Report>
 			<DataProcessor>бит_омни_ЕдиныйЧат</DataProcessor>
 			<InformationRegister>бит_омни_ЗначенияНастроек</InformationRegister>
 			<InformationRegister>бит_омни_АктивныеРассылки</InformationRegister>
 			<InformationRegister>бит_омни_Команды</InformationRegister>
 			<InformationRegister>бит_омни_Сообщения</InformationRegister>
 			<InformationRegister>бит_омни_ИсторияЧатовMAX</InformationRegister>
+			<InformationRegister>бит_омни_СостоянияДиалоговMAX</InformationRegister>
 			<AccumulationRegister>НакопленияПоСкидкам</AccumulationRegister>
 		</ChildObjects>
 	</Configuration>
