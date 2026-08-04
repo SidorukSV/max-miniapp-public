@@ -38,6 +38,8 @@ JWT_SECRET='YourStrongRandomSecretAtLeast32Chars!2026' REDIS_URL=redis://<host>:
 JWT_SECRET=replace_with_strong_random_secret
 MAX_BOT_TOKEN=replace_with_max_bot_token
 MAX_BOT_ID=replace_with_max_bot_id
+MAX_WEBHOOK_URL=https://miniapp.example.com/api/v1/max/webhook
+MAX_WEBHOOK_SECRET=replace_with_random_webhook_secret
 
 # Опциональные (с дефолтами)
 PORT=3000
@@ -82,6 +84,27 @@ npm run dev
 ```
 
 > Не коммитьте `.env` в репозиторий. Для команды храните production-секреты в менеджере секретов (например, 1Password Secrets Automation, HashiCorp Vault, AWS Secrets Manager, GCP Secret Manager, Doppler).
+
+### Подключение подписки MAX на сообщения
+
+После запуска production-сервера подключите доставку новых сообщений к уже
+реализованному endpoint `POST /api/v1/max/webhook`:
+
+```bash
+chmod +x scripts/subscribe-max-webhook.sh
+./scripts/subscribe-max-webhook.sh
+```
+
+Скрипт читает `MAX_BOT_TOKEN`, `MAX_WEBHOOK_SECRET` и `MAX_WEBHOOK_URL` из
+`backend/.env.production`. Если `MAX_WEBHOOK_URL` не задан, публичный адрес
+собирается из первого домена в `CORS_ALLOWED_ORIGINS`. Адрес можно передать явно:
+
+```bash
+./scripts/subscribe-max-webhook.sh --url https://miniapp.example.com/api/v1/max/webhook
+```
+
+Webhook должен быть доступен снаружи по HTTPS на стандартном порту `443` и иметь
+доверенный TLS-сертификат. Скрипт подписывает бота на событие `message_created`.
 
 ### Переменные refresh-cookie
 
