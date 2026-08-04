@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+# При явном запуске через `sh script.sh` shebang не учитывается. Перезапускаем
+# скрипт в Bash до первой Bash-специфичной конструкции.
+if [ -z "${BASH_VERSION:-}" ]; then
+  if command -v bash >/dev/null 2>&1; then
+    exec bash "$0" "$@"
+  fi
+
+  printf 'Ошибка: для запуска скрипта требуется Bash.\n' >&2
+  exit 1
+fi
+
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
