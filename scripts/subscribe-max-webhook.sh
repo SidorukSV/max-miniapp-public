@@ -18,6 +18,7 @@ PROJECT_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
 ENV_FILE="${PROJECT_DIR}/backend/.env.production"
 WEBHOOK_URL="${MAX_WEBHOOK_URL:-}"
 MAX_API_BASE_URL="${MAX_API_BASE_URL:-https://platform-api2.max.ru}"
+MAX_CA_CERT="${MAX_CA_CERT:-${SCRIPT_DIR}/certificates/russian-trusted-root-ca.pem}"
 
 usage() {
   cat <<'EOF'
@@ -40,6 +41,7 @@ usage() {
 Необязательные переменные:
   MAX_WEBHOOK_SECRET Секрет заголовка X-Max-Bot-Api-Secret
   MAX_WEBHOOK_URL    Полный публичный HTTPS URL webhook
+  MAX_CA_CERT        CA-сертификат API MAX
 EOF
 }
 
@@ -71,6 +73,7 @@ while (($# > 0)); do
 done
 
 command -v curl >/dev/null 2>&1 || die "не найдена команда curl"
+[[ -f "$MAX_CA_CERT" ]] || die "не найден CA-сертификат MAX: ${MAX_CA_CERT}"
 
 read_env_value() {
   local name="$1"
@@ -142,6 +145,7 @@ printf 'Подключение подписки message_created к %s\n' "$WEBHO
 HTTP_STATUS="$(curl --silent --show-error \
   --connect-timeout 10 \
   --max-time 30 \
+  --cacert "$MAX_CA_CERT" \
   --output "$RESPONSE_FILE" \
   --write-out '%{http_code}' \
   --request POST \
