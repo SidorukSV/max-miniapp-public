@@ -85,7 +85,7 @@ npm run dev
 
 > Не коммитьте `.env` в репозиторий. Для команды храните production-секреты в менеджере секретов (например, 1Password Secrets Automation, HashiCorp Vault, AWS Secrets Manager, GCP Secret Manager, Doppler).
 
-### Подключение подписки MAX на сообщения
+### Подключение подписки MAX на события
 
 После запуска production-сервера подключите доставку новых сообщений к уже
 реализованному endpoint `POST /api/v1/max/webhook`:
@@ -108,7 +108,9 @@ Webhook должен быть доступен снаружи по HTTPS на с
 использует включённый в репозиторий корневой сертификат `Russian Trusted Root CA`;
 он получен с официального сайта Госуслуг, его SHA-256 начинается с
 `D2:6D:2D:02:31:B7`. Системная проверка TLS не отключается. Скрипт подписывает
-бота на событие `message_created`.
+бота на события `message_created`, `bot_started`, `bot_stopped` и
+`message_callback`. Событие `bot_started` необходимо для обработки нажатия
+пользователем кнопки «Старт» в MAX.
 
 ### Переменные refresh-cookie
 

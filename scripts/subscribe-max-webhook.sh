@@ -18,6 +18,7 @@ PROJECT_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
 ENV_FILE="${PROJECT_DIR}/backend/.env.production"
 WEBHOOK_URL="${MAX_WEBHOOK_URL:-}"
 MAX_API_BASE_URL="${MAX_API_BASE_URL:-https://platform-api2.max.ru}"
+UPDATE_TYPES_JSON='["message_created","bot_started","bot_stopped","message_callback"]'
 MAX_CA_CERT="${MAX_CA_CERT:-${SCRIPT_DIR}/certificates/russian-trusted-root-ca.pem}"
 
 usage() {
@@ -132,16 +133,16 @@ AUTHORITY="${AUTHORITY%%/*}"
 if [[ -n "$MAX_WEBHOOK_SECRET" ]]; then
   [[ "$MAX_WEBHOOK_SECRET" =~ ^[A-Za-z0-9_-]{5,256}$ ]] ||
     die "MAX_WEBHOOK_SECRET должен содержать 5–256 символов: A-Z, a-z, 0-9, _ или -"
-  REQUEST_BODY="{\"url\":\"${WEBHOOK_URL}\",\"update_types\":[\"message_created\"],\"secret\":\"${MAX_WEBHOOK_SECRET}\"}"
+  REQUEST_BODY="{\"url\":\"${WEBHOOK_URL}\",\"update_types\":${UPDATE_TYPES_JSON},\"secret\":\"${MAX_WEBHOOK_SECRET}\"}"
 else
   printf 'Предупреждение: MAX_WEBHOOK_SECRET не задан; запросы webhook не будут защищены секретом.\n' >&2
-  REQUEST_BODY="{\"url\":\"${WEBHOOK_URL}\",\"update_types\":[\"message_created\"]}"
+  REQUEST_BODY="{\"url\":\"${WEBHOOK_URL}\",\"update_types\":${UPDATE_TYPES_JSON}}"
 fi
 
 RESPONSE_FILE="$(mktemp)"
 trap 'rm -f -- "$RESPONSE_FILE"' EXIT
 
-printf 'Подключение подписки message_created к %s\n' "$WEBHOOK_URL"
+printf 'Подключение подписки на события MAX к %s\n' "$WEBHOOK_URL"
 HTTP_STATUS="$(curl --silent --show-error \
   --connect-timeout 10 \
   --max-time 30 \
@@ -166,4 +167,4 @@ if ! grep -Eq '"success"[[:space:]]*:[[:space:]]*true' "$RESPONSE_FILE"; then
   exit 1
 fi
 
-printf 'Готово: подписка на сообщения подключена.\n'
+printf 'Готово: подписка на message_created, bot_started, bot_stopped и message_callback подключена.\n'
