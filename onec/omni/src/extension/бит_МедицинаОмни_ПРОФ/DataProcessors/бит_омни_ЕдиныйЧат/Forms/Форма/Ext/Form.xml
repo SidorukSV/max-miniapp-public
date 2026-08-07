@@ -417,6 +417,10 @@
 											</InputHint>
 											<ContextMenu name="ТекстОтветаКонтекстноеМеню" id="78"/>
 											<ExtendedTooltip name="ТекстОтветаРасширеннаяПодсказка" id="79"/>
+											<Events>
+												<Event name="EditTextChange">ТекстОтветаИзменениеТекстаРедактирования</Event>
+												<Event name="TextEditEnd">ТекстОтветаОкончаниеВводаТекста</Event>
+											</Events>
 										</InputField>
 										<UsualGroup name="ГруппаКнопкиОтправки" id="80">
 											<Group>AlwaysHorizontal</Group>
