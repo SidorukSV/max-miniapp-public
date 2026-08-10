@@ -9,6 +9,11 @@ function extractSurveyId(payload) {
 
   const normalized = payload.trim();
 
+  const compactMatch = normalized.match(/^survey_([0-9a-fA-F-]{36})$/);
+  if (compactMatch?.[1]) {
+    return compactMatch[1];
+  }
+
   try {
     const params = new URLSearchParams(normalized);
     const idFromParams = params.get("survey_id");
@@ -29,6 +34,16 @@ function extractAppointmentTarget(payload) {
   }
 
   const normalized = payload.trim();
+
+  const compactMatch = normalized.match(
+    /^appointment_([0-9a-fA-F-]{36})_(confirm|reschedule|cancel)$/,
+  );
+  if (compactMatch?.[1]) {
+    return {
+      appointmentId: compactMatch[1],
+      intent: compactMatch[2],
+    };
+  }
 
   try {
     const params = new URLSearchParams(normalized);
