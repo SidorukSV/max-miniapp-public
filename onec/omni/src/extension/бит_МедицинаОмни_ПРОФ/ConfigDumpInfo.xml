@@ -102,6 +102,7 @@
 		</Metadata>
 		<Metadata name="Catalog.бит_омни_Рассылки.Form.ФормаЭлемента" id="c058679f-aae6-4ecc-af67-980584f0e7c1" configVersion="280fab5e7613114fd58eceb5791d85cfd2ca5a6a"/>
 		<Metadata name="Catalog.бит_омни_Рассылки.Form.ФормаЭлемента.Form" id="c058679f-aae6-4ecc-af67-980584f0e7c1.0" configVersion="8a9ea7b83b2865350116c8d749bac363f5489577"/>
+		<Metadata name="Catalog.бит_омни_Рассылки.ManagerModule" id="fdc75333-b5c9-4a9e-b498-e318120e9faa.3" configVersion="9e6461ef510f7b7c9333f54ca6918fde33b75b46"/>
 		<Metadata name="Catalog.бит_омни_Рассылки.ObjectModule" id="fdc75333-b5c9-4a9e-b498-e318120e9faa.0" configVersion="c722f00ebe9692ffc6eec904524373c506e3ff3a"/>
 		<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных" id="38521610-eaaa-4976-b6fb-4965356b1746" configVersion="ec62328de381e8fd57a3547a206620206c5e846d">
 			<Metadata name="Catalog.бит_омни_СхемыКомпоновкиДанных.Attribute.ХранилищеСКД" id="3e4dbb3e-2c81-4288-ae3d-f00925b4fb36"/>

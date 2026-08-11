@@ -109,6 +109,11 @@
 			<ContextMenu name="ИмяПользователяКонтекстноеМеню" id="14"/>
 			<ExtendedTooltip name="ИмяПользователяРасширеннаяПодсказка" id="15"/>
 		</InputField>
+		<Button name="СоздатьРассылкиЗаписей" id="30">
+			<Type>UsualButton</Type>
+			<CommandName>Form.Command.СоздатьРассылкиЗаписей</CommandName>
+			<ExtendedTooltip name="СоздатьРассылкиЗаписейРасширеннаяПодсказка" id="31"/>
+		</Button>
 	</ChildItems>
 	<Attributes>
 		<Attribute name="Объект" id="1">
@@ -139,6 +144,22 @@
 			</Picture>
 			<Action>ЗаполнитьИнформациюОБоте</Action>
 			<Representation>Picture</Representation>
+		</Command>
+		<Command name="СоздатьРассылкиЗаписей" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Создать рассылки записей</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Создать популярные рассылки MAX с готовыми СКД, не изменяя существующие</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>СоздатьРассылкиЗаписей</Action>
+			<Representation>Text</Representation>
 		</Command>
 	</Commands>
 </Form>
