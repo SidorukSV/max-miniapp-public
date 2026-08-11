@@ -10,8 +10,8 @@
       "sourceHash": "sha256:ca052842b8aa721fea5fc64a2f0060f38e9ffb74d088b421bec8c4e7fab9979c"
     },
     "onec": {
-      "version": "1.1.0.21",
-      "sourceHash": "sha256:c708cb69b0a662a5d9708bb137186f3d58eee39ccf799aad0a290fd65a24fc1f"
+      "version": "1.1.0.22",
+      "sourceHash": "sha256:c8024351453a01d541d1b4f65d2c7d99976ffe833c8d53244cb3be200a0a1d54"
     }
   }
 }
