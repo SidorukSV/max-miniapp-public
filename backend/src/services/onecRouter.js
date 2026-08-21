@@ -107,17 +107,22 @@ export async function onecFetch(path, options = {}) {
         storedCookie = refreshedCookie;
     }
 
-    const data = await res.json().
-        catch(async () => { return await res.text().catch(() => "") });
-    
-    let isJsonResponse = true;
-    if (typeof(data) === typeof(String)) {
-        isJsonResponse = false;
+    const responseText = await res.text().catch(() => "");
+    let data = responseText;
+    let isJsonResponse = false;
+
+    if (responseText) {
+        try {
+            data = JSON.parse(responseText);
+            isJsonResponse = true;
+        } catch {
+            // 1C can return XML or plain text for platform-level errors.
+        }
     }
 
     if (!res.ok) {
-        const reason = data.desc
-            || data.error
+        const reason = (isJsonResponse ? data?.desc : null)
+            || (isJsonResponse ? data?.error : null)
             || (!isJsonResponse ? data : JSON.stringify(data))
             || "api_error";
         throw new Error(reason);
@@ -225,7 +230,8 @@ export async function getPatientsByPhone({ phone}) {
     const endpoint = "/catalogs/clients";
     let data;
     try {
-        data = await onecFetch(oneCConfig.url.concat(`${endpoint}/?search_type=ByPhone&phone=${phone}`), {
+        data = await onecFetch(oneCConfig.url.concat(
+            `${endpoint}/?search_type=ByPhone&phone=${encodeURIComponent(phone)}`), {
             method: "GET",
             headers: {
                 Authorization: `Basic ${oneCConfig.basicAuth}`,

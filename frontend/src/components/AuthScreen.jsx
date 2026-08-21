@@ -66,6 +66,8 @@ function getAuthErrorMessage(error) {
             return "Передача контакта отменена пользователем.";
         case "client.request_phone.request_error":
             return "MAX не смог обработать запрос контакта.";
+        case "patients_unavailable":
+            return "Сервис клиники временно недоступен. Попробуйте позже.";
         default:
             return "Авторизация не пройдена. Попробуйте ещё раз.";
     }
@@ -205,6 +207,7 @@ export default function AuthScreen() {
                 channel: phonePayload.channel,
                 proof: phonePayload.proof,
                 init_data: initData,
+                trace_id: traceId,
             });
 
             const matchedPatients = phoneResult.patients || [];

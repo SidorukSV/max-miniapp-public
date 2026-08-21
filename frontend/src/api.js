@@ -76,10 +76,10 @@ export async function sendAuthDiagnostic({ event, trace_id, level = "info", deta
     }
 }
 
-export async function authPhone({ auth_session_id, phone, channel, proof, init_data }) {
+export async function authPhone({ auth_session_id, phone, channel, proof, init_data, trace_id }) {
     return apiFetch("/auth/phone", {
         method: "POST",
-        body: JSON.stringify({ auth_session_id, phone, channel, proof, init_data }),
+        body: JSON.stringify({ auth_session_id, phone, channel, proof, init_data, trace_id }),
     });
 }
 

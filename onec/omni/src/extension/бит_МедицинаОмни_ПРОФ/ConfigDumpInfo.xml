@@ -7,8 +7,8 @@
 		<Metadata name="Catalog.ВидыСостоянийЗаявок" id="41c34b3c-3d4e-4704-8cda-dfdfe0a4742c" configVersion="f70af91140d7a0dc625c66c59b13997061ac4a09">
 			<Metadata name="Catalog.ВидыСостоянийЗаявок.Attribute.бит_омни_ЗаголовокДляВыгрузки" id="9da5ff86-b60b-419f-af4e-a4b81db50f88"/>
 		</Metadata>
-		<Metadata name="Catalog.ВидыСостоянийЗаявок.Form.ФормаЭлементаУпр" id="1bf0cc64-0844-45ba-b13c-3f31bd4ef5d0" configVersion="806a0f96092e2f8d0f064b64f4912f4c9829b142"/>
-		<Metadata name="Catalog.ВидыСостоянийЗаявок.Form.ФормаЭлементаУпр.Form" id="1bf0cc64-0844-45ba-b13c-3f31bd4ef5d0.0" configVersion="1461cc6d0f7f48bea62339b81d4bf3fb818f302f"/>
+		<Metadata name="Catalog.ВидыСостоянийЗаявок.Form.ФормаЭлемента" id="6e59322e-b3ba-4234-ba7d-b5eb47b0ef81" configVersion="806a0f96092e2f8d0f064b64f4912f4c9829b142"/>
+		<Metadata name="Catalog.ВидыСостоянийЗаявок.Form.ФормаЭлемента.Form" id="6e59322e-b3ba-4234-ba7d-b5eb47b0ef81.0" configVersion="1461cc6d0f7f48bea62339b81d4bf3fb818f302f"/>
 		<Metadata name="Catalog.КатегорииВыработки" id="0dbf7aad-ab78-4e4a-9bfe-be8a20985ba0" configVersion="14465db8f32fef8ad27ec116d2c67a3856fd39dc">
 			<Metadata name="Catalog.КатегорииВыработки.Attribute.НомерСекции" id="00583aec-3b1b-4fc6-92cc-49da1afb754a"/>
 			<Metadata name="Catalog.КатегорииВыработки.Attribute.ДлительностьПриема" id="4d76ece5-d184-4be8-938d-5ea93401c340"/>
@@ -330,6 +330,7 @@
 		<Metadata name="Report.КалендарьПланирования.Form.ФормаОтчетаУпр" id="3695b2f3-1e5b-459d-9f4f-808508094d27" configVersion="23c2183bf93415e69c4d395ce7f971487500c5e9"/>
 		<Metadata name="Report.КалендарьПланирования.Form.ФормаОтчетаУпр.Form" id="3695b2f3-1e5b-459d-9f4f-808508094d27.0" configVersion="9c0ab502f2dd91a2aed1688c43812b4d462c1444"/>
 		<Metadata name="Role.бит_омни_ОсновнаяРоль" id="eb265577-520a-43c3-ae23-e2d3213d855f" configVersion="7bf437d77e6367e3cd1fdc0ee251d7b97ad69daa"/>
+		<Metadata name="Role.бит_омни_ОсновнаяРоль.Rights" id="eb265577-520a-43c3-ae23-e2d3213d855f.0" configVersion="0f94b388a9d2bb705a681f06fe3feba745808954"/>
 		<Metadata name="SessionParameter.бит_омни_КешОбъектовДляРассылки" id="440acded-a511-40b4-a005-6679849112da" configVersion="0cabcbb2709effd1d5d1e8b34a8e115a3f28d6c7"/>
 		<Metadata name="Subsystem.бит_омни" id="f5e7ada2-342a-44b7-bdfd-a882e40a8fca" configVersion="c79e47d9fe2a3d0d4dcc8ae1fd1d4af75a85c977"/>
 	</ConfigVersions>

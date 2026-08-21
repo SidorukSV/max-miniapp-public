@@ -58,7 +58,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">Role.бит_омни_ОсновнаяРоль</xr:Item>
 			</DefaultRoles>
 			<Vendor>Первый Бит, офис Челябинск</Vendor>
-			<Version>1.1.0.22</Version>
+			<Version>1.1.0.29</Version>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
 			<BriefInformation/>
 			<DetailedInformation/>
@@ -108,10 +108,12 @@
 			<CommonModule>бит_омни_РаботаССообщениями</CommonModule>
 			<CommonModule>бит_омни_РаботаССообщениямПовтИсп</CommonModule>
 			<CommonModule>бит_омни_СхемыКомпоновки</CommonModule>
+			<CommonModule>бит_омни_РассылкиMAXСервер</CommonModule>
 			<HTTPService>бит_омни_Интеграция</HTTPService>
 			<EventSubscription>бит_омни_СправочникиПередЗаписью</EventSubscription>
 			<EventSubscription>бит_омни_ПриЗаписиОбъекта</EventSubscription>
 			<EventSubscription>бит_омни_ДокументыПередЗаписью</EventSubscription>
+			<EventSubscription>бит_омни_ЗначенияСвойствПередЗаписью</EventSubscription>
 			<Catalog>КатегорииВыработки</Catalog>
 			<Catalog>Оборудование</Catalog>
 			<Catalog>Филиалы</Catalog>
@@ -150,6 +152,8 @@
 			<InformationRegister>бит_омни_Сообщения</InformationRegister>
 			<InformationRegister>бит_омни_ИсторияЧатовMAX</InformationRegister>
 			<InformationRegister>бит_омни_СостоянияДиалоговMAX</InformationRegister>
+			<InformationRegister>бит_омни_СтандартныеРассылкиMAX</InformationRegister>
+			<InformationRegister>бит_омни_ОчередьРассылокMAX</InformationRegister>
 			<AccumulationRegister>НакопленияПоСкидкам</AccumulationRegister>
 		</ChildObjects>
 	</Configuration>

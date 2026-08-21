@@ -490,7 +490,7 @@ export async function authRoutes(app) {
     app.post("/api/v1/auth/phone",
         { preHandler: [sessionMiddleware, normalizePhoneMiddleware] },
         async (req, reply) => {
-            const { channel, proof, init_data } = req.body || {};
+            const { channel, proof, init_data, trace_id: traceId } = req.body || {};
             const session = req.session;
             const authChannel = channel || "unknown";
             const maxInitData = init_data || proof?.init_data || proof?.initData || null;
@@ -545,11 +545,29 @@ export async function authRoutes(app) {
                 max_user: verifiedMaxInitData?.user || null,
             });
 
-            const patients = await getPatientsByPhone({
-                phone: req.phone,
-            });
+            let patients;
+            try {
+                patients = await getPatientsByPhone({
+                    phone: req.phone,
+                });
 
-            const patients_sorted = [...patients].sort((a, b) => { return a.fullName.toUpperCase().localeCompare(b.fullName.toUpperCase()) }); 
+                if (!Array.isArray(patients)) {
+                    throw new Error("onec_patients_response_invalid");
+                }
+            } catch (error) {
+                req.log.error({
+                    event: "auth_patients_lookup_failed",
+                    endpoint: "/api/v1/auth/phone",
+                    operation: "getPatientsByPhone",
+                    traceId: typeof traceId === "string" ? traceId.slice(0, 128) : null,
+                    err: error,
+                }, "Failed to load patients by phone during authorization");
+                return sendApiError(reply, 502, "patients_unavailable");
+            }
+
+            const patients_sorted = [...patients].sort((a, b) => {
+                return String(a?.fullName || "").toUpperCase().localeCompare(String(b?.fullName || "").toUpperCase());
+            });
 
             req.session = await updateSession(session.id, {
                 patients: patients_sorted,

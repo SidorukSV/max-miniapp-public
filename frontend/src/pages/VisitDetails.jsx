@@ -12,8 +12,10 @@ import { buildRescheduleUrl, normalizeAppointment } from "../modules/appointment
 export default function VisitDetails() {
   const nav = useNavigate();
   const { id = "" } = useParams();
-  const { state } = useLocation();
+  const { state, search } = useLocation();
   const accessToken = getStoredAccessToken();
+
+  const intent = useMemo(() => new URLSearchParams(search).get("intent") || "", [search]);
 
   const decodedId = useMemo(() => {
     try {
@@ -54,6 +56,12 @@ export default function VisitDetails() {
 
     loadVisit();
   }, [accessToken, decodedId]);
+
+  useEffect(() => {
+    if (!loading && visit && intent === "cancel") {
+      setCancelDialogOpen(true);
+    }
+  }, [intent, loading, visit]);
 
   async function confirmVisit() {
     if (!accessToken || !visit || visit.isApproved === true) return;
