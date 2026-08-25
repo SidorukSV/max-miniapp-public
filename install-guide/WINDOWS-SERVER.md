@@ -1,5 +1,8 @@
 # Windows Server install guide (backend as Windows Service)
 
+> Актуальная полная инструкция для установки без Docker, с Redis и приложением как Windows-службами:
+> [WINDOWS-NO-DOCKER.md](./WINDOWS-NO-DOCKER.md).
+
 Этот гайд для Windows Server 2019/2022 и запуска `backend` как службы через NSSM.
 
 ## 1) Предпосылки

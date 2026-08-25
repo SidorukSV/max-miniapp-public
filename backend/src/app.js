@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import fastifyStatic from "@fastify/static";
 import { config, oneCConfigLoadDiagnostics } from "./config.js";
 import { authRoutes } from "./routes/auth.js";
 import { meRoutes } from "./routes/me.js";
@@ -35,6 +36,42 @@ function logOneCConfigDiagnostics(app) {
         const safeLevel = typeof app.log[level] === "function" ? level : "info";
         app.log[safeLevel](payload, "1C config load diagnostic");
     }
+}
+
+async function registerFrontendStatic(app) {
+    if (!config.frontendDistDir) {
+        return;
+    }
+
+    const distDir = path.resolve(process.cwd(), config.frontendDistDir);
+    const indexPath = path.join(distDir, "index.html");
+
+    if (!fs.existsSync(indexPath)) {
+        app.log.warn({
+            event: "frontend_dist_missing",
+            frontendDistDir: distDir,
+        }, "frontend static serving is disabled");
+        return;
+    }
+
+    await app.register(fastifyStatic, {
+        root: distDir,
+        prefix: "/",
+        decorateReply: false,
+    });
+
+    app.setNotFoundHandler(async (req, reply) => {
+        if (req.raw.method !== "GET" || req.url.startsWith("/api/")) {
+            return reply.code(404).send({ error: "not_found" });
+        }
+
+        return reply.sendFile("index.html");
+    });
+
+    app.log.info({
+        event: "frontend_static_enabled",
+        frontendDistDir: distDir,
+    });
 }
 
 export async function buildApp() {
@@ -110,6 +147,9 @@ export async function buildApp() {
     app.register(documentsRoutes);
     app.register(maxWebhookRoutes);
     app.register(versionRoutes);
+    app.get("/healthz", async () => ({ status: "ok" }));
+
+    await registerFrontendStatic(app);
 
     return app;
 }
