@@ -36,8 +36,15 @@ frontend/public/*.json
 # Local 1C file database
 database/
 
+# Local 1C build artifacts and work in progress
+/onec/omni/BUILD/
+/onec/omni/WIP/
+
 # Local release artifacts
 .artifacts/
+
+# Local scratch artifacts
+.local-artifacts/
 
 # Local deployment runtime
 .runtime/

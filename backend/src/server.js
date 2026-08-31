@@ -5,10 +5,6 @@ import { finishOneCSessions, startOneCSessions } from "./services/onecRouter.js"
 
 const app = await buildApp();
 
-app.get("/", async () => {
-    return { status: "ok" };
-});
-
 await getRedisClient();
 await startOneCSessions();
 

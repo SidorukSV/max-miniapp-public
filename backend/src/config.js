@@ -309,6 +309,7 @@ export const config = {
     buildTime: process.env.BUILD_TIME || "unknown",
     backendLogFile: process.env.BACKEND_LOG_FILE || "",
     backendLogLevel: parseLogLevel(process.env.BACKEND_LOG_LEVEL),
+    frontendDistDir: process.env.FRONTEND_DIST_DIR || "",
     jwtSecret: validateJwtSecret(process.env.JWT_SECRET),
     maxBotToken: process.env.MAX_BOT_TOKEN || "",
     maxBotId: process.env.MAX_BOT_ID || "",
