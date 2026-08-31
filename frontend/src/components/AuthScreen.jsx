@@ -167,7 +167,13 @@ export default function AuthScreen() {
         return {
             phone,
             channel: "max",
-            proof: { init_data: initData },
+            proof: {
+                init_data: initData,
+                contact: {
+                    auth_date: sendContact.authDate,
+                    hash: sendContact.hash,
+                },
+            },
         };
     }
 

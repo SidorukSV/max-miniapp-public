@@ -21,11 +21,41 @@ export async function sessionMiddleware(req, reply) {
     req.session = session;
 }
 
+export function normalizePhone(phone) {
+    const rawPhone = String(phone || "").trim();
+
+    if (!rawPhone || !/^[+\d\s()-]+$/.test(rawPhone)) {
+        return null;
+    }
+
+    const plusCount = (rawPhone.match(/\+/g) || []).length;
+    if (plusCount > 1 || (plusCount === 1 && !rawPhone.startsWith("+"))) {
+        return null;
+    }
+
+    let digits = rawPhone.replace(/\D/g, "");
+
+    if (digits.length === 10) {
+        digits = `7${digits}`;
+    } else if (digits.length === 11 && digits.startsWith("8")) {
+        digits = `7${digits.slice(1)}`;
+    }
+
+    if (digits.length !== 11 || !digits.startsWith("7")) {
+        return null;
+    }
+
+    return `+${digits}`;
+}
+
 export async function normalizePhoneMiddleware(req, reply) {
-    const normalizePhone = String(req.body.phone || "").replace(/[^\d+]/g, "");
-    if (!normalizePhone) {
+    const rawPhone = String(req.body.phone || "").trim();
+    const normalizedPhone = normalizePhone(rawPhone);
+
+    if (!normalizedPhone) {
         return sendApiError(reply, 400, "invalid_phone");
     }
 
-    req.phone = normalizePhone;
+    req.rawPhone = rawPhone;
+    req.phone = normalizedPhone;
 }

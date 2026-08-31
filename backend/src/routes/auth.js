@@ -12,6 +12,7 @@ import {
     revokeUserDeviceRefreshTokens,
 } from "../store/refreshTokens.js";
 import { verifyMaxInitData } from "../auth/maxInitData.js";
+import { verifyMaxContact } from "../auth/maxContact.js";
 import { sendApiError } from "../utils/apiErrors.js";
 import { verifyDevTotpCode } from "../auth/devTotp.js";
 import {
@@ -538,6 +539,34 @@ export async function authRoutes(app) {
             }
 
             const verifiedMaxInitData = proofValidation.verifiedMaxInitData || null;
+
+            if (authChannel === "max") {
+                try {
+                    verifyMaxContact({
+                        phone: req.rawPhone,
+                        authDate: proof?.contact?.auth_date ?? proof?.contact?.authDate,
+                        hash: proof?.contact?.hash,
+                        userId: verifiedMaxInitData?.user?.id,
+                        botToken: config.maxBotToken,
+                        maxAgeSeconds: config.maxInitDataMaxAgeSeconds,
+                    });
+                } catch (error) {
+                    req.log.warn({
+                        endpoint: "/api/v1/auth/phone",
+                        operation: "verifyMaxContact",
+                        channel: authChannel,
+                        errorCode: error?.message || "contact_validation_failed",
+                    }, "MAX contact proof validation failed");
+                    recordAuthAttempt({
+                        scope: "auth_phone",
+                        dimensions: phoneAttemptDimensions,
+                        success: false,
+                        policy: phoneAttemptPolicy,
+                    });
+                    return sendUnifiedAuthFailure(reply);
+                }
+            }
+
             req.session = await updateSession(session.id, {
                 phone: req.phone,
                 channel: authChannel,
