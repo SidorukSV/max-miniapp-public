@@ -180,6 +180,21 @@
 			<ContextMenu name="КнопкиMAXКонтекстноеМеню" id="58"/>
 			<ExtendedTooltip name="КнопкиMAXРасширеннаяПодсказка" id="59"/>
 		</InputField>
+		<CheckBoxField name="ПоказыватьПодтвердитьMAX" id="60">
+			<DataPath>Объект.ПоказыватьПодтвердитьMAX</DataPath>
+			<ContextMenu name="ПоказыватьПодтвердитьMAXКонтекстноеМеню" id="61"/>
+			<ExtendedTooltip name="ПоказыватьПодтвердитьMAXРасширеннаяПодсказка" id="62"/>
+		</CheckBoxField>
+		<CheckBoxField name="ПоказыватьПеренестиMAX" id="63">
+			<DataPath>Объект.ПоказыватьПеренестиMAX</DataPath>
+			<ContextMenu name="ПоказыватьПеренестиMAXКонтекстноеМеню" id="64"/>
+			<ExtendedTooltip name="ПоказыватьПеренестиMAXРасширеннаяПодсказка" id="65"/>
+		</CheckBoxField>
+		<CheckBoxField name="ПоказыватьОтменитьMAX" id="66">
+			<DataPath>Объект.ПоказыватьОтменитьMAX</DataPath>
+			<ContextMenu name="ПоказыватьОтменитьMAXКонтекстноеМеню" id="67"/>
+			<ExtendedTooltip name="ПоказыватьОтменитьMAXРасширеннаяПодсказка" id="68"/>
+		</CheckBoxField>
 		<UsualGroup name="Группа1" id="32">
 			<Behavior>Usual</Behavior>
 			<Representation>None</Representation>
