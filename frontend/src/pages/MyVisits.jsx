@@ -5,7 +5,7 @@ import { BranchInfoRow, DoctorInfoRow } from "../components/VisitInfoRows.jsx";
 import PageLayout from "../components/PageLayout";
 import QuestionDialog from "../components/QuestionDialog";
 import { getAppointments, getStoredAccessToken, updateAppointment } from "../api";
-import { buildRescheduleUrl, normalizeAppointment } from "../modules/appointmentView.js";
+import { normalizeAppointment } from "../modules/appointmentView.js";
 import "../App.css";
 import MyVisitsSkeleton from "../components/my-visits/MyVisitsSkeleton.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
@@ -16,7 +16,7 @@ function stopAndRun(event, action) {
     action();
 }
 
-function VisitCard({ v, pendingId, onOpen, onConfirm, onCancel, onReschedule }) {
+function VisitCard({ v, pendingId, onOpen, onConfirm, onCancel }) {
     const isConfirmedByPatient = v.isApproved === true;
     const canBeConfirmedByPatient = v.isApproved !== undefined;
     const shouldShowConfirmButton = canBeConfirmedByPatient && !isConfirmedByPatient;
@@ -51,14 +51,6 @@ function VisitCard({ v, pendingId, onOpen, onConfirm, onCancel, onReschedule }) 
                             Подтвердить
                         </Button>
                     )}
-
-                    <Button
-                        mode="secondary"
-                        onClick={(event) => stopAndRun(event, () => onReschedule(v))}
-                        disabled={isBusy}
-                    >
-                        Перенести
-                    </Button>
 
                     <Button
                         mode="secondary"
@@ -163,10 +155,6 @@ export default function MyVisits() {
         }
     }
 
-    function rescheduleVisit(visit) {
-        nav(buildRescheduleUrl(visit));
-    }
-
     function openVisitDetails(visit) {
         nav(`/visits/${encodeURIComponent(visit.id)}`, { state: { visit } });
     }
@@ -208,7 +196,6 @@ export default function MyVisits() {
                             onOpen={openVisitDetails}
                             onConfirm={confirmVisit}
                             onCancel={openCancelDialog}
-                            onReschedule={rescheduleVisit}
                         />
                     ))
                 ) : null}

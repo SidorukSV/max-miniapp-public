@@ -18,6 +18,7 @@ import { useMaxWebApp } from "./hooks/useMaxWebApp.js";
 import { MaxContext } from "./context/MaxContext.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 import CommunicationConsent from "./pages/CommunicationCosent.jsx";
+import DoctorSchedule from "./pages/DoctorSchedule.jsx";
 import { isPageVisible } from "./modules/featureVisibility.js";
 
 function PageVisibilityRoute({ page, children }) {
@@ -30,6 +31,14 @@ function PageVisibilityRoute({ page, children }) {
   return children;
 }
 
+function PatientRoute({ children }) {
+  const { me, loading } = useAuth();
+  if (!loading && me?.actor_type === "employee") {
+    return <Navigate to="/doctor" replace />;
+  }
+  return children;
+}
+
 function AppContent() {
   const max = useMaxWebApp();
 
@@ -38,37 +47,38 @@ function AppContent() {
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <PayloadSurveyRedirect />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/book" element={<BookVisit />} />
-          <Route path="/book/flow" element={<BookVisitFlow />} />
-          <Route path="/book/summary" element={<BookVisitSummary />} />
-          <Route path="/visits" element={<MyVisits />} />
-          <Route path="/visits/:id" element={<VisitDetails />} />
+          <Route path="/" element={<ActorHome />} />
+          <Route path="/doctor" element={<DoctorSchedule />} />
+          <Route path="/book" element={<PatientRoute><BookVisit /></PatientRoute>} />
+          <Route path="/book/flow" element={<PatientRoute><BookVisitFlow /></PatientRoute>} />
+          <Route path="/book/summary" element={<PatientRoute><BookVisitSummary /></PatientRoute>} />
+          <Route path="/visits" element={<PatientRoute><MyVisits /></PatientRoute>} />
+          <Route path="/visits/:id" element={<PatientRoute><VisitDetails /></PatientRoute>} />
           <Route path="/history" element={<Navigate to="/medcard" replace />} />
-          <Route path="/medcard" element={<History />} />
+          <Route path="/medcard" element={<PatientRoute><History /></PatientRoute>} />
           <Route
             path="/bonuses"
             element={(
-              <PageVisibilityRoute page="bonuses">
+              <PatientRoute><PageVisibilityRoute page="bonuses">
                 <Bonuses />
-              </PageVisibilityRoute>
+              </PageVisibilityRoute></PatientRoute>
             )}
           />
           <Route path="/profile" element={<Profile />} />
           <Route
             path="/surveys"
             element={(
-              <PageVisibilityRoute page="survey">
+              <PatientRoute><PageVisibilityRoute page="survey">
                 <MySurveys />
-              </PageVisibilityRoute>
+              </PageVisibilityRoute></PatientRoute>
             )}
           />
           <Route
             path="/surveys/:id"
             element={(
-              <PageVisibilityRoute page="survey">
+              <PatientRoute><PageVisibilityRoute page="survey">
                 <SurveyDetails />
-              </PageVisibilityRoute>
+              </PageVisibilityRoute></PatientRoute>
             )}
           />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -79,6 +89,14 @@ function AppContent() {
       </BrowserRouter>
     </MaxContext.Provider>
   );
+}
+
+function ActorHome() {
+  const { me, loading } = useAuth();
+  if (!loading && me?.actor_type === "employee") {
+    return <Navigate to="/doctor" replace />;
+  }
+  return <Home />;
 }
 
 export default function App() {

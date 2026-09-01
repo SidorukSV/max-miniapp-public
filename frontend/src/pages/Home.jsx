@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, CalendarDays, ChevronRight, Mail, RotateCcw, X } from "lucide-react";
+import { Bell, CalendarDays, ChevronRight, Mail, X } from "lucide-react";
 import PageLayout from "../components/PageLayout.jsx";
 import AuthScreen from "../components/AuthScreen.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
@@ -10,7 +10,7 @@ import { Avatar, Button, Card, IconButton, Stack, Typography } from "../componen
 import { BranchInfoRow, DoctorInfoRow } from "../components/VisitInfoRows.jsx";
 import { getAppointments, getStoredAccessToken, getSurveys, updateAppointment } from "../api.js";
 import { useAuth } from "../context/AuthContext.jsx";
-import { buildRescheduleUrl, normalizeAppointment } from "../modules/appointmentView.js";
+import { normalizeAppointment } from "../modules/appointmentView.js";
 import { getFallbackGradientByInitials } from "../modules/avatarGradient.js";
 import { isPageVisible } from "../modules/featureVisibility.js";
 
@@ -46,7 +46,7 @@ function stopAndRun(event, action) {
   action();
 }
 
-function AppointmentCard({ visit, onOpen, onReschedule, onCancel }) {
+function AppointmentCard({ visit, onOpen, onCancel }) {
   return (
     <Card className="visitCardClickable" onClick={() => onOpen(visit)}>
       <div className="appointmentHero">
@@ -61,10 +61,6 @@ function AppointmentCard({ visit, onOpen, onReschedule, onCancel }) {
           <BranchInfoRow clinic={visit.clinic} place={visit.place} />
         </Stack>
         <div className="appointmentActions">
-          <Button onClick={(event) => stopAndRun(event, () => onReschedule(visit))}>
-            <RotateCcw size={18} />
-            Перенести
-          </Button>
           <Button mode="secondary" className="dangerBtn" onClick={(event) => stopAndRun(event, () => onCancel(visit.id))}>
             <X size={18} />
             Отменить
@@ -75,7 +71,7 @@ function AppointmentCard({ visit, onOpen, onReschedule, onCancel }) {
   );
 }
 
-function MiniVisitCard({ visit, onOpen, onReschedule }) {
+function MiniVisitCard({ visit, onOpen }) {
   return (
     <Card className="miniVisitCard visitCardClickable" onClick={() => onOpen(visit)}>
       <Stack gap={8}>
@@ -85,11 +81,6 @@ function MiniVisitCard({ visit, onOpen, onReschedule }) {
         <DoctorInfoRow doctor={visit.doctor} specialization={visit.spec} />
         <BranchInfoRow clinic={visit.clinic} place={visit.place} />
       </Stack>
-      <div className="miniVisitCard__actions">
-        <Button mode="secondary" stretched onClick={(event) => stopAndRun(event, () => onReschedule(visit))}>
-          Перенести
-        </Button>
-      </div>
     </Card>
   );
 }
@@ -164,10 +155,6 @@ export default function Home() {
     return future[0] || appointments[0] || null;
   }, [appointments]);
 
-  function rescheduleVisit(visit) {
-    nav(buildRescheduleUrl(visit));
-  }
-
   function openVisitDetails(visit) {
     nav(`/visits/${encodeURIComponent(visit.id)}`, { state: { visit } });
   }
@@ -241,7 +228,6 @@ export default function Home() {
             <AppointmentCard
               visit={nearestAppointment}
               onOpen={openVisitDetails}
-              onReschedule={rescheduleVisit}
               onCancel={(id) => setCancelDialogVisitId(id)}
               pendingId={pendingVisitId}
             />
@@ -274,7 +260,6 @@ export default function Home() {
                     key={visit.id}
                     visit={visit}
                     onOpen={openVisitDetails}
-                    onReschedule={rescheduleVisit}
                   />
                 ))}
               </div>

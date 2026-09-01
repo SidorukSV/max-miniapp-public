@@ -1710,3 +1710,36 @@
     font-size: 9px;
   }
 }
+.doctorShift {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: baseline;
+}
+
+.doctorShift span,
+.doctorAppointment__body span {
+  color: var(--text-secondary, #6f7480);
+}
+
+.doctorAppointment {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 12px;
+}
+
+.doctorAppointment__time {
+  font-weight: 700;
+}
+
+.doctorAppointment__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (max-width: 380px) {
+  .doctorAppointment {
+    grid-template-columns: 1fr;
+  }
+}

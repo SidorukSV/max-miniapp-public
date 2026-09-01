@@ -24,7 +24,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { SpecializationIcon } from "../modules/specializationIcons.jsx";
 import { openExternalLink } from "../utils/safeUrl.js";
 
-const REDIRECT_QUERY_KEYS = ["appointmentId", "specializationId", "doctorId", "branchId"];
+const REDIRECT_QUERY_KEYS = ["specializationId", "doctorId", "branchId"];
 
 function normalizeSpec(item) {
   return {

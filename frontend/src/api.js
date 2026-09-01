@@ -90,6 +90,13 @@ export async function authSelectPatient({ auth_session_id, patient_id }) {
     });
 }
 
+export async function authSelectEmployee({ auth_session_id }) {
+    return apiFetch("/auth/select-employee", {
+        method: "POST",
+        body: JSON.stringify({ auth_session_id }),
+    });
+}
+
 export async function authSwitchPatient({ access_token, patient_id }) {
     return apiFetch("/auth/switch-patient", {
         method: "POST",
@@ -281,6 +288,13 @@ export async function getDoctorSchedule(access_token, { doctorId, branchId, date
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
+    });
+}
+
+export async function getDoctorWorkplaceSchedule(access_token, date) {
+    const params = new URLSearchParams({ date });
+    return apiFetch(`/doctor/schedule?${params}`, {
+        headers: { Authorization: `Bearer ${access_token}` },
     });
 }
 

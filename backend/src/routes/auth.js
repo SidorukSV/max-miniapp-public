@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { createSession, updateSession } from "../store/authSessions.js";
 import { config } from "../config.js";
-import { getPatientsByPhone } from "../services/onecRouter.js";
+import { getEmployeesByPhone, getPatientsByPhone } from "../services/onecRouter.js";
 import { normalizePhoneMiddleware, sessionMiddleware } from "../middleware/session.js";
 import { signAccessToken, signRefreshToken, verifyToken, ACCESS_TOKEN_EXPIRES_SECONDS, REFRESH_TOKEN_EXPIRES_SECONDS } from "../auth/jwt.js";
 import {
@@ -10,6 +10,8 @@ import {
     deleteRefreshToken,
     revokeUserRefreshTokens,
     revokeUserDeviceRefreshTokens,
+    revokeEmployeeRefreshTokens,
+    revokeEmployeeDeviceRefreshTokens,
 } from "../store/refreshTokens.js";
 import { verifyMaxInitData } from "../auth/maxInitData.js";
 import { verifyMaxContact } from "../auth/maxContact.js";
@@ -575,13 +577,27 @@ export async function authRoutes(app) {
             });
 
             let patients;
+            let employees = [];
             try {
-                patients = await getPatientsByPhone({
-                    phone: req.phone,
-                });
+                const [patientsResult, employeesResult] = await Promise.allSettled([
+                    getPatientsByPhone({ phone: req.phone }),
+                    getEmployeesByPhone({ phone: req.phone }),
+                ]);
 
-                if (!Array.isArray(patients)) {
-                    throw new Error("onec_patients_response_invalid");
+                if (patientsResult.status !== "fulfilled" || !Array.isArray(patientsResult.value)) {
+                    throw patientsResult.reason || new Error("onec_patients_response_invalid");
+                }
+                patients = patientsResult.value;
+
+                if (employeesResult.status === "fulfilled" && Array.isArray(employeesResult.value)) {
+                    employees = employeesResult.value;
+                } else {
+                    req.log.warn({
+                        event: "auth_employees_lookup_failed",
+                        endpoint: "/api/v1/auth/phone",
+                        operation: "getEmployeesByPhone",
+                        err: employeesResult.reason || new Error("onec_employees_response_invalid"),
+                    }, "Employee lookup is unavailable; patient authorization remains enabled");
                 }
             } catch (error) {
                 req.log.error({
@@ -597,9 +613,11 @@ export async function authRoutes(app) {
             const patients_sorted = [...patients].sort((a, b) => {
                 return String(a?.fullName || "").toUpperCase().localeCompare(String(b?.fullName || "").toUpperCase());
             });
+            const employee = employees.length === 1 ? employees[0] : null;
 
             req.session = await updateSession(session.id, {
                 patients: patients_sorted,
+                employee,
             });
 
             recordAuthAttempt({
@@ -611,7 +629,10 @@ export async function authRoutes(app) {
 
             return {
                 need_select_patient: true,
+                need_select_context: Boolean(employee && patients_sorted.length),
                 patients: patients_sorted,
+                employee,
+                employee_ambiguous: employees.length > 1,
             };
         });
 
@@ -670,6 +691,7 @@ export async function authRoutes(app) {
             }
 
             const tokenPayload = {
+                actor_type: "patient",
                 patient_id: patient.id,
                 phone: session.phone,
                 channel: session.channel || "unknown",
@@ -722,6 +744,46 @@ export async function authRoutes(app) {
 
         });
 
+    app.post("/api/v1/auth/select-employee",
+        { preHandler: [sessionMiddleware] },
+        async (req, reply) => {
+            const session = req.session;
+            const employee = session.employee;
+
+            if (!employee?.id) {
+                return sendUnifiedAuthFailure(reply);
+            }
+
+            const tokenPayload = {
+                actor_type: "employee",
+                employee_id: employee.id,
+                role: "doctor",
+                phone: session.phone,
+                channel: session.channel || "unknown",
+            };
+            const access_token = signAccessToken(tokenPayload);
+            const refresh_token = signRefreshToken(tokenPayload);
+            const decodedRefreshToken = verifyToken(refresh_token);
+            const refreshContext = buildRefreshTokenContext(req, tokenPayload.channel);
+
+            await saveRefreshToken(decodedRefreshToken.jti, {
+                ...tokenPayload,
+                ...refreshContext,
+                expiresAt: decodedRefreshToken.exp * 1000,
+            });
+            req.session = await updateSession(session.id, {
+                selected_employee_id: employee.id,
+            });
+            setRefreshCookie(req, reply, refresh_token, REFRESH_TOKEN_EXPIRES_SECONDS);
+
+            return {
+                access_token,
+                expires_in: ACCESS_TOKEN_EXPIRES_SECONDS,
+                ...(shouldExposeRefreshToken(tokenPayload.channel) ? { refresh_token } : {}),
+                employee,
+            };
+        });
+
     app.post("/api/v1/auth/switch-patient",
         { preHandler: [authMiddleware] },
         async (req, reply) => {
@@ -753,6 +815,7 @@ export async function authRoutes(app) {
             }
 
             const tokenPayload = {
+                actor_type: "patient",
                 patient_id: patient.id,
                 phone,
                 channel: channel || "unknown",
@@ -832,7 +895,10 @@ export async function authRoutes(app) {
         await deleteRefreshToken(decoded.jti);
 
         const tokenPayload = {
-            patient_id: stored.patient_id,
+            actor_type: stored.actor_type || "patient",
+            ...(stored.patient_id ? { patient_id: stored.patient_id } : {}),
+            ...(stored.employee_id ? { employee_id: stored.employee_id } : {}),
+            ...(stored.role ? { role: stored.role } : {}),
             phone: stored.phone,
             channel: stored.channel,
         };
@@ -887,10 +953,14 @@ export async function authRoutes(app) {
             if (decoded.token_type === "refresh") {
                 const stored = await getRefreshToken(decoded.jti);
 
-                if (stored?.patient_id) {
+                if (stored?.patient_id || stored?.employee_id) {
                     const scope = revoke_scope || (stored.device_id ? "device" : "token");
 
-                    if (scope === "user") {
+                    if (stored.employee_id && scope === "user") {
+                        revokedCount = await revokeEmployeeRefreshTokens(stored.employee_id);
+                    } else if (stored.employee_id && scope === "device" && stored.device_id) {
+                        revokedCount = await revokeEmployeeDeviceRefreshTokens(stored.employee_id, stored.device_id);
+                    } else if (scope === "user") {
                         revokedCount = await revokeUserRefreshTokens(stored.patient_id);
                     } else if (scope === "device" && stored.device_id) {
                         revokedCount = await revokeUserDeviceRefreshTokens(stored.patient_id, stored.device_id);

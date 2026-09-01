@@ -7,7 +7,6 @@ export default function SpecializationSection({
     specId,
     onPickSpec,
     isLoading,
-    isRescheduleMode,
 }) {
     return (
         <Container className="card">
@@ -19,7 +18,6 @@ export default function SpecializationSection({
                             key={item.id}
                             active={specId === item.id}
                             onClick={() => onPickSpec(item.id)}
-                            disabled={isRescheduleMode}
                         >
                             {item.title}
                         </Pill>

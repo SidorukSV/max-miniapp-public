@@ -36,7 +36,7 @@ function extractAppointmentTarget(payload) {
   const normalized = payload.trim();
 
   const compactMatch = normalized.match(
-    /^appointment_([0-9a-fA-F-]{36})_(confirm|reschedule|cancel)$/,
+    /^appointment_([0-9a-fA-F-]{36})_(confirm|cancel)$/,
   );
   if (compactMatch?.[1]) {
     return {
@@ -49,9 +49,10 @@ function extractAppointmentTarget(payload) {
     const params = new URLSearchParams(normalized);
     const appointmentId = params.get("appointment_id");
     if (appointmentId) {
+      const intent = params.get("intent") || "";
       return {
         appointmentId,
-        intent: params.get("intent") || "",
+        intent: intent === "confirm" || intent === "cancel" ? intent : "",
       };
     }
   } catch {
@@ -63,7 +64,7 @@ function extractAppointmentTarget(payload) {
     return null;
   }
 
-  const intentMatch = normalized.match(/(?:^|&)intent=(confirm|reschedule|cancel)(?:&|$)/);
+  const intentMatch = normalized.match(/(?:^|&)intent=(confirm|cancel)(?:&|$)/);
   return {
     appointmentId: idMatch[1],
     intent: intentMatch?.[1] || "",

@@ -5,6 +5,7 @@ import {
     authStart,
     authPhone,
     authSelectPatient,
+    authSelectEmployee,
     storeTokens,
     getMe,
     sendAuthDiagnostic,
@@ -79,6 +80,7 @@ export default function AuthScreen() {
 
     const [authSessionId, setAuthSessionId] = useState(null);
     const [patients, setPatients] = useState([]);
+    const [employee, setEmployee] = useState(null);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
     const [manualPhone, setManualPhone] = useState("");
@@ -217,12 +219,17 @@ export default function AuthScreen() {
             });
 
             const matchedPatients = phoneResult.patients || [];
+            const matchedEmployee = phoneResult.employee || null;
             reportAuthDiagnostic("auth_phone_completed", traceId, {
                 patientCount: matchedPatients.length,
             });
             setPatients(matchedPatients);
+            setEmployee(matchedEmployee);
+            if (phoneResult.employee_ambiguous) {
+                setError("К номеру привязано несколько сотрудников. Обратитесь к администратору клиники.");
+            }
 
-            if (matchedPatients.length === 1) {
+            if (matchedPatients.length === 1 && !matchedEmployee) {
                 stage = "select_patient";
                 await handleSelectPatient(matchedPatients[0].id, start.auth_session_id);
             }
@@ -235,6 +242,23 @@ export default function AuthScreen() {
 
             const diagnosticCode = traceId.slice(-8);
             setError(`${getAuthErrorMessage(err)} Код диагностики: ${diagnosticCode}`);
+        } finally {
+            setBusy(false);
+        }
+    }
+
+    async function handleSelectEmployee(sessionId = authSessionId) {
+        if (!sessionId) return;
+
+        setBusy(true);
+        setError("");
+        try {
+            const result = await authSelectEmployee({ auth_session_id: sessionId });
+            await storeTokens(result);
+            setMe(await getMe(result.access_token));
+        } catch (err) {
+            console.error(err);
+            setError("Не удалось войти в рабочее место врача.");
         } finally {
             setBusy(false);
         }
@@ -267,7 +291,7 @@ export default function AuthScreen() {
     return (
         <PageLayout
             showBottom={false}
-            showBottomButton={!patients.length}
+            showBottomButton={!patients.length && !employee}
             bottomButtonText={busy ? "Подтверждаем номер..." : "Подтвердить номер телефона"}
             onBottomButtonClick={handleStart}
             bottomButtonDisabled={busy}
@@ -288,7 +312,7 @@ export default function AuthScreen() {
                 <Container className="card">
                     <Flex direction="column" gap={10}>
                         <Typography.Title level={2}>Вход в личный кабинет</Typography.Title>
-                        {!patients.length && (
+                        {!patients.length && !employee && (
                             <Typography.Label className="roleLine">
                                 Подтвердите номер телефона, чтобы продолжить.
                             </Typography.Label>
@@ -329,6 +353,22 @@ export default function AuthScreen() {
                                         onClick={() => handleSelectPatient(patient.id)}
                                     />
                                 ))}
+                            </CellList>
+                        )}
+
+                        {employee && (
+                            <CellList
+                                header={<CellHeader titleStyle="caps">Рабочий профиль</CellHeader>}
+                                filled
+                                mode="island"
+                            >
+                                <CellSimple
+                                    height="normal"
+                                    title={employee.fullName}
+                                    subtitle="Войти как врач"
+                                    showChevron
+                                    onClick={() => handleSelectEmployee()}
+                                />
                             </CellList>
                         )}
 

@@ -44,15 +44,3 @@ export function normalizeAppointment(item, index = 0) {
     isApproved: item?.isApproved,
   };
 }
-
-export function buildRescheduleUrl(visit) {
-  const params = new URLSearchParams({
-    appointmentId: visit.id,
-    specializationId: visit.specializationId || "",
-    doctorId: visit.doctorId || "",
-  });
-
-  if (visit.branchId) params.set("branchId", visit.branchId);
-
-  return `/book/flow?${params.toString()}`;
-}

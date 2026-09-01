@@ -1,7 +1,9 @@
-import { authMiddleware } from "../middleware/auth.js";
+import { doctorAuthMiddleware, patientAuthMiddleware } from "../middleware/auth.js";
 import {
     createAppointmentDocument,
     getDoctorSchedule,
+    getDoctorAppointments,
+    getDoctorShifts,
     getAppointmentsDocuments,
     getMedicalDocuments,
     getAppointmentsSchedule,
@@ -25,7 +27,7 @@ function getRequestPayload(body) {
 
 export async function documentsRoutes(app) {
     app.get("/api/v1/documents/appointments",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req) => {
             const { patient_id } = req.user;
             const items = await getAppointmentsDocuments({ patient_id });
@@ -36,7 +38,7 @@ export async function documentsRoutes(app) {
         });
 
     app.get("/api/v1/documents/schedule",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req) => {
             const { doctorId, branchId, date, format } = req.query || {};
 
@@ -55,7 +57,7 @@ export async function documentsRoutes(app) {
         });
 
     app.get("/api/v1/documents/medical",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req) => {
             const { patient_id } = req.user;
             const items = await getMedicalDocuments({ patient_id });
@@ -66,7 +68,7 @@ export async function documentsRoutes(app) {
         });
 
     app.get("/api/v1/documents/surveys",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req) => {
             const { patient_id } = req.user;
             const items = await getSurveysDocuments({ patient_id });
@@ -77,7 +79,7 @@ export async function documentsRoutes(app) {
         });
 
     app.get("/api/v1/documents/survey",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req) => {
             const { surveyId } = req.query || {};
 
@@ -90,7 +92,7 @@ export async function documentsRoutes(app) {
         });
 
     app.post("/api/v1/documents/appointments",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req) => {
             const { patient_id } = req.user;
             const payload = {
@@ -103,7 +105,7 @@ export async function documentsRoutes(app) {
         });
 
     app.put("/api/v1/documents/appointments",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         
         async (req) => {
             const { patient_id } = req.user;
@@ -117,10 +119,27 @@ export async function documentsRoutes(app) {
         });
 
     app.put("/api/v1/documents/surveys",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req) => {
             const payload = getRequestPayload(req.body);
             const item = await updateSurveyDocument({ payload });
             return { item };
+        });
+
+    app.get("/api/v1/doctor/schedule",
+        { preHandler: [doctorAuthMiddleware] },
+        async (req, reply) => {
+            const date = String(req.query?.date || "");
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+                return reply.code(400).send({ error: "date_required" });
+            }
+
+            const doctorId = req.user.employee_id;
+            const [shifts, appointments] = await Promise.all([
+                getDoctorShifts({ doctorId, date }),
+                getDoctorAppointments({ doctorId, date }),
+            ]);
+
+            return { date, shifts, appointments };
         });
 }

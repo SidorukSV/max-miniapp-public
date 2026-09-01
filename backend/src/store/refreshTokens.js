@@ -3,6 +3,8 @@ import { getRedisClient } from "./redisClient.js";
 const REFRESH_TOKEN_PREFIX = "refresh_token:";
 const USER_TOKENS_PREFIX = "refresh_user_tokens:";
 const USER_DEVICE_TOKENS_PREFIX = "refresh_user_device_tokens:";
+const EMPLOYEE_TOKENS_PREFIX = "refresh_employee_tokens:";
+const EMPLOYEE_DEVICE_TOKENS_PREFIX = "refresh_employee_device_tokens:";
 
 function getRefreshTokenKey(jti) {
     return `${REFRESH_TOKEN_PREFIX}${jti}`;
@@ -16,6 +18,14 @@ function getUserDeviceTokensKey(patientId, deviceId) {
     return `${USER_DEVICE_TOKENS_PREFIX}${patientId}:${deviceId}`;
 }
 
+function getEmployeeTokensKey(employeeId) {
+    return `${EMPLOYEE_TOKENS_PREFIX}${employeeId}`;
+}
+
+function getEmployeeDeviceTokensKey(employeeId, deviceId) {
+    return `${EMPLOYEE_DEVICE_TOKENS_PREFIX}${employeeId}:${deviceId}`;
+}
+
 function getIndexKeys(data) {
     const keys = [];
 
@@ -25,6 +35,11 @@ function getIndexKeys(data) {
         if (data.device_id) {
             keys.push(getUserDeviceTokensKey(data.patient_id, data.device_id));
         }
+    }
+
+    if (data?.employee_id) {
+        keys.push(getEmployeeTokensKey(data.employee_id));
+        if (data.device_id) keys.push(getEmployeeDeviceTokensKey(data.employee_id, data.device_id));
     }
 
     return keys;
@@ -164,4 +179,14 @@ export async function revokeUserDeviceRefreshTokens(patientId, deviceId) {
     }
 
     return revokeByIndexKey(getUserDeviceTokensKey(patientId, deviceId));
+}
+
+export async function revokeEmployeeRefreshTokens(employeeId) {
+    if (!employeeId) return 0;
+    return revokeByIndexKey(getEmployeeTokensKey(employeeId));
+}
+
+export async function revokeEmployeeDeviceRefreshTokens(employeeId, deviceId) {
+    if (!employeeId || !deviceId) return 0;
+    return revokeByIndexKey(getEmployeeDeviceTokensKey(employeeId, deviceId));
 }

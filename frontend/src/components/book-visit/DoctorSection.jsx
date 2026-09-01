@@ -10,7 +10,6 @@ export default function DoctorSection({
     doctorId,
     branchId,
     onPickDoctor,
-    isRescheduleMode,
 }) {
     return (
         <Container className={`card ${specId ? "" : "card--disabled"}`}>
@@ -28,7 +27,6 @@ export default function DoctorSection({
                                         key={`${doc.branchId}:${doc.doctorId}`}
                                         active={doctorId === doc.doctorId && branchId === doc.branchId}
                                         onClick={() => onPickDoctor(doc.doctorId, doc.branchId)}
-                                        disabled={isRescheduleMode}
                                     >
                                         {getDoctorLabel(doc)}
                                     </Pill>

@@ -6,7 +6,6 @@ import {
     getCatalogSpecializationsBySchedule,
     getDoctorSchedule,
     getStoredAccessToken,
-    updateAppointment,
 } from "../api";
 import {
     buildMonthGrid,
@@ -25,11 +24,9 @@ export default function useBookVisitFlow() {
     const [searchParams] = useSearchParams();
     const accessToken = getStoredAccessToken();
 
-    const appointmentId = searchParams.get("appointmentId") || "";
     const initialSpecId = searchParams.get("specializationId") || "";
     const initialDoctorId = searchParams.get("doctorId") || "";
     const initialBranchId = searchParams.get("branchId") || "";
-    const isRescheduleMode = Boolean(appointmentId);
 
     const [loadingSpecialties, setLoadingSpecialties] = useState(false);
     const [loadingDoctors, setLoadingDoctors] = useState(false);
@@ -93,15 +90,10 @@ export default function useBookVisitFlow() {
             }
         }
 
-        if (isRescheduleMode && initialSpecId) {
-            setSpecId(initialSpecId);
-            return;
-        }
-
         if (!specId) {
             setSpecId(specialties[0].id);
         }
-    }, [isRescheduleMode, initialSpecId, specialties, specId]);
+    }, [initialSpecId, specialties, specId]);
 
     useEffect(() => {
         async function loadDoctors() {
@@ -165,21 +157,12 @@ export default function useBookVisitFlow() {
             }
         }
 
-        if (isRescheduleMode && initialDoctorId) {
-            const matched = doctors.find((item) => item.doctorId === initialDoctorId);
-            if (matched) {
-                setDoctorId(matched.doctorId);
-                setBranchId(matched.branchId);
-                return;
-            }
-        }
-
         const first = doctors[0];
         if (!doctorId && first) {
             setDoctorId(first.doctorId);
             setBranchId(first.branchId);
         }
-    }, [doctors, doctorId, isRescheduleMode, initialDoctorId, initialBranchId]);
+    }, [doctors, doctorId, initialDoctorId, initialBranchId]);
 
     useEffect(() => {
         async function loadDates() {
@@ -367,16 +350,11 @@ export default function useBookVisitFlow() {
             setSaving(true);
             setError("");
 
-            const response = isRescheduleMode
-                ? await updateAppointment(accessToken, {
-                    appointmentId,
-                    ...payload,
-                })
-                : await createAppointment(accessToken, payload);
+            const response = await createAppointment(accessToken, payload);
 
             nav("/book/summary", {
                 state: {
-                    mode: isRescheduleMode ? "reschedule" : "create",
+                    mode: "create",
                     appointment: response?.item || null,
                     summary: {
                         specialization: selectedSpecialty?.title || "—",
@@ -413,7 +391,6 @@ export default function useBookVisitFlow() {
             selectedDoctor,
             selectedSlot,
             showMissingWarning,
-            isRescheduleMode,
             canConfirm,
             error,
         },

@@ -16,8 +16,8 @@ export default function BookVisitFlow() {
   return (
     <PageLayout
       showBottom={false}
-      headerTitle={state.isRescheduleMode ? "Перенос записи" : "Онлайн-запись"}
-      bottomButtonText={loading.saving ? "Сохраняем..." : state.isRescheduleMode ? "Перенести запись" : "Подтвердить запись"}
+      headerTitle="Онлайн-запись"
+      bottomButtonText={loading.saving ? "Сохраняем..." : "Подтвердить запись"}
       onBottomButtonClick={actions.onBottomButtonClick}
       before={state.showMissingWarning ? (
         <Typography.Label className="bookVisitWarning">
@@ -29,7 +29,7 @@ export default function BookVisitFlow() {
     >
       <Stack gap={12}>
         <SectionTitle
-          title={state.isRescheduleMode ? "Перенос записи" : "Запись на приём"}
+          title="Запись на приём"
           subtitle="Выберите параметры приёма"
         />
 
@@ -44,7 +44,6 @@ export default function BookVisitFlow() {
           specId={state.specId}
           onPickSpec={actions.onPickSpec}
           isLoading={loading.specialties}
-          isRescheduleMode={state.isRescheduleMode}
         />
 
         <DoctorSection
@@ -54,7 +53,6 @@ export default function BookVisitFlow() {
           doctorId={state.doctorId}
           branchId={state.branchId}
           onPickDoctor={actions.onPickDoctor}
-          isRescheduleMode={state.isRescheduleMode}
         />
 
         <DateSection

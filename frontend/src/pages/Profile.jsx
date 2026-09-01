@@ -64,7 +64,7 @@ export default function Profile() {
     .join("");
   const patientsByPhone = Array.isArray(me?.patients_by_phone) ? me.patients_by_phone : [];
   const balance = useMemo(() => Number(me?.bonus || 0), [me?.bonus]);
-  const bonusesVisible = isPageVisible(me, "bonuses");
+  const bonusesVisible = me?.actor_type !== "employee" && isPageVisible(me, "bonuses");
 
   useEffect(() => {
     async function loadVersion() {

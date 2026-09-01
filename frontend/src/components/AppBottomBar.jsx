@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { CalendarCheck, IdCard, LayoutGrid, QrCode, UserRound } from "lucide-react";
+import { CalendarCheck, IdCard, LayoutGrid, QrCode, Stethoscope, UserRound } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { isPageVisible } from "../modules/featureVisibility.js";
 
@@ -20,7 +20,13 @@ function isTabActive(pathname, tab) {
 export default function AppBottomBar() {
   const { pathname } = useLocation();
   const { me } = useAuth();
-  const visibleTabs = TABS.filter((tab) => (
+  const tabs = me?.actor_type === "employee"
+    ? [
+      { to: "/doctor", label: "Расписание", icon: Stethoscope },
+      { to: "/profile", label: "Профиль", icon: UserRound },
+    ]
+    : TABS;
+  const visibleTabs = tabs.filter((tab) => (
     !tab.visibilityPage || (Boolean(me) && isPageVisible(me, tab.visibilityPage))
   ));
 

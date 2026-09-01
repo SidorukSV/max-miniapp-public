@@ -274,6 +274,33 @@ export async function getPatientById({ patient_id}) {
 
 }
 
+export async function getEmployeesByPhone({ phone }) {
+    const oneCConfig = getOneCConfig();
+    const params = new URLSearchParams({ search_type: "ByPhone", phone });
+    const data = await onecFetch(oneCConfig.url.concat(`/catalogs/employees?${params}`), {
+        method: "GET",
+        headers: { Authorization: `Basic ${oneCConfig.basicAuth}` },
+    });
+
+    return Array.isArray(data) ? data : [];
+}
+
+export async function getEmployeeById({ employee_id }) {
+    const oneCConfig = getOneCConfig();
+    const params = new URLSearchParams({ search_type: "ByID", doctorId: employee_id });
+    const data = await onecFetch(oneCConfig.url.concat(`/catalogs/employees?${params}`), {
+        method: "GET",
+        headers: { Authorization: `Basic ${oneCConfig.basicAuth}` },
+    });
+
+    if (!data || data.error) return null;
+    return {
+        id: data.doctorId,
+        fullName: data.doctorTitle,
+        role: "doctor",
+    };
+}
+
 export async function getBonusTransactions({ patient_id }) {
     const oneCConfig = getOneCConfig();
     const endpoint = "/transactions/bonus";
@@ -326,6 +353,21 @@ export async function getAppointmentsDocuments({ patient_id }) {
     }
 
     return data;
+}
+
+export async function getDoctorAppointments({ doctorId, date }) {
+    const oneCConfig = getOneCConfig();
+    const params = new URLSearchParams({
+        search_type: "ByDoctor",
+        doctorId,
+        date,
+    });
+    const data = await onecFetch(oneCConfig.url.concat(`/documents/appointments?${params}`), {
+        method: "GET",
+        headers: { Authorization: `Basic ${oneCConfig.basicAuth}` },
+    });
+
+    return Array.isArray(data) ? data : [];
 }
 
 export async function getSurveysDocuments({ patient_id }) {
@@ -585,6 +627,15 @@ export async function getDoctorSchedule({ doctorId, branchId, date, format }) {
     }
 
     return data;
+}
+
+export async function getDoctorShifts({ doctorId, date }) {
+    return getDoctorSchedule({
+        doctorId,
+        branchId: "",
+        date,
+        format: "DoctorWorkplace",
+    });
 }
 
 export async function createAppointmentDocument({ payload }) {

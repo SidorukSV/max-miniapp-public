@@ -6,8 +6,6 @@ export default function BookVisitSummary() {
     const nav = useNavigate();
     const { state } = useLocation();
     const summary = state?.summary;
-    const mode = state?.mode;
-
     return (
         <PageLayout
             showBottom
@@ -18,7 +16,7 @@ export default function BookVisitSummary() {
             <Flex direction="column" gap={10}>
                 <Container className="card">
                     <Typography.Title level={2}>
-                        {mode === "reschedule" ? "Запись перенесена" : "Запись создана"}
+                        Запись создана
                     </Typography.Title>
                     <Typography.Label style={{ marginTop: 8 }}>
                         Проверьте детали записи

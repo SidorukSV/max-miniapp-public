@@ -1,8 +1,9 @@
-import { authMiddleware } from "../middleware/auth.js";
+import { authMiddleware, patientAuthMiddleware } from "../middleware/auth.js";
 import {
     DEFAULT_APPLICATION_SETTINGS,
     getApplicationSettings,
     getBonusTransactions,
+    getEmployeeById,
     getPatientById,
     getPatientsByPhone,
 } from "../services/onecRouter.js";
@@ -12,8 +13,21 @@ export async function meRoutes(app) {
     app.get("/api/v1/me",
         { preHandler: [authMiddleware] },
         async (req, reply) => {
-            const { patient_id, phone, channel } = req.user;
+            const { actor_type, employee_id, patient_id, phone, channel } = req.user;
             try {
+                if (actor_type === "employee") {
+                    const employee = await getEmployeeById({ employee_id });
+                    if (!employee) return sendApiError(reply, 404, "employee_not_found");
+
+                    return {
+                        ...employee,
+                        actor_type: "employee",
+                        employee_id,
+                        phone,
+                        channel,
+                    };
+                }
+
                 const [patient, patientsByPhone, applicationSettings] = await Promise.all([
                     getPatientById({ patient_id }),
                     getPatientsByPhone({ phone }).catch(() => []),
@@ -35,6 +49,7 @@ export async function meRoutes(app) {
 
                 return {
                     ...patient,
+                    actor_type: "patient",
                     phone,
                     channel,
                     patients_by_phone: patientsByPhoneSorted,
@@ -51,7 +66,7 @@ export async function meRoutes(app) {
         });
 
     app.get("/api/v1/me/bonus-transactions",
-        { preHandler: [authMiddleware] },
+        { preHandler: [patientAuthMiddleware] },
         async (req, reply) => {
             const { patient_id } = req.user;
             try {

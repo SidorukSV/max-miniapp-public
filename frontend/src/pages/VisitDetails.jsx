@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CalendarDays, Check, RotateCcw, X } from "lucide-react";
+import { CalendarDays, Check, X } from "lucide-react";
 import PageLayout from "../components/PageLayout.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
 import QuestionDialog from "../components/QuestionDialog.jsx";
 import { BranchInfoRow, DoctorInfoRow } from "../components/VisitInfoRows.jsx";
 import { Button, Card, Flex, Stack, Typography } from "../components/ui.jsx";
 import { getAppointments, getStoredAccessToken, updateAppointment } from "../api.js";
-import { buildRescheduleUrl, normalizeAppointment } from "../modules/appointmentView.js";
+import { normalizeAppointment } from "../modules/appointmentView.js";
 
 export default function VisitDetails() {
   const nav = useNavigate();
@@ -81,11 +81,6 @@ export default function VisitDetails() {
     }
   }
 
-  function rescheduleVisit() {
-    if (!visit) return;
-    nav(buildRescheduleUrl(visit));
-  }
-
   async function cancelVisit() {
     if (!accessToken || !visit) return;
 
@@ -153,10 +148,6 @@ export default function VisitDetails() {
                 <Button onClick={confirmVisit} disabled={pendingAction === "confirm" || visit.isApproved === true}>
                   <Check size={17} />
                   Подтвердить
-                </Button>
-                <Button mode="secondary" onClick={rescheduleVisit} disabled={Boolean(pendingAction)}>
-                  <RotateCcw size={17} />
-                  Перенести
                 </Button>
                 <Button
                   mode="secondary"
