@@ -3,6 +3,10 @@
 	<WindowOpeningMode>LockOwnerWindow</WindowOpeningMode>
 	<UseForFoldersAndItems>Items</UseForFoldersAndItems>
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<Events>
+		<Event name="OnCreateAtServer">бит_ПриСозданииНаСервере</Event>
+		<Event name="BeforeWriteAtServer">бит_ПередЗаписьюНаСервере</Event>
+	</Events>
 	<ChildItems>
 		<UsualGroup name="ГруппаИдентификаторИспользование" id="28">
 			<Title>
@@ -109,12 +113,22 @@
 			<ContextMenu name="ИмяПользователяКонтекстноеМеню" id="14"/>
 			<ExtendedTooltip name="ИмяПользователяРасширеннаяПодсказка" id="15"/>
 		</InputField>
-		<InputField name="НапоминатьЗаЧасовMAX" id="32">
-			<DataPath>Объект.НапоминатьЗаЧасовMAX</DataPath>
-			<EditMode>EnterOnInput</EditMode>
-			<ContextMenu name="НапоминатьЗаЧасовMAXКонтекстноеМеню" id="33"/>
-			<ExtendedTooltip name="НапоминатьЗаЧасовMAXРасширеннаяПодсказка" id="34"/>
-		</InputField>
+		<Table name="ИнтервалыНапоминанийMAX" id="35">
+			<DataPath>Объект.ИнтервалыНапоминанийMAX</DataPath>
+			<ContextMenu name="ИнтервалыНапоминанийMAXКонтекстноеМеню" id="36"/>
+			<AutoCommandBar name="ИнтервалыНапоминанийMAXКоманднаяПанель" id="37"/>
+			<SearchStringAddition name="ИнтервалыНапоминанийMAXСтрокаПоиска" id="38"/>
+			<ViewStatusAddition name="ИнтервалыНапоминанийMAXСостояниеПросмотра" id="39"/>
+			<SearchControlAddition name="ИнтервалыНапоминанийMAXУправлениеПоиском" id="40"/>
+			<ChildItems>
+				<InputField name="ЧасовДоПриема" id="41">
+					<DataPath>Объект.ИнтервалыНапоминанийMAX.ЧасовДоПриема</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<ContextMenu name="ЧасовДоПриемаКонтекстноеМеню" id="42"/>
+					<ExtendedTooltip name="ЧасовДоПриемаРасширеннаяПодсказка" id="43"/>
+				</InputField>
+			</ChildItems>
+		</Table>
 		<Button name="СоздатьРассылкиЗаписей" id="30">
 			<Type>UsualButton</Type>
 			<CommandName>Form.Command.СоздатьРассылкиЗаписей</CommandName>
