@@ -35,9 +35,18 @@ function normalizeAuthDate(authDate) {
         throw new Error("contact_auth_date_invalid");
     }
 
-    const timestamp = Number(value);
+    const rawTimestamp = Number(value);
 
-    if (!Number.isSafeInteger(timestamp) || timestamp <= 0) {
+    if (!Number.isSafeInteger(rawTimestamp) || rawTimestamp <= 0) {
+        throw new Error("contact_auth_date_invalid");
+    }
+
+    let timestamp;
+    if (value.length === 10) {
+        timestamp = rawTimestamp;
+    } else if (value.length === 13) {
+        timestamp = Math.floor(rawTimestamp / 1000);
+    } else {
         throw new Error("contact_auth_date_invalid");
     }
 

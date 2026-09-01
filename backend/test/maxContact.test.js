@@ -43,6 +43,33 @@ test("valid MAX contact proof is accepted", () => {
     });
 });
 
+test("MAX contact freshness accepts a millisecond authDate without changing its signature", () => {
+    const authDateMilliseconds = `${AUTH_DATE}000`;
+    const hash = createMaxContactHash({
+        phone: PHONE,
+        authDate: authDateMilliseconds,
+        userId: USER_ID,
+        botToken: BOT_TOKEN,
+    });
+
+    const result = verifyMaxContact({
+        phone: PHONE,
+        authDate: authDateMilliseconds,
+        userId: USER_ID,
+        hash,
+        botToken: BOT_TOKEN,
+        maxAgeSeconds: 300,
+        nowUnix: Number(AUTH_DATE) + 60,
+    });
+
+    assert.deepEqual(result, {
+        ok: true,
+        authDate: Number(AUTH_DATE),
+        phone: "79991234567",
+        userId: USER_ID,
+    });
+});
+
 test("MAX contact proof rejects a substituted phone", () => {
     assert.throws(() => verifyMaxContact({
         phone: "+79991234568",
@@ -105,6 +132,15 @@ test("MAX contact proof requires hash and valid phone", () => {
         userId: USER_ID,
         botToken: BOT_TOKEN,
     }), /contact_phone_invalid/);
+
+    assert.throws(() => verifyMaxContact({
+        phone: PHONE,
+        authDate: "170000000000",
+        userId: USER_ID,
+        hash: HASH,
+        botToken: BOT_TOKEN,
+        nowUnix: Number(AUTH_DATE),
+    }), /contact_auth_date_invalid/);
 });
 
 test("phone normalization produces one Russian canonical form", () => {
