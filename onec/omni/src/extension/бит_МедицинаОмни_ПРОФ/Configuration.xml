@@ -58,7 +58,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">Role.бит_омни_ОсновнаяРоль</xr:Item>
 			</DefaultRoles>
 			<Vendor>Первый Бит, офис Челябинск</Vendor>
-			<Version>1.1.0.31</Version>
+			<Version>1.1.0.34</Version>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
 			<BriefInformation/>
 			<DetailedInformation/>
@@ -70,6 +70,7 @@
 		<ChildObjects>
 			<Language>Русский</Language>
 			<Subsystem>бит_омни</Subsystem>
+			<StyleItem>ПоясняющийТекст</StyleItem>
 			<CommonPicture>ВыделитьОсновным</CommonPicture>
 			<CommonPicture>бит_омни_Логотип</CommonPicture>
 			<CommonPicture>ПоискНоменклатуры_16х16</CommonPicture>
@@ -144,6 +145,9 @@
 			<Enum>бит_омни_ИконкиСпециализаций</Enum>
 			<Enum>бит_омни_ВидыОтправителейMAX</Enum>
 			<Enum>бит_омни_СостоянияДиалоговMAX</Enum>
+			<Enum>ПараметрыУчетнойПолитики</Enum>
+			<Enum>ПоложениеСостоянияЗаявкиВЖурналеЗаписи</Enum>
+			<Enum>ТипыСостоянийЗаявок</Enum>
 			<Report>КалендарьПланирования</Report>
 			<DataProcessor>бит_омни_ЕдиныйЧат</DataProcessor>
 			<InformationRegister>бит_омни_ЗначенияНастроек</InformationRegister>
@@ -154,6 +158,7 @@
 			<InformationRegister>бит_омни_СостоянияДиалоговMAX</InformationRegister>
 			<InformationRegister>бит_омни_СтандартныеРассылкиMAX</InformationRegister>
 			<InformationRegister>бит_омни_ОчередьРассылокMAX</InformationRegister>
+			<InformationRegister>УчетнаяПолитика</InformationRegister>
 			<AccumulationRegister>НакопленияПоСкидкам</AccumulationRegister>
 		</ChildObjects>
 	</Configuration>

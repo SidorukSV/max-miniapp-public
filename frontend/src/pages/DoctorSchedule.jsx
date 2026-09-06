@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { ChevronRight, X } from "lucide-react";
 import AuthScreen from "../components/AuthScreen.jsx";
 import PageLayout from "../components/PageLayout.jsx";
-import { Card, Input, Stack, Typography } from "../components/ui.jsx";
+import { Card, IconButton, Input, Stack, Typography } from "../components/ui.jsx";
 import { getDoctorWorkplaceSchedule, getStoredAccessToken } from "../api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -17,12 +18,92 @@ function timeOf(value) {
   return match?.[1] || String(value).slice(0, 5);
 }
 
+function AppointmentDetails({ appointment, onClose }) {
+  useEffect(() => {
+    if (!appointment) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [appointment, onClose]);
+
+  if (!appointment) return null;
+
+  const comment = String(appointment.comment || "").trim();
+
+  return (
+    <div
+      className="doctorAppointmentDetailsOverlay"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        className="doctorAppointmentDetails"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="doctor-appointment-details-title"
+      >
+        <header className="doctorAppointmentDetails__header">
+          <Typography.Title level={2} id="doctor-appointment-details-title">Заявка</Typography.Title>
+          <IconButton onClick={onClose} aria-label="Закрыть заявку">
+            <X size={22} aria-hidden="true" />
+          </IconButton>
+        </header>
+
+        <div className="doctorAppointmentDetails__content">
+          <div className="doctorAppointmentDetails__row">
+            <span>Время</span>
+            <strong>{timeOf(appointment.datetimeBegin)}–{timeOf(appointment.datetimeEnd)}</strong>
+          </div>
+          <div className="doctorAppointmentDetails__row">
+            <span>Пациент</span>
+            <strong>{appointment.patientTitle || "Пациент не указан"}</strong>
+          </div>
+          <div className="doctorAppointmentDetails__row">
+            <span>Телефон</span>
+            <strong>{appointment.patientPhone || "Телефон не указан"}</strong>
+          </div>
+          <div className="doctorAppointmentDetails__row">
+            <span>Услуга</span>
+            <strong>{appointment.serviceTitle || appointment.specializationTitle || "Приём"}</strong>
+          </div>
+          <div className="doctorAppointmentDetails__row">
+            <span>Статус</span>
+            <strong>{appointment.conditionTitle || "Статус не указан"}</strong>
+          </div>
+          {appointment.branchTitle ? (
+            <div className="doctorAppointmentDetails__row">
+              <span>Филиал</span>
+              <strong>{appointment.branchTitle}</strong>
+            </div>
+          ) : null}
+          <div className="doctorAppointmentDetails__comment">
+            <span>Комментарий</span>
+            <p>{comment || "Комментарий не указан"}</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export default function DoctorSchedule() {
   const { me, loading, isAuthorized } = useAuth();
   const [date, setDate] = useState(todayIso);
   const [data, setData] = useState({ shifts: [], appointments: [] });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   useEffect(() => {
     if (me?.actor_type !== "employee") return;
@@ -94,24 +175,36 @@ export default function DoctorSchedule() {
         <Stack gap={10}>
           <Typography.Title level={3}>Текущие заявки — {appointments.length}</Typography.Title>
           {appointments.map((appointment, index) => (
-            <Card key={`${appointment.appointment_id}-${appointment.serviceId || index}`}>
+            <button
+              type="button"
+              className="card doctorAppointmentCard"
+              key={`${appointment.appointment_id}-${appointment.serviceId || index}`}
+              onClick={() => setSelectedAppointment(appointment)}
+              aria-label={`Открыть заявку пациента ${appointment.patientTitle || "без имени"}`}
+            >
               <div className="doctorAppointment">
                 <div className="doctorAppointment__time">
                   {timeOf(appointment.datetimeBegin)}–{timeOf(appointment.datetimeEnd)}
                 </div>
                 <div className="doctorAppointment__body">
                   <strong>{appointment.patientTitle || "Пациент не указан"}</strong>
+                  <span>{appointment.patientPhone ? `Телефон: ${appointment.patientPhone}` : "Телефон не указан"}</span>
                   <span>{appointment.serviceTitle || appointment.specializationTitle || "Приём"}</span>
                   <span>{appointment.conditionTitle || "Статус не указан"}</span>
                   {appointment.branchTitle ? <span>{appointment.branchTitle}</span> : null}
+                  {String(appointment.comment || "").trim() ? (
+                    <span className="doctorAppointment__commentPreview">Комментарий: {appointment.comment}</span>
+                  ) : null}
                 </div>
+                <ChevronRight className="doctorAppointment__chevron" size={22} aria-hidden="true" />
               </div>
-            </Card>
+            </button>
           ))}
           {!busy && !appointments.length ? <Typography.Label>На выбранную дату заявок нет.</Typography.Label> : null}
           {error ? <Typography.Label className="authErrorLabel">{error}</Typography.Label> : null}
         </Stack>
       </Stack>
+      <AppointmentDetails appointment={selectedAppointment} onClose={() => setSelectedAppointment(null)} />
     </PageLayout>
   );
 }

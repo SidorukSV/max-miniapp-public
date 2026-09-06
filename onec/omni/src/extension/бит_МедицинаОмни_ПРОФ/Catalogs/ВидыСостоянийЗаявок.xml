@@ -28,6 +28,12 @@
 			<Name>ВидыСостоянийЗаявок</Name>
 			<Comment/>
 			<ExtendedConfigurationObject>d71a3a1e-6cab-40fe-80fa-d1d48e1222c6</ExtendedConfigurationObject>
+			<Hierarchical>false</Hierarchical>
+			<CodeLength>0</CodeLength>
+			<DescriptionLength>50</DescriptionLength>
+			<CodeType>Number</CodeType>
+			<CodeAllowedLength>Fixed</CodeAllowedLength>
+			<DefaultObjectForm>Catalog.ВидыСостоянийЗаявок.Form.бит_омни_ФормаЭлемента</DefaultObjectForm>
 		</Properties>
 		<ChildObjects>
 			<Attribute uuid="9da5ff86-b60b-419f-af4e-a4b81db50f88">
@@ -74,7 +80,38 @@
 					<DataHistory>Use</DataHistory>
 				</Properties>
 			</Attribute>
-			<Form>ФормаЭлемента</Form>
+			<Form>бит_омни_ФормаЭлемента</Form>
+
+			<Attribute uuid="82f6f54c-747c-43f5-ac58-c82f13ec99d2">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ТипСостояния</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>a13471a1-209b-424f-b8e4-8f38d79bc865</ExtendedConfigurationObject>
+					<Type><v8:Type>cfg:EnumRef.ТипыСостоянийЗаявок</v8:Type></Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="51688027-93aa-457b-8c61-eace6f8a87c9">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Цвет</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>35eaa110-9f95-4871-82c2-842f40336a8a</ExtendedConfigurationObject>
+					<Type><v8:Type>v8:ValueStorage</v8:Type></Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="c67051d6-bcb3-4722-9223-f1eb2ba37469">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ПоложениеВЖурналеЗаписи</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>d0f57285-852c-43cf-b0ec-c548b1e606ae</ExtendedConfigurationObject>
+					<Type><v8:Type>cfg:EnumRef.ПоложениеСостоянияЗаявкиВЖурналеЗаписи</v8:Type></Type>
+				</Properties>
+			</Attribute>
 		</ChildObjects>
 	</Catalog>
 </MetaDataObject>

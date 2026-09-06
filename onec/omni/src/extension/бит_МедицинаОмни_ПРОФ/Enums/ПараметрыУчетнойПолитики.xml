@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="bbbd8efd-e813-450f-92f3-96a67cf71001">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ПараметрыУчетнойПолитики" category="Ref">
+				<xr:TypeId>13bcfe65-eac9-43c1-b2c5-65384671db7a</xr:TypeId>
+				<xr:ValueId>423b5112-1919-44c2-bc3a-9538528f2ce4</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ПараметрыУчетнойПолитики" category="Manager">
+				<xr:TypeId>654976ec-aaec-48d9-8eef-afa230959a9f</xr:TypeId>
+				<xr:ValueId>7105403d-ba53-45c3-8c81-4038fe005fd1</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ПараметрыУчетнойПолитики" category="List">
+				<xr:TypeId>c0361d66-6bee-40c2-969d-c2fe8a07eaf3</xr:TypeId>
+				<xr:ValueId>0b8fa6d3-b79b-4496-b423-f3c92938789b</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ПараметрыУчетнойПолитики</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>b097f04d-fb1d-4ec2-8ebf-9e5d47ce2d77</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects>
+		<EnumValue uuid="431fd9ae-7d97-4560-ab51-532619f38535">
+			<Properties>
+				<Name>бит_СтатусНеподтвержденнойЗаявки</Name><Synonym>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Статус неподтвержденной заявки (MAX)</v8:content>
+					</v8:item>
+				</Synonym>
+				<Comment>Сафаров ШИ. Состояние, устанавливаемое заявке, если пациент не ответил за заданный срок после отправки запроса подтверждения в MAX.</Comment>
+			</Properties>
+		</EnumValue>
+		<EnumValue uuid="6cde290e-b611-4492-8340-9d2b8e098167">
+			<Properties>
+				<Name>бит_СрокОжиданияПодтвержденияMAXЧасов</Name>
+				<Synonym>
+					<v8:item>
+						<v8:lang>ru</v8:lang>
+						<v8:content>Срок ожидания подтверждения MAX, часов</v8:content>
+					</v8:item>
+				</Synonym>
+				<Comment>Сафаров ШИ. Число часов ожидания ответа с момента успешной отправки запроса подтверждения в MAX. Ноль отключает автоматическую смену статуса.</Comment>
+			</Properties>
+		</EnumValue>
+		</ChildObjects>
+	</Enum>
+</MetaDataObject>

@@ -51,6 +51,8 @@ global.fetch = async (url) => {
         return createJsonResponse(200, [{
             appointment_id: "appointment-1",
             patientTitle: "Пациент",
+            patientPhone: "+7 999 000-11-22",
+            comment: "Позвонить перед приёмом",
             datetimeBegin: "2026-08-31T10:00:00Z",
             datetimeEnd: "2026-08-31T10:30:00Z",
         }]);
@@ -99,6 +101,8 @@ test("doctor schedule uses doctor identity from JWT and returns shifts with appo
         appointments: [{
             appointment_id: "appointment-1",
             patientTitle: "Пациент",
+            patientPhone: "+7 999 000-11-22",
+            comment: "Позвонить перед приёмом",
             datetimeBegin: "2026-08-31T10:00:00Z",
             datetimeEnd: "2026-08-31T10:30:00Z",
         }],

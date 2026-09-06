@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Enum uuid="f09e2c5c-495d-458e-8f58-4b365813bd07">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.ПоложениеСостоянияЗаявкиВЖурналеЗаписи" category="Ref">
+				<xr:TypeId>be3ed3b1-39aa-42b5-b936-22e83e163a63</xr:TypeId>
+				<xr:ValueId>d47aa02a-52dc-4c4d-bd46-91560f794862</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.ПоложениеСостоянияЗаявкиВЖурналеЗаписи" category="Manager">
+				<xr:TypeId>c6053a70-3a10-49e9-ab05-f559e5e80ec9</xr:TypeId>
+				<xr:ValueId>b5dfb19c-0fda-4bbb-95e8-df11c9498746</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.ПоложениеСостоянияЗаявкиВЖурналеЗаписи" category="List">
+				<xr:TypeId>b1a8f8c6-8d17-4cb4-b09b-f643df16578f</xr:TypeId>
+				<xr:ValueId>54b29955-67bc-46bb-b0d1-4179f8457835</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>ПоложениеСостоянияЗаявкиВЖурналеЗаписи</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>0b29bc1e-4ed3-44d4-9a66-dc27016b1172</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects>
+			<EnumValue uuid="2853e331-1fd4-446f-b8f5-774d5d6ea2a0">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ВОсновномСписке</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>e30579ed-bd16-4139-85f3-d8782cdf7868</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="1ec75126-0f39-4b25-8d5a-05c32b7de725">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ВПодменю</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>69156691-daeb-44b1-b275-419cb3b2b871</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="3ef75bab-8b77-4f9b-b79e-63a628aec4cb">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>НеОтображать</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>832bcf09-7d3d-48dd-8671-ba9fcc0d14e6</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+		</ChildObjects>
+	</Enum>
+</MetaDataObject>
