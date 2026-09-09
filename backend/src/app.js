@@ -57,11 +57,24 @@ async function registerFrontendStatic(app) {
     await app.register(fastifyStatic, {
         root: distDir,
         prefix: "/",
-        decorateReply: false,
+        decorateReply: true,
     });
 
     app.setNotFoundHandler(async (req, reply) => {
-        if (req.raw.method !== "GET" || req.url.startsWith("/api/")) {
+        let pathname;
+        try {
+            pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+        } catch {
+            return reply.code(400).send({ error: "bad_request" });
+        }
+
+        // Only browser navigation may fall back to HTML, never API or asset requests.
+        const isNavigation = (req.method === "GET" || req.method === "HEAD")
+            && (req.headers.accept || "").includes("text/html");
+        const isReservedPath = pathname === "/api" || pathname.startsWith("/api/")
+            || pathname === "/assets" || pathname.startsWith("/assets/");
+        const isFilePath = pathname.split("/").some((segment) => segment.includes("."));
+        if (!isNavigation || isReservedPath || isFilePath) {
             return reply.code(404).send({ error: "not_found" });
         }
 
