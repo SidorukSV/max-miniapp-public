@@ -690,6 +690,9 @@
 									</Title>
 									<ContextMenu name="НадписьЗаписьДатаКонтекстноеМеню" id="351"/>
 									<ExtendedTooltip name="НадписьЗаписьДатаРасширеннаяПодсказка" id="352"/>
+									<Events>
+										<Event name="Click">бит_НадписьЗаписьДатаНажатие</Event>
+									</Events>
 								</LabelDecoration>
 								<LabelDecoration name="НадписьЗапись" id="353">
 									<Title formatted="false">
@@ -733,6 +736,16 @@
 								</UsualGroup>
 							</ChildItems>
 						</UsualGroup>
+						<Button name="бит_РасписаниеКлиентаКнопка" id="437">
+							<CommandName>Form.Command.бит_РасписаниеКлиента</CommandName>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Расписание клиента</v8:content>
+								</v8:item>
+							</Title>
+							<ExtendedTooltip name="бит_РасписаниеКлиентаКнопкаРасширеннаяПодсказка" id="438"/>
+						</Button>
 						<PictureDecoration name="ДекорацияРазделитель3" id="425">
 							<HorizontalStretch>true</HorizontalStretch>
 							<VerticalStretch>false</VerticalStretch>
@@ -1414,6 +1427,15 @@
 				</v8:item>
 			</Title>
 			<Action>ОткрытьКарточкуПациентаОбработка</Action>
+		</Command>
+		<Command name="бит_РасписаниеКлиента" id="213">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Расписание клиента</v8:content>
+				</v8:item>
+			</Title>
+			<Action>бит_РасписаниеКлиентаОбработка</Action>
 		</Command>
 	</Commands>
 </Form>

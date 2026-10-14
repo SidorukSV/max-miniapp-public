@@ -385,5 +385,7 @@
 		<Metadata name="SessionParameter.бит_омни_КешОбъектовДляРассылки" id="440acded-a511-40b4-a005-6679849112da" configVersion="0cabcbb2709effd1d5d1e8b34a8e115a3f28d6c7"/>
 		<Metadata name="StyleItem.ПоясняющийТекст" id="d87a3951-e5b1-4578-b917-2986fb37d409" configVersion="c631813575460801499505c2ee4ca0cd60fbb10d"/>
 		<Metadata name="Subsystem.бит_омни" id="f5e7ada2-342a-44b7-bdfd-a882e40a8fca" configVersion="c79e47d9fe2a3d0d4dcc8ae1fd1d4af75a85c977"/>
+		<Metadata name="CommonModule.бит_омни_ЧатКлиент" id="b50a305b-fe03-4454-b214-99eb6e9594db"/>
+		<Metadata name="CommonModule.бит_омни_ЧатКлиент.Module" id="b50a305b-fe03-4454-b214-99eb6e9594db.0"/>
 	</ConfigVersions>
 </ConfigDumpInfo>
