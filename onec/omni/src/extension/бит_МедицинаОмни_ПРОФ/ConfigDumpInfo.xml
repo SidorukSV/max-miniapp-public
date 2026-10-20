@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ConfigDumpInfo xmlns="http://v8.1c.ru/8.3/xcf/dumpinfo" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" format="Hierarchical" version="2.20">
 	<ConfigVersions>
 		<Metadata name="AccumulationRegister.НакопленияПоСкидкам" id="e7ba6f25-8343-40e6-93da-ac88644e8082" configVersion="ff7dcf7a62765ed279275d1b97655af549aedcdd"/>
@@ -79,6 +79,8 @@
 		<Metadata name="Catalog.бит_омни_КатегорииЗаписи.Form.ФормаЭлемента" id="1afedd0d-4571-4f7e-87c7-8b0dd59932e9" configVersion="34ceaa5e300e20eaf629753f8bbd39baf0647e2a"/>
 		<Metadata name="Catalog.бит_омни_КатегорииЗаписи.Form.ФормаЭлемента.Form" id="1afedd0d-4571-4f7e-87c7-8b0dd59932e9.0" configVersion="796e133b6ddac42f1a0c758c7f97dd585340327e"/>
 		<Metadata name="Catalog.бит_омни_Контакты" id="7fb6b48d-a1ac-4c23-a91d-cb36bec8a87d" configVersion="da3fb79e28a99aa6ea9ae22df93abb5dd2812bd7">
+			<Metadata name="Catalog.бит_омни_Контакты.Attribute.ТелефонMAX" id="81611d3e-67fa-4f92-b615-ea5a86fcdf11"/>
+			<Metadata name="Catalog.бит_омни_Контакты.Attribute.ВыборПациентаMAX" id="2e4983e9-82e3-4cfa-82cc-87ed208cee21"/>
 			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Бот" id="01f3c2ef-f80f-4887-9e0f-892ccce4e713"/>
 			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Заблокирован" id="0362dd3d-4f65-4820-8e02-3154db984721"/>
 			<Metadata name="Catalog.бит_омни_Контакты.Attribute.Получатель" id="3dddbbc3-0bc4-4beb-b84e-be36b51d25c4"/>

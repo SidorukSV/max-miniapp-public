@@ -256,7 +256,7 @@ class UnlinkedContactPrompt(unittest.TestCase):
 Функция ПолучитьОбъект() Экспорт
     Возврат Объект;
 КонецФункции
-Объект = Новый Структура("Получатель,Заблокирован,ПометкаУдаления,Бот", Неопределено, Ложь, Ложь, "bot");
+Объект = Новый Структура("Получатель,Заблокирован,ПометкаУдаления,Бот,ТелефонMAX", Неопределено, Ложь, Ложь, "bot", "");
 ''',
         }
         self.run_bsl(source, '''
@@ -287,6 +287,13 @@ class UnlinkedContactPrompt(unittest.TestCase):
 Контакт.Объект.Бот = "other_bot";
 ЗапроситьТелефонНепривязанногоКонтактаMAX(Контакт, "bot");
 Если Попытки <> 2 Тогда ВызватьИсключение "Fresh linked, blocked, deleted or foreign-bot contact must not receive a prompt"; КонецЕсли;
+Контакт.Объект.Бот = "bot";
+Контакт.Объект.ТелефонMAX = "+79991234567";
+ЗапроситьТелефонНепривязанногоКонтактаMAX(Контакт, "bot");
+Если Попытки <> 2 Тогда ВызватьИсключение "Verified phone must suppress automatic prompt after patient choice"; КонецЕсли;
+Контакт.Объект.Получатель = "patient";
+ЗапроситьТелефонНепривязанногоКонтактаMAX(Контакт, "bot", Истина);
+Если Попытки <> 3 Тогда ВызватьИсключение "Explicit command may request own phone again even for a linked contact"; КонецЕсли;
 ''', fixtures)
 
 

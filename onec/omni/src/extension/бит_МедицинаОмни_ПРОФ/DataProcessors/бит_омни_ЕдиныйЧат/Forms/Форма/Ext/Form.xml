@@ -516,17 +516,44 @@
 							<Visible>false</Visible>
 							<ExtendedTooltip name="ГруппаПривязкаПациентаРасширеннаяПодсказка" id="440"/>
 							<ChildItems>
-								<InputField name="ПациентДляПривязки" id="441">
-									<DataPath>ПациентДляПривязки</DataPath>
-									<Title>
-										<v8:item>
-											<v8:lang>ru</v8:lang>
-											<v8:content>Пациент</v8:content>
-										</v8:item>
-									</Title>
-									<ContextMenu name="ПациентДляПривязкиКонтекстноеМеню" id="442"/>
-									<ExtendedTooltip name="ПациентДляПривязкиРасширеннаяПодсказка" id="443"/>
-								</InputField>
+								<UsualGroup name="ГруппаВыборПациента" id="448">
+									<Group>AlwaysHorizontal</Group>
+									<Representation>None</Representation>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаВыборПациентаРасширеннаяПодсказка" id="449"/>
+									<ChildItems>
+										<InputField name="ПациентДляПривязки" id="441">
+											<DataPath>ПациентДляПривязки</DataPath>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Пациент</v8:content>
+												</v8:item>
+											</Title>
+											<ContextMenu name="ПациентДляПривязкиКонтекстноеМеню" id="442"/>
+											<ExtendedTooltip name="ПациентДляПривязкиРасширеннаяПодсказка" id="443"/>
+											<Events>
+												<Event name="AutoComplete">ПациентДляПривязкиАвтоПодбор</Event>
+											</Events>
+										</InputField>
+										<Button name="ПоискПациентаКнопка" id="446">
+											<Type>UsualButton</Type>
+											<Representation>Picture</Representation>
+											<Picture>
+												<xr:Ref>CommonPicture.ПоискКлиента_16х16</xr:Ref>
+												<xr:LoadTransparent>true</xr:LoadTransparent>
+											</Picture>
+											<CommandName>Form.Command.ПоискПациента</CommandName>
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Поиск клиента</v8:content>
+												</v8:item>
+											</Title>
+											<ExtendedTooltip name="ПоискПациентаКнопкаРасширеннаяПодсказка" id="447"/>
+										</Button>
+									</ChildItems>
+								</UsualGroup>
 								<Button name="ПривязатьПациентаКнопка" id="444">
 									<CommandName>Form.Command.ПривязатьПациента</CommandName>
 									<Title>
@@ -1368,6 +1395,15 @@
 				<v8:Type>cfg:CatalogRef.Клиенты</v8:Type>
 			</Type>
 		</Attribute>
+		<Attribute name="ТелефонКонтактаMAX" id="216">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>40</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
 	</Attributes>
 	<Commands>
 		<Command name="ПереключитьАвтообновление" id="212">
@@ -1471,6 +1507,9 @@
 		</Command>
 		<Command name="ПривязатьПациента" id="214">
 			<Action>ПривязатьПациентаОбработка</Action>
+		</Command>
+		<Command name="ПоискПациента" id="215">
+			<Action>ПоискПациентаОбработка</Action>
 		</Command>
 	</Commands>
 </Form>
