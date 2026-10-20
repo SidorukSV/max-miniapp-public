@@ -512,30 +512,30 @@
 								</UsualGroup>
 							</ChildItems>
 						</UsualGroup>
-						<UsualGroup name="бит_ГруппаПривязкаПациента" id="439">
+						<UsualGroup name="ГруппаПривязкаПациента" id="439">
 							<Visible>false</Visible>
-							<ExtendedTooltip name="бит_ГруппаПривязкаПациентаРасширеннаяПодсказка" id="440"/>
+							<ExtendedTooltip name="ГруппаПривязкаПациентаРасширеннаяПодсказка" id="440"/>
 							<ChildItems>
-								<InputField name="бит_ПациентДляПривязки" id="441">
-									<DataPath>бит_ПациентДляПривязки</DataPath>
+								<InputField name="ПациентДляПривязки" id="441">
+									<DataPath>ПациентДляПривязки</DataPath>
 									<Title>
 										<v8:item>
 											<v8:lang>ru</v8:lang>
 											<v8:content>Пациент</v8:content>
 										</v8:item>
 									</Title>
-									<ContextMenu name="бит_ПациентДляПривязкиКонтекстноеМеню" id="442"/>
-									<ExtendedTooltip name="бит_ПациентДляПривязкиРасширеннаяПодсказка" id="443"/>
+									<ContextMenu name="ПациентДляПривязкиКонтекстноеМеню" id="442"/>
+									<ExtendedTooltip name="ПациентДляПривязкиРасширеннаяПодсказка" id="443"/>
 								</InputField>
-								<Button name="бит_ПривязатьПациентаКнопка" id="444">
-									<CommandName>Form.Command.бит_ПривязатьПациента</CommandName>
+								<Button name="ПривязатьПациентаКнопка" id="444">
+									<CommandName>Form.Command.ПривязатьПациента</CommandName>
 									<Title>
 										<v8:item>
 											<v8:lang>ru</v8:lang>
 											<v8:content>Привязать пациента</v8:content>
 										</v8:item>
 									</Title>
-									<ExtendedTooltip name="бит_ПривязатьПациентаКнопкаРасширеннаяПодсказка" id="445"/>
+									<ExtendedTooltip name="ПривязатьПациентаКнопкаРасширеннаяПодсказка" id="445"/>
 								</Button>
 							</ChildItems>
 						</UsualGroup>
@@ -718,7 +718,7 @@
 									<ContextMenu name="НадписьЗаписьДатаКонтекстноеМеню" id="351"/>
 									<ExtendedTooltip name="НадписьЗаписьДатаРасширеннаяПодсказка" id="352"/>
 									<Events>
-										<Event name="Click">бит_НадписьЗаписьДатаНажатие</Event>
+										<Event name="Click">НадписьЗаписьДатаНажатие</Event>
 									</Events>
 								</LabelDecoration>
 								<LabelDecoration name="НадписьЗапись" id="353">
@@ -763,15 +763,15 @@
 								</UsualGroup>
 							</ChildItems>
 						</UsualGroup>
-						<Button name="бит_РасписаниеКлиентаКнопка" id="437">
-							<CommandName>Form.Command.бит_РасписаниеКлиента</CommandName>
+						<Button name="РасписаниеКлиентаКнопка" id="437">
+							<CommandName>Form.Command.РасписаниеКлиента</CommandName>
 							<Title>
 								<v8:item>
 									<v8:lang>ru</v8:lang>
 									<v8:content>Расписание клиента</v8:content>
 								</v8:item>
 							</Title>
-							<ExtendedTooltip name="бит_РасписаниеКлиентаКнопкаРасширеннаяПодсказка" id="438"/>
+							<ExtendedTooltip name="РасписаниеКлиентаКнопкаРасширеннаяПодсказка" id="438"/>
 						</Button>
 						<PictureDecoration name="ДекорацияРазделитель3" id="425">
 							<HorizontalStretch>true</HorizontalStretch>
@@ -1363,7 +1363,7 @@
 				</v8:StringQualifiers>
 			</Type>
 		</Attribute>
-		<Attribute name="бит_ПациентДляПривязки" id="215">
+		<Attribute name="ПациентДляПривязки" id="215">
 			<Type>
 				<v8:Type>cfg:CatalogRef.Клиенты</v8:Type>
 			</Type>
@@ -1460,17 +1460,17 @@
 			</Title>
 			<Action>ОткрытьКарточкуПациентаОбработка</Action>
 		</Command>
-		<Command name="бит_РасписаниеКлиента" id="213">
+		<Command name="РасписаниеКлиента" id="213">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
 					<v8:content>Расписание клиента</v8:content>
 				</v8:item>
 			</Title>
-			<Action>бит_РасписаниеКлиентаОбработка</Action>
+			<Action>РасписаниеКлиентаОбработка</Action>
 		</Command>
-		<Command name="бит_ПривязатьПациента" id="214">
-			<Action>бит_ПривязатьПациентаОбработка</Action>
+		<Command name="ПривязатьПациента" id="214">
+			<Action>ПривязатьПациентаОбработка</Action>
 		</Command>
 	</Commands>
 </Form>
