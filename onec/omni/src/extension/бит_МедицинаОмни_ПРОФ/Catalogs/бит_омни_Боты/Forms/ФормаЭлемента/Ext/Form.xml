@@ -113,6 +113,10 @@
 			<ContextMenu name="ИмяПользователяКонтекстноеМеню" id="14"/>
 			<ExtendedTooltip name="ИмяПользователяРасширеннаяПодсказка" id="15"/>
 		</InputField>
+		<Button name="ЗарегистрироватьКомандыMAX" id="44">
+			<CommandName>Form.Command.ЗарегистрироватьКомандыMAX</CommandName>
+			<ExtendedTooltip name="ЗарегистрироватьКомандыMAXРасширеннаяПодсказка" id="45"/>
+		</Button>
 		<Table name="ИнтервалыНапоминанийMAX" id="35">
 			<DataPath>Объект.ИнтервалыНапоминанийMAX</DataPath>
 			<ContextMenu name="ИнтервалыНапоминанийMAXКонтекстноеМеню" id="36"/>
@@ -180,6 +184,15 @@
 			</ToolTip>
 			<Action>СоздатьРассылкиЗаписей</Action>
 			<Representation>Text</Representation>
+		</Command>
+		<Command name="ЗарегистрироватьКомандыMAX" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Зарегистрировать команды MAX</v8:content>
+				</v8:item>
+			</Title>
+			<Action>ЗарегистрироватьКомандыMAX</Action>
 		</Command>
 	</Commands>
 </Form>
