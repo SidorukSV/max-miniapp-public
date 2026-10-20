@@ -512,6 +512,33 @@
 								</UsualGroup>
 							</ChildItems>
 						</UsualGroup>
+						<UsualGroup name="бит_ГруппаПривязкаПациента" id="439">
+							<Visible>false</Visible>
+							<ExtendedTooltip name="бит_ГруппаПривязкаПациентаРасширеннаяПодсказка" id="440"/>
+							<ChildItems>
+								<InputField name="бит_ПациентДляПривязки" id="441">
+									<DataPath>бит_ПациентДляПривязки</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Пациент</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="бит_ПациентДляПривязкиКонтекстноеМеню" id="442"/>
+									<ExtendedTooltip name="бит_ПациентДляПривязкиРасширеннаяПодсказка" id="443"/>
+								</InputField>
+								<Button name="бит_ПривязатьПациентаКнопка" id="444">
+									<CommandName>Form.Command.бит_ПривязатьПациента</CommandName>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Привязать пациента</v8:content>
+										</v8:item>
+									</Title>
+									<ExtendedTooltip name="бит_ПривязатьПациентаКнопкаРасширеннаяПодсказка" id="445"/>
+								</Button>
+							</ChildItems>
+						</UsualGroup>
 						<PictureDecoration name="ДекорацияРазделитель1" id="419">
 							<HorizontalStretch>true</HorizontalStretch>
 							<VerticalStretch>false</VerticalStretch>
@@ -1336,6 +1363,11 @@
 				</v8:StringQualifiers>
 			</Type>
 		</Attribute>
+		<Attribute name="бит_ПациентДляПривязки" id="215">
+			<Type>
+				<v8:Type>cfg:CatalogRef.Клиенты</v8:Type>
+			</Type>
+		</Attribute>
 	</Attributes>
 	<Commands>
 		<Command name="ПереключитьАвтообновление" id="212">
@@ -1436,6 +1468,9 @@
 				</v8:item>
 			</Title>
 			<Action>бит_РасписаниеКлиентаОбработка</Action>
+		</Command>
+		<Command name="бит_ПривязатьПациента" id="214">
+			<Action>бит_ПривязатьПациентаОбработка</Action>
 		</Command>
 	</Commands>
 </Form>
