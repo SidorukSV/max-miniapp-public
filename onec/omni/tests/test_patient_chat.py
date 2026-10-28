@@ -9,6 +9,34 @@ import test_mailing_schemas
 class PatientChat(unittest.TestCase):
     run_bsl = test_mailing_schemas.MailingSchemas.run_bsl
 
+    def test_prefilled_phone_runs_standard_search_without_text_edit(self):
+        module = SOURCE / "CommonForms/ФормаПоискаКлиентаУпр/Ext/Form/Module.bsl"
+        method = re.search(r"(?ms)^Процедура НайтиКлиентаИзЕдиногоЧата\(.*?^КонецПроцедуры",
+                           module.read_text(encoding="utf-8-sig")).group()
+        source = '''Перем Элементы, Поиск, ОбновлениеТекстаРедактирования, Запросы, Найденные;
+''' + method + '''
+Процедура ОбработкаПоискаПоФИО(Текст)
+    Если Поиск <> Текст Тогда ВызватьИсключение "Query and visible attribute differ"; КонецЕсли;
+    Запросы = Запросы + 1;
+    Найденные = Новый Массив;
+    Найденные.Добавить("phone-patient-1");
+    Найденные.Добавить("phone-patient-2");
+КонецПроцедуры
+'''
+        self.run_bsl(source, '''
+Элементы = Новый Структура("Поиск", Новый Структура("ОбновлениеТекстаРедактирования", "dont-use"));
+ОбновлениеТекстаРедактирования = Новый Структура("ПриИзмененииЗначения", "on-value-change");
+Запросы = 0;
+НайтиКлиентаИзЕдиногоЧата("9001230832");
+Если Запросы <> 1 Или Найденные.Количество() <> 2 Или Поиск <> "9001230832" Тогда
+    ВызватьИсключение "Opening a prefilled query must run search immediately, without a synthetic keypress";
+КонецЕсли;
+НайтиКлиентаИзЕдиногоЧата("9001230832");
+Если Запросы <> 2 Тогда ВызватьИсключение "Same prefilled query must refresh results on reopening"; КонецЕсли;
+НайтиКлиентаИзЕдиногоЧата("");
+Если Запросы <> 2 Или Поиск <> "" Тогда ВызватьИсключение "An absent phone must not launch an empty search"; КонецЕсли;
+''', {})
+
     def test_search_phone_and_patient_labels(self):
         module = SOURCE / "DataProcessors/бит_омни_ЕдиныйЧат/Forms/Форма/Ext/Form/Module.bsl"
         source = "\n".join(function_source(module, name) for name in (

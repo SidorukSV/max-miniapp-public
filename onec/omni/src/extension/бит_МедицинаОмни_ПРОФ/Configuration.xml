@@ -58,7 +58,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">Role.бит_омни_ОсновнаяРоль</xr:Item>
 			</DefaultRoles>
 			<Vendor>Первый Бит, офис Челябинск</Vendor>
-			<Version>1.1.0.42</Version>
+			<Version>1.1.0.43</Version>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
 			<BriefInformation/>
 			<DetailedInformation/>
@@ -116,6 +116,7 @@
 			<EventSubscription>бит_омни_ПриЗаписиОбъекта</EventSubscription>
 			<EventSubscription>бит_омни_ДокументыПередЗаписью</EventSubscription>
 			<EventSubscription>бит_омни_ЗначенияСвойствПередЗаписью</EventSubscription>
+			<CommonForm>ФормаПоискаКлиентаУпр</CommonForm>
 			<Catalog>КатегорииВыработки</Catalog>
 			<Catalog>Оборудование</Catalog>
 			<Catalog>Филиалы</Catalog>

@@ -389,5 +389,7 @@
 		<Metadata name="Subsystem.бит_омни" id="f5e7ada2-342a-44b7-bdfd-a882e40a8fca" configVersion="c79e47d9fe2a3d0d4dcc8ae1fd1d4af75a85c977"/>
 		<Metadata name="CommonModule.бит_омни_ЧатКлиент" id="b50a305b-fe03-4454-b214-99eb6e9594db"/>
 		<Metadata name="CommonModule.бит_омни_ЧатКлиент.Module" id="b50a305b-fe03-4454-b214-99eb6e9594db.0"/>
+		<Metadata name="CommonForm.&#x424;&#x43E;&#x440;&#x43C;&#x430;&#x41F;&#x43E;&#x438;&#x441;&#x43A;&#x430;&#x41A;&#x43B;&#x438;&#x435;&#x43D;&#x442;&#x430;&#x423;&#x43F;&#x440;" id="d22eca8b-e5a4-4237-aa87-ea79acf7f57c" configVersion="0db9abd9f08ee56c09ba2ffc9ba644cc1a0a1fdf"/>
+		<Metadata name="CommonForm.&#x424;&#x43E;&#x440;&#x43C;&#x430;&#x41F;&#x43E;&#x438;&#x441;&#x43A;&#x430;&#x41A;&#x43B;&#x438;&#x435;&#x43D;&#x442;&#x430;&#x423;&#x43F;&#x440;.Form" id="d22eca8b-e5a4-4237-aa87-ea79acf7f57c.0" configVersion="bb19eb3847e836f33bd755763aa0d9d5046f6d51"/>
 	</ConfigVersions>
 </ConfigDumpInfo>
