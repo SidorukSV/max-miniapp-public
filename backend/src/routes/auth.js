@@ -1,7 +1,12 @@
 import crypto from "crypto";
 import { createSession, updateSession } from "../store/authSessions.js";
 import { config } from "../config.js";
-import { getEmployeesByPhone, getPatientsByPhone } from "../services/onecRouter.js";
+import {
+    DEFAULT_APPLICATION_SETTINGS,
+    getApplicationSettings,
+    getEmployeesByPhone,
+    getPatientsByPhone,
+} from "../services/onecRouter.js";
 import { normalizePhoneMiddleware, sessionMiddleware } from "../middleware/session.js";
 import { signAccessToken, signRefreshToken, verifyToken, ACCESS_TOKEN_EXPIRES_SECONDS, REFRESH_TOKEN_EXPIRES_SECONDS } from "../auth/jwt.js";
 import {
@@ -627,12 +632,15 @@ export async function authRoutes(app) {
                 policy: phoneAttemptPolicy,
             });
 
+            const { chat_url } = await getApplicationSettings().catch(() => DEFAULT_APPLICATION_SETTINGS);
+
             return {
                 need_select_patient: true,
                 need_select_context: Boolean(employee && patients_sorted.length),
                 patients: patients_sorted,
                 employee,
                 employee_ambiguous: employees.length > 1,
+                chat_url,
             };
         });
 

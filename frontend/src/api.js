@@ -90,6 +90,30 @@ export async function authSelectPatient({ auth_session_id, patient_id }) {
     });
 }
 
+export async function getAuthChatSpecializations({ auth_session_id }) {
+    return apiFetch("/auth/chat/specializations", {
+        method: "POST",
+        body: JSON.stringify({ auth_session_id }),
+    });
+}
+
+export async function startAuthChatDialog({ auth_session_id, specializationId }) {
+    return apiFetch("/auth/chat/start", {
+        method: "POST",
+        body: JSON.stringify({ auth_session_id, specializationId }),
+    });
+}
+
+export async function startChatDialog(access_token, { specializationId }) {
+    return apiFetch("/chat/start", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+        body: JSON.stringify({ specializationId }),
+    });
+}
+
 export async function authSelectEmployee({ auth_session_id }) {
     return apiFetch("/auth/select-employee", {
         method: "POST",
@@ -275,7 +299,7 @@ export async function getCatalogSurveyTemplateById(access_token, surveyTemplateI
     });
 }
 
-export async function getDoctorSchedule(access_token, { doctorId, branchId, date, format }) {
+export async function getDoctorSchedule(access_token, { doctorId, branchId, date, format, specializationId }) {
     const params = new URLSearchParams({
         doctorId,
         branchId,
@@ -283,6 +307,7 @@ export async function getDoctorSchedule(access_token, { doctorId, branchId, date
 
     if (date) params.set("date", date);
     if (format) params.set("format", format);
+    if (specializationId) params.set("specializationId", specializationId);
 
     return apiFetch(`/documents/schedule?${params}`, {
         headers: {

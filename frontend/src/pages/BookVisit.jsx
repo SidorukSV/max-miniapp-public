@@ -19,6 +19,7 @@ import {
   getCatalogSpecializationsBySchedule,
   getMedicalHistory,
   getStoredAccessToken,
+  startChatDialog,
 } from "../api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { SpecializationIcon } from "../modules/specializationIcons.jsx";
@@ -108,7 +109,7 @@ function MethodCard({ icon, iconCode, title, subtitle, tag, selected, onClick, c
 export default function BookVisit() {
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
-  const { loading: authLoading, isAuthorized } = useAuth();
+  const { me, loading: authLoading, isAuthorized } = useAuth();
   const accessToken = getStoredAccessToken();
 
   const [query, setQuery] = useState("");
@@ -118,7 +119,7 @@ export default function BookVisit() {
   const [error, setError] = useState("");
   const [contactDialogSpec, setContactDialogSpec] = useState(null);
   const selectedContactSpecId = searchParams.get("contactSpecializationId") || "";
-  const chatUrl = import.meta.env.VITE_MAX_CHAT_URL || "";
+  const chatUrl = me?.chat_url || "";
 
   const shouldRedirectToFlow = REDIRECT_QUERY_KEYS.some((key) => searchParams.has(key));
 
@@ -206,6 +207,18 @@ export default function BookVisit() {
 
   const onlineSpecs = filteredSpecs.filter((item) => item.type === "online");
   const offlineSpecs = filteredSpecs.filter((item) => item.type === "phone" || item.type === "phone_and_chat");
+
+  async function openChatForSpec(spec) {
+    if (spec?.id) {
+      try {
+        await startChatDialog(getStoredAccessToken(), { specializationId: spec.id });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    openExternalLink(chatUrl);
+  }
 
   function openOnline(specId = "") {
     const params = new URLSearchParams();
@@ -335,7 +348,7 @@ export default function BookVisit() {
                 Позвонить
               </Button>
               {spec.type === "phone_and_chat" ? (
-                <Button mode="secondary" onClick={() => openExternalLink(chatUrl)} disabled={!chatUrl}>
+                <Button mode="secondary" onClick={() => openChatForSpec(spec)} disabled={!chatUrl}>
                   <MessageCircle size={18} />
                   Чат
                 </Button>
@@ -376,7 +389,7 @@ export default function BookVisit() {
           setContactDialogSpec(null);
         }}
         onConfirm={() => {
-          openExternalLink(chatUrl);
+          openChatForSpec(contactDialogSpec);
           setContactDialogSpec(null);
         }}
       />

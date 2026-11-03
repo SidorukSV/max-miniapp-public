@@ -29,6 +29,9 @@ export default function DoctorSection({
                                         onClick={() => onPickDoctor(doc.doctorId, doc.branchId)}
                                     >
                                         {getDoctorLabel(doc)}
+                                        {Number(doc.servicePrice) > 0
+                                            ? ` · от ${Number(doc.servicePrice).toLocaleString("ru-RU")} ₽`
+                                            : ""}
                                     </Pill>
                                 ))}
                             </div>

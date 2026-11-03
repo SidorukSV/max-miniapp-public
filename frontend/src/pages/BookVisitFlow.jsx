@@ -6,6 +6,7 @@ import DoctorSection from "../components/book-visit/DoctorSection.jsx";
 import DateSection from "../components/book-visit/DateSection.jsx";
 import TimeSection from "../components/book-visit/TimeSection.jsx";
 import SummarySection from "../components/book-visit/SummarySection.jsx";
+import QuestionDialog from "../components/QuestionDialog.jsx";
 import useBookVisitFlow from "../hooks/useBookVisitFlow";
 import { getDoctorLabel, toRuDate, toRuTime } from "../modules/bookVisitHelpers";
 import "../App.css";
@@ -88,6 +89,16 @@ export default function BookVisitFlow() {
           К вариантам записи
         </Button>
       </Stack>
+
+      <QuestionDialog
+        open={state.contactDialogOpen}
+        question="Запись подтвердит оператор контакт-центра. Как с вами связаться?"
+        onClose={actions.onCloseContactDialog}
+        cancelText="По телефону"
+        confirmText="В MAX"
+        onCancel={() => actions.confirm("phone")}
+        onConfirm={() => actions.confirm("max")}
+      />
     </PageLayout>
   );
 }

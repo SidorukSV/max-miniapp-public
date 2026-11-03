@@ -8,9 +8,12 @@ import { BranchInfoRow, DoctorInfoRow } from "../components/VisitInfoRows.jsx";
 import { Button, Card, Flex, Stack, Typography } from "../components/ui.jsx";
 import { getAppointments, getStoredAccessToken, updateAppointment } from "../api.js";
 import { normalizeAppointment } from "../modules/appointmentView.js";
+import { useAuth } from "../context/AuthContext.jsx";
+import { openExternalLink } from "../utils/safeUrl.js";
 
 export default function VisitDetails() {
   const nav = useNavigate();
+  const { me } = useAuth();
   const { id = "" } = useParams();
   const { state, search } = useLocation();
   const accessToken = getStoredAccessToken();
@@ -31,6 +34,7 @@ export default function VisitDetails() {
   const [error, setError] = useState("");
   const [pendingAction, setPendingAction] = useState("");
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const chatUrl = me?.chat_url || "";
 
   useEffect(() => {
     async function loadVisit() {
@@ -81,22 +85,9 @@ export default function VisitDetails() {
     }
   }
 
-  async function cancelVisit() {
-    if (!accessToken || !visit) return;
-
-    try {
-      setPendingAction("cancel");
-      setError("");
-      await updateAppointment(accessToken, {
-        appointmentId: visit.id,
-        isCanceled: true,
-      });
+  function cancelVisit() {
+    if (openExternalLink(chatUrl)) {
       setCancelDialogOpen(false);
-      nav("/visits", { replace: true });
-    } catch {
-      setError("Не удалось отменить запись");
-    } finally {
-      setPendingAction("");
     }
   }
 
@@ -158,7 +149,11 @@ export default function VisitDetails() {
                   <X size={17} />
                   Отменить
                 </Button>
+                <Button mode="secondary" onClick={() => openExternalLink(chatUrl)} disabled={!chatUrl}>
+                  Перенести через оператора
+                </Button>
               </div>
+              {!chatUrl ? <Typography.Label>Чат с оператором не настроен. Для отмены или переноса обратитесь в клинику.</Typography.Label> : null}
             </Stack>
           </Card>
         ) : null}
@@ -166,11 +161,14 @@ export default function VisitDetails() {
 
       <QuestionDialog
         open={cancelDialogOpen}
-        question="Вы уверены, что хотите отменить запись?"
+        question={chatUrl
+          ? "Для отмены записи напишите оператору в MAX. До подтверждения оператора запись действует."
+          : "Ссылка на чат с оператором не настроена. Запись не отменена; обратитесь в клинику."}
         onCancel={() => setCancelDialogOpen(false)}
         onConfirm={cancelVisit}
         cancelText="Нет"
-        confirmText={pendingAction === "cancel" ? "Отменяем..." : "Да, отменить"}
+        confirmText="Перейти в чат"
+        confirmDisabled={!chatUrl}
         confirmMode="secondary"
         confirmClassName="dangerBtn"
       />

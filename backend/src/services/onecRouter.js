@@ -7,6 +7,7 @@ export const DEFAULT_APPLICATION_SETTINGS = Object.freeze({
         bonuses: true,
         survey: true,
     }),
+    chat_url: "",
 });
 
 function validateOneCConfig(oneCConfig) {
@@ -137,12 +138,14 @@ export function getOneCConfig() {
 
 export function normalizeApplicationSettings(payload) {
     const visibilityPages = payload?.visibility_pages;
+    const chatUrl = payload?.chat_url;
 
     return {
         visibility_pages: {
             bonuses: visibilityPages?.bonuses !== false,
             survey: visibilityPages?.survey !== false,
         },
+        chat_url: typeof chatUrl === "string" ? chatUrl : "",
     };
 }
 
@@ -238,6 +241,9 @@ export async function getPatientsByPhone({ phone}) {
             },
         });
     } catch (error) {
+        if (error.message === "patients_not_found") {
+            return [];
+        }
         throw new Error(`onec_request_failed:endpoint=${endpoint};operation=getPatientsByPhone;reason=${error.message}`);
     }
 
@@ -600,7 +606,7 @@ async function loadAnswerItemsByEndpoint({ oneCConfig, answerEndpoint, idOptionK
     });
 }
 
-export async function getDoctorSchedule({ doctorId, branchId, date, format }) {
+export async function getDoctorSchedule({ doctorId, branchId, date, format, specializationId }) {
     const oneCConfig = getOneCConfig();
     const params = new URLSearchParams({
         doctorId,
@@ -613,6 +619,10 @@ export async function getDoctorSchedule({ doctorId, branchId, date, format }) {
 
     if (format) {
         params.set("format", format);
+    }
+
+    if (specializationId) {
+        params.set("specializationId", specializationId);
     }
 
     const data = await onecFetch(oneCConfig.url.concat(`/documents/schedule?${params}`), {
@@ -636,6 +646,19 @@ export async function getDoctorShifts({ doctorId, date }) {
         date,
         format: "DoctorWorkplace",
     });
+}
+
+export async function startChatDialog({ specializationId, patientId, maxUserId }) {
+    const oneCConfig = getOneCConfig();
+    const data = await onecFetch(oneCConfig.url.concat("/chat/start"), {
+        method: "POST",
+        headers: {
+            Authorization: `Basic ${oneCConfig.basicAuth}`,
+        },
+        body: JSON.stringify({ specializationId, patientId, maxUserId }),
+    });
+
+    return { messageSent: data?.messageSent === true };
 }
 
 export async function createAppointmentDocument({ payload }) {

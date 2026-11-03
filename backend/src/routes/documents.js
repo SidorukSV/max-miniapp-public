@@ -40,7 +40,7 @@ export async function documentsRoutes(app) {
     app.get("/api/v1/documents/schedule",
         { preHandler: [patientAuthMiddleware] },
         async (req) => {
-            const { doctorId, branchId, date, format } = req.query || {};
+            const { doctorId, branchId, date, format, specializationId } = req.query || {};
 
             if (!doctorId || !branchId) {
                 return { items: [] };
@@ -51,6 +51,7 @@ export async function documentsRoutes(app) {
                 branchId,
                 date,
                 format,
+                specializationId,
             });
 
             return { items };

@@ -8,6 +8,7 @@ import { authRoutes } from "./routes/auth.js";
 import { meRoutes } from "./routes/me.js";
 import { logsRoutes } from "./routes/logs.js";
 import { catalogsRoutes } from "./routes/catalogs.js";
+import { chatRoutes } from "./routes/chat.js";
 import { documentsRoutes } from "./routes/documents.js";
 import { maxWebhookRoutes } from "./routes/maxWebhook.js";
 import { versionRoutes } from "./routes/version.js";
@@ -157,6 +158,7 @@ export async function buildApp() {
     app.register(meRoutes);
     app.register(logsRoutes);
     app.register(catalogsRoutes);
+    app.register(chatRoutes);
     app.register(documentsRoutes);
     app.register(maxWebhookRoutes);
     app.register(versionRoutes);

@@ -8,11 +8,12 @@ import QuestionDialog from "../components/QuestionDialog.jsx";
 import { HomeLoadingCard } from "../components/loadingCard.jsx";
 import { Avatar, Button, Card, IconButton, Stack, Typography } from "../components/ui.jsx";
 import { BranchInfoRow, DoctorInfoRow } from "../components/VisitInfoRows.jsx";
-import { getAppointments, getStoredAccessToken, getSurveys, updateAppointment } from "../api.js";
+import { getAppointments, getStoredAccessToken, getSurveys } from "../api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { normalizeAppointment } from "../modules/appointmentView.js";
 import { getFallbackGradientByInitials } from "../modules/avatarGradient.js";
 import { isPageVisible } from "../modules/featureVisibility.js";
+import { openExternalLink } from "../utils/safeUrl.js";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -94,7 +95,6 @@ export default function Home() {
   const [contentLoading, setContentLoading] = useState(true);
   const [error, setError] = useState("");
   const [cancelDialogVisitId, setCancelDialogVisitId] = useState(null);
-  const [pendingVisitId, setPendingVisitId] = useState("");
   const surveysVisible = isPageVisible(me, "survey");
 
   const username = me?.fullName || "Пациент";
@@ -159,22 +159,9 @@ export default function Home() {
     nav(`/visits/${encodeURIComponent(visit.id)}`, { state: { visit } });
   }
 
-  async function confirmCancelVisit() {
-    if (!cancelDialogVisitId || !accessToken) return;
-
-    try {
-      setPendingVisitId(cancelDialogVisitId);
-      setError("");
-      await updateAppointment(accessToken, {
-        appointmentId: cancelDialogVisitId,
-        isCanceled: true,
-      });
-      setAppointments((prev) => prev.filter((visit) => visit.id !== cancelDialogVisitId));
+  function confirmCancelVisit() {
+    if (openExternalLink(me?.chat_url || "")) {
       setCancelDialogVisitId(null);
-    } catch {
-      setError("Не удалось отменить запись");
-    } finally {
-      setPendingVisitId("");
     }
   }
 
@@ -229,7 +216,6 @@ export default function Home() {
               visit={nearestAppointment}
               onOpen={openVisitDetails}
               onCancel={(id) => setCancelDialogVisitId(id)}
-              pendingId={pendingVisitId}
             />
           ) : (
             <EmptyStateCard
@@ -319,11 +305,14 @@ export default function Home() {
 
       <QuestionDialog
         open={Boolean(cancelDialogVisitId)}
-        question="Вы уверены, что хотите отменить запись?"
+        question={me?.chat_url
+          ? "Для отмены записи напишите оператору в MAX. До подтверждения оператора запись действует."
+          : "Ссылка на чат с оператором не настроена. Запись не отменена; обратитесь в клинику."}
         onCancel={() => setCancelDialogVisitId(null)}
         onConfirm={confirmCancelVisit}
         cancelText="Нет"
-        confirmText={pendingVisitId ? "Отменяем..." : "Да, отменить"}
+        confirmText="Перейти в чат"
+        confirmDisabled={!me?.chat_url}
         confirmMode="secondary"
         confirmClassName="dangerBtn"
       />

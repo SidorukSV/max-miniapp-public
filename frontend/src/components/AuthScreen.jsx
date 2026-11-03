@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -8,14 +8,18 @@ import {
     authSelectEmployee,
     storeTokens,
     getMe,
+    getAuthChatSpecializations,
+    startAuthChatDialog,
     sendAuthDiagnostic,
 } from "../api";
-import { Flex, Container, Typography, CellList, CellSimple, CellHeader, Input } from "./ui.jsx";
+import { Flex, Container, Typography, CellList, CellSimple, CellHeader, Input, Button } from "./ui.jsx";
 import "../App.css";
 import { useMaxWebApp } from "../hooks/useMaxWebApp";
 import { dateISOFormat } from "../modules/DateFormat";
 import PageLayout from "./PageLayout";
 import { appConfig } from "../config.js";
+import { openExternalLink } from "../utils/safeUrl.js";
+import Pill from "./book-visit/Pill.jsx";
 
 function createAuthTraceId() {
     if (globalThis.crypto?.randomUUID) {
@@ -81,11 +85,49 @@ export default function AuthScreen() {
     const [authSessionId, setAuthSessionId] = useState(null);
     const [patients, setPatients] = useState([]);
     const [employee, setEmployee] = useState(null);
+    const [verifiedNoPatient, setVerifiedNoPatient] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
     const [manualPhone, setManualPhone] = useState("");
     const [manualTotpCode, setManualTotpCode] = useState("");
     const communicationConsentUrl = appConfig.communicationConsentUrl;
+    const [chatUrl, setChatUrl] = useState("");
+    const [chatSpecs, setChatSpecs] = useState([]);
+    const [chatSpecId, setChatSpecId] = useState("");
+
+    useEffect(() => {
+        if (!verifiedNoPatient || !authSessionId) return undefined;
+
+        let cancelled = false;
+        getAuthChatSpecializations({ auth_session_id: authSessionId })
+            .then((response) => {
+                if (!cancelled) setChatSpecs(Array.isArray(response?.items) ? response.items : []);
+            })
+            .catch(() => {
+                if (!cancelled) setChatSpecs([]);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [verifiedNoPatient, authSessionId]);
+
+    const selectedChatSpec = chatSpecs.find((item) => item.specializationId === chatSpecId) || null;
+
+    async function handleOpenOperatorChat() {
+        if (selectedChatSpec) {
+            try {
+                await startAuthChatDialog({
+                    auth_session_id: authSessionId,
+                    specializationId: selectedChatSpec.specializationId,
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        openExternalLink(chatUrl);
+    }
 
     const isBrowserLocalhost = useMemo(() => {
         const host = window.location.hostname;
@@ -182,6 +224,7 @@ export default function AuthScreen() {
     async function handleStart() {
         setBusy(true);
         setError("");
+        setVerifiedNoPatient(false);
 
         const traceId = createAuthTraceId();
         let stage = "auth_start";
@@ -225,6 +268,8 @@ export default function AuthScreen() {
             });
             setPatients(matchedPatients);
             setEmployee(matchedEmployee);
+            setChatUrl(phoneResult.chat_url || "");
+            setVerifiedNoPatient(matchedPatients.length === 0 && !matchedEmployee && !phoneResult.employee_ambiguous);
             if (phoneResult.employee_ambiguous) {
                 setError("К номеру привязано несколько сотрудников. Обратитесь к администратору клиники.");
             }
@@ -291,7 +336,7 @@ export default function AuthScreen() {
     return (
         <PageLayout
             showBottom={false}
-            showBottomButton={!patients.length && !employee}
+            showBottomButton={!patients.length && !employee && !verifiedNoPatient}
             bottomButtonText={busy ? "Подтверждаем номер..." : "Подтвердить номер телефона"}
             onBottomButtonClick={handleStart}
             bottomButtonDisabled={busy}
@@ -312,10 +357,56 @@ export default function AuthScreen() {
                 <Container className="card">
                     <Flex direction="column" gap={10}>
                         <Typography.Title level={2}>Вход в личный кабинет</Typography.Title>
-                        {!patients.length && !employee && (
+                        {!patients.length && !employee && !verifiedNoPatient && (
                             <Typography.Label className="roleLine">
                                 Подтвердите номер телефона, чтобы продолжить.
                             </Typography.Label>
+                        )}
+
+                        {verifiedNoPatient && (
+                            <div className="authNoPatient">
+                                <Typography.Label>
+                                    По подтверждённому номеру карта пациента не найдена.
+                                    Для записи обратитесь в чат к оператору контакт-центра.
+                                </Typography.Label>
+                                {chatSpecs.length > 0 && (
+                                    <>
+                                        <Typography.Label>Выберите направление:</Typography.Label>
+                                        <div className="pills">
+                                            {chatSpecs.map((item) => (
+                                                <Pill
+                                                    key={item.specializationId}
+                                                    active={chatSpecId === item.specializationId}
+                                                    onClick={() => setChatSpecId(item.specializationId)}
+                                                >
+                                                    {item.specializationTitle}
+                                                </Pill>
+                                            ))}
+                                        </div>
+                                        {selectedChatSpec?.appointment_phone && (
+                                            <Typography.Label>
+                                                Позвонить в контакт-центр: {selectedChatSpec.appointment_phone}
+                                            </Typography.Label>
+                                        )}
+                                    </>
+                                )}
+                                {chatUrl ? (
+                                    <Button
+                                        mode="secondary"
+                                        onClick={handleOpenOperatorChat}
+                                        disabled={chatSpecs.length > 0 && !selectedChatSpec}
+                                    >
+                                        Написать оператору в MAX
+                                    </Button>
+                                ) : (
+                                    <Typography.Label>
+                                        Ссылка на чат пока не настроена. Обратитесь в клинику по телефону.
+                                    </Typography.Label>
+                                )}
+                                <Button mode="secondary" onClick={() => setVerifiedNoPatient(false)}>
+                                    Проверить другой номер
+                                </Button>
+                            </div>
                         )}
 
                         {isBrowserLocalhost && (

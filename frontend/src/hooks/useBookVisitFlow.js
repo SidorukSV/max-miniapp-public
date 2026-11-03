@@ -47,6 +47,7 @@ export default function useBookVisitFlow() {
     const [timeISO, setTimeISO] = useState("");
     const [monthCursor, setMonthCursor] = useState(() => getMonthStart());
     const [showMissingWarning, setShowMissingWarning] = useState(false);
+    const [contactDialogOpen, setContactDialogOpen] = useState(false);
 
     useEffect(() => {
         async function loadSpecializations() {
@@ -178,6 +179,7 @@ export default function useBookVisitFlow() {
                     doctorId,
                     branchId,
                     format: "OnlyDate",
+                    specializationId: specId,
                 });
 
                 const items = Array.isArray(response?.items) ? response.items : [];
@@ -202,7 +204,7 @@ export default function useBookVisitFlow() {
         setTimeISO("");
         setDaySchedule([]);
         loadDates();
-    }, [accessToken, doctorId, branchId]);
+    }, [accessToken, doctorId, branchId, specId]);
 
     useEffect(() => {
         if (!dates.length || date) return;
@@ -319,7 +321,7 @@ export default function useBookVisitFlow() {
 
     function onBottomButtonClick() {
         if (canConfirm) {
-            confirm();
+            setContactDialogOpen(true);
             return;
         }
 
@@ -334,8 +336,10 @@ export default function useBookVisitFlow() {
         setMonthCursor((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
     }
 
-    async function confirm() {
+    async function confirm(contactChannel) {
         if (!accessToken || !canConfirm) return;
+
+        setContactDialogOpen(false);
 
         const payload = {
             specializationId: specId,
@@ -344,6 +348,7 @@ export default function useBookVisitFlow() {
             date,
             datetimeBegin: timeISO,
             cabinetId: selectedSlot?.cabinetId,
+            contactChannel,
         };
 
         try {
@@ -392,6 +397,7 @@ export default function useBookVisitFlow() {
             selectedSlot,
             showMissingWarning,
             canConfirm,
+            contactDialogOpen,
             error,
         },
         actions: {
@@ -403,6 +409,7 @@ export default function useBookVisitFlow() {
             onNextMonth: goNextMonth,
             onBottomButtonClick,
             confirm,
+            onCloseContactDialog: () => setContactDialogOpen(false),
             goHome: () => nav("/book"),
         },
         loading: {

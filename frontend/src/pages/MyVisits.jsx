@@ -10,6 +10,8 @@ import "../App.css";
 import MyVisitsSkeleton from "../components/my-visits/MyVisitsSkeleton.jsx";
 import EmptyStateCard from "../components/EmptyStateCard.jsx";
 import { CalendarClock } from "lucide-react";
+import { openExternalLink } from "../utils/safeUrl.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function stopAndRun(event, action) {
     event.stopPropagation();
@@ -69,6 +71,8 @@ function VisitCard({ v, pendingId, onOpen, onConfirm, onCancel }) {
 export default function MyVisits() {
     const nav = useNavigate();
     const accessToken = getStoredAccessToken();
+    const { me } = useAuth();
+    const chatUrl = me?.chat_url || "";
 
     const [visits, setVisits] = useState([]);
     const [cancelDialogVisitId, setCancelDialogVisitId] = useState(null);
@@ -134,24 +138,9 @@ export default function MyVisits() {
         setCancelDialogVisitId(null);
     }
 
-    async function confirmCancelVisit() {
-        if (!cancelDialogVisitId || !accessToken) {
-            return;
-        }
-
-        try {
-            setPendingVisitId(cancelDialogVisitId);
-            setError("");
-            await updateAppointment(accessToken, {
-                appointmentId: cancelDialogVisitId,
-                isCanceled: true,
-            });
-            setVisits((prev) => prev.filter((visit) => visit.id !== cancelDialogVisitId));
+    function confirmCancelVisit() {
+        if (openExternalLink(chatUrl)) {
             closeCancelDialog();
-        } catch {
-            setError("Не удалось отменить запись");
-        } finally {
-            setPendingVisitId("");
         }
     }
 
@@ -203,11 +192,14 @@ export default function MyVisits() {
 
             <QuestionDialog
                 open={Boolean(cancelDialogVisitId)}
-                question="Вы уверены что хотите отменить запись на прием?"
+                question={chatUrl
+                    ? "Для отмены записи напишите оператору в MAX. До подтверждения оператора запись действует."
+                    : "Ссылка на чат с оператором не настроена. Запись не отменена; обратитесь в клинику."}
                 onCancel={closeCancelDialog}
                 onConfirm={confirmCancelVisit}
                 cancelText="Нет"
-                confirmText="Да, отменить"
+                confirmText="Перейти в чат"
+                confirmDisabled={!chatUrl}
                 confirmMode="secondary"
                 confirmClassName="dangerBtn"
             />
