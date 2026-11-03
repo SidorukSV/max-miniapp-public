@@ -21,6 +21,8 @@ import { appConfig } from "../config.js";
 import { openExternalLink } from "../utils/safeUrl.js";
 import Pill from "./book-visit/Pill.jsx";
 
+const CHAT_START_WAIT_MS = 2500;
+
 function createAuthTraceId() {
     if (globalThis.crypto?.randomUUID) {
         return globalThis.crypto.randomUUID();
@@ -94,6 +96,7 @@ export default function AuthScreen() {
     const [chatUrl, setChatUrl] = useState("");
     const [chatSpecs, setChatSpecs] = useState([]);
     const [chatSpecId, setChatSpecId] = useState("");
+    const [chatBusy, setChatBusy] = useState(false);
 
     useEffect(() => {
         if (!verifiedNoPatient || !authSessionId) return undefined;
@@ -115,18 +118,25 @@ export default function AuthScreen() {
     const selectedChatSpec = chatSpecs.find((item) => item.specializationId === chatSpecId) || null;
 
     async function handleOpenOperatorChat() {
+        if (chatBusy) return;
+        setChatBusy(true);
+
         if (selectedChatSpec) {
             try {
-                await startAuthChatDialog({
-                    auth_session_id: authSessionId,
-                    specializationId: selectedChatSpec.specializationId,
-                });
+                await Promise.race([
+                    startAuthChatDialog({
+                        auth_session_id: authSessionId,
+                        specializationId: selectedChatSpec.specializationId,
+                    }),
+                    new Promise((resolve) => setTimeout(resolve, CHAT_START_WAIT_MS)),
+                ]);
             } catch (err) {
                 console.error(err);
             }
         }
 
         openExternalLink(chatUrl);
+        setChatBusy(false);
     }
 
     const isBrowserLocalhost = useMemo(() => {
@@ -369,6 +379,7 @@ export default function AuthScreen() {
                                     По подтверждённому номеру карта пациента не найдена.
                                     Для записи обратитесь в чат к оператору контакт-центра.
                                 </Typography.Label>
+                                {" "}
                                 {chatSpecs.length > 0 && (
                                     <>
                                         <Typography.Label>Выберите направление:</Typography.Label>
@@ -391,13 +402,20 @@ export default function AuthScreen() {
                                     </>
                                 )}
                                 {chatUrl ? (
-                                    <Button
-                                        mode="secondary"
-                                        onClick={handleOpenOperatorChat}
-                                        disabled={chatSpecs.length > 0 && !selectedChatSpec}
-                                    >
-                                        Написать оператору в MAX
-                                    </Button>
+                                    <>
+                                        <Button
+                                            mode="secondary"
+                                            onClick={handleOpenOperatorChat}
+                                            disabled={chatBusy || (chatSpecs.length > 0 && !selectedChatSpec)}
+                                        >
+                                            {chatBusy ? "Открываем чат..." : "Написать оператору в MAX"}
+                                        </Button>
+                                        {chatSpecs.length > 0 && !selectedChatSpec && (
+                                            <Typography.Label>
+                                                Выберите направление выше, чтобы написать оператору.
+                                            </Typography.Label>
+                                        )}
+                                    </>
                                 ) : (
                                     <Typography.Label>
                                         Ссылка на чат пока не настроена. Обратитесь в клинику по телефону.

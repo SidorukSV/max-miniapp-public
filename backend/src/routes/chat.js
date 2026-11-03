@@ -51,6 +51,9 @@ export async function chatRoutes(app) {
                 return sendApiError(reply, 400, "max_user_required");
             }
 
-            return startDialog(req, reply, { maxUserId });
+            const { first_name: firstName, last_name: lastName } = req.session.max_user || {};
+            const maxUserName = [firstName, lastName].filter(Boolean).join(" ");
+
+            return startDialog(req, reply, { maxUserId, maxUserName });
         });
 }

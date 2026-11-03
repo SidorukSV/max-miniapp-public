@@ -211,7 +211,10 @@ export default function BookVisit() {
   async function openChatForSpec(spec) {
     if (spec?.id) {
       try {
-        await startChatDialog(getStoredAccessToken(), { specializationId: spec.id });
+        await Promise.race([
+          startChatDialog(getStoredAccessToken(), { specializationId: spec.id }),
+          new Promise((resolve) => setTimeout(resolve, 2500)),
+        ]);
       } catch (err) {
         console.error(err);
       }
