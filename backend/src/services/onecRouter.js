@@ -648,14 +648,14 @@ export async function getDoctorShifts({ doctorId, date }) {
     });
 }
 
-export async function startChatDialog({ specializationId, patientId, maxUserId, maxUserName }) {
+export async function startChatDialog({ specializationId, patientId, maxUserId, maxUserName, phone }) {
     const oneCConfig = getOneCConfig();
     const data = await onecFetch(oneCConfig.url.concat("/chat/start"), {
         method: "POST",
         headers: {
             Authorization: `Basic ${oneCConfig.basicAuth}`,
         },
-        body: JSON.stringify({ specializationId, patientId, maxUserId, maxUserName }),
+        body: JSON.stringify({ specializationId, patientId, maxUserId, maxUserName, phone }),
     });
 
     return { messageSent: data?.messageSent === true };
